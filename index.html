@@ -10,769 +10,360 @@
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg: #08090f;
-      --surface: #0f1018;
-      --card: #12141e;
+      --bg: #08090f; --surface: #0f1018; --card: #12141e;
       --border: rgba(255,255,255,0.07);
-      --primary: #00c8ff;
-      --primary-dim: rgba(0,200,255,0.15);
-      --gold: #ffd700;
-      --gold-dim: rgba(255,215,0,0.15);
-      --fg: #f0f2ff;
-      --muted: #8892a4;
+      --primary: #00c8ff; --primary-dim: rgba(0,200,255,0.15);
+      --gold: #ffd700; --gold-dim: rgba(255,215,0,0.15);
+      --fg: #f0f2ff; --muted: #8892a4;
       --electric-grad: linear-gradient(135deg, #00c8ff, #5b6bff);
       --gold-grad: linear-gradient(135deg, #ffd700, #d4960a);
       --glow-blue: 0 0 40px rgba(0,200,255,0.35), 0 0 80px rgba(0,200,255,0.15);
       --glow-gold: 0 0 30px rgba(255,215,0,0.35), 0 0 60px rgba(255,215,0,0.12);
-      --glass: rgba(255,255,255,0.03);
-      --radius: 14px;
+      --glass: rgba(255,255,255,0.03); --radius: 14px;
       --font-ar: 'Cairo', system-ui, sans-serif;
       --font-en: 'Space Grotesk', 'Inter', system-ui, sans-serif;
     }
-
     html { scroll-behavior: smooth; }
-
     body {
-      background-color: var(--bg);
-      color: var(--fg);
-      font-family: var(--font-ar);
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-      background-image:
-        radial-gradient(ellipse at 20% 0%, rgba(0,200,255,0.08) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 100%, rgba(255,215,0,0.05) 0%, transparent 50%);
+      background-color: var(--bg); color: var(--fg); font-family: var(--font-ar);
+      -webkit-font-smoothing: antialiased; overflow-x: hidden;
+      background-image: radial-gradient(ellipse at 20% 0%, rgba(0,200,255,0.08) 0%, transparent 50%), radial-gradient(ellipse at 80% 100%, rgba(255,215,0,0.05) 0%, transparent 50%);
       background-attachment: fixed;
     }
-
+    body.en { font-family: var(--font-en); }
     ::selection { background: rgba(0,200,255,0.3); color: var(--fg); }
-
     ::-webkit-scrollbar { width: 8px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
     ::-webkit-scrollbar-thumb { background: rgba(0,200,255,0.25); border-radius: 10px; }
     ::-webkit-scrollbar-thumb:hover { background: rgba(0,200,255,0.5); }
-
-    /* CURSOR */
-    .cursor-dot, .cursor-ring {
-      position: fixed; top:0; left:0;
-      pointer-events: none; z-index: 9999;
-      border-radius: 9999px;
-      mix-blend-mode: difference;
-      transition: opacity 0.3s;
-    }
+    .cursor-dot, .cursor-ring { position: fixed; top:0; left:0; pointer-events: none; z-index: 9999; border-radius: 9999px; mix-blend-mode: difference; }
     .cursor-dot { width:6px; height:6px; background: var(--primary); transform: translate(-50%,-50%); }
     .cursor-ring { width:34px; height:34px; border: 1px solid rgba(255,215,0,0.6); transform: translate(-50%,-50%); transition: width .2s, height .2s, border-color .2s; }
     .cursor-ring.hover { width:60px; height:60px; border-color: var(--primary); }
     @media (pointer:coarse) { .cursor-dot, .cursor-ring { display:none; } }
-
-    /* PARTICLES CANVAS */
     #particles-canvas { position:fixed; inset:0; z-index:0; pointer-events:none; opacity:0.55; }
-
-    /* NAVBAR */
     nav {
       position: fixed; top:0; width:100%; z-index:100;
-      backdrop-filter: blur(20px) saturate(150%);
-      -webkit-backdrop-filter: blur(20px) saturate(150%);
-      background: rgba(8,9,15,0.75);
-      border-bottom: 1px solid var(--border);
-      padding: 0 2rem;
-      height: 64px;
-      display: flex; align-items: center; justify-content: space-between;
+      backdrop-filter: blur(20px) saturate(150%); -webkit-backdrop-filter: blur(20px) saturate(150%);
+      background: rgba(8,9,15,0.75); border-bottom: 1px solid var(--border);
+      padding: 0 2rem; height: 64px; display: flex; align-items: center; justify-content: space-between;
     }
-    .nav-logo {
-      font-weight: 800; font-size: 1.25rem; letter-spacing: -0.02em;
-      background: var(--electric-grad); -webkit-background-clip: text; background-clip: text; color: transparent;
-      font-family: var(--font-en);
-    }
+    .nav-logo { font-weight: 800; font-size: 1.25rem; letter-spacing: -0.02em; background: var(--electric-grad); -webkit-background-clip: text; background-clip: text; color: transparent; font-family: var(--font-en); }
     .nav-links { display:flex; gap:1.75rem; list-style:none; }
     .nav-links a { color: var(--muted); text-decoration:none; font-size:0.82rem; font-weight:500; transition: color 0.2s; }
     .nav-links a:hover { color: var(--primary); }
-    .lang-btn {
-      background: rgba(0,200,255,0.08); border: 1px solid rgba(0,200,255,0.25);
-      color: var(--primary); padding: 0.3rem 0.9rem; border-radius: 999px;
-      cursor:pointer; font-size:0.8rem; font-weight:600; transition: all 0.2s;
-    }
+    .lang-btn { background: rgba(0,200,255,0.08); border: 1px solid rgba(0,200,255,0.25); color: var(--primary); padding: 0.3rem 0.9rem; border-radius: 999px; cursor:pointer; font-size:0.8rem; font-weight:600; transition: all 0.2s; }
     .lang-btn:hover { background: rgba(0,200,255,0.18); }
     .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; }
-    .hamburger span { width:24px; height:2px; background: var(--fg); border-radius:2px; transition: all 0.3s; display:block; }
+    .hamburger span { width:24px; height:2px; background: var(--fg); border-radius:2px; display:block; }
     @media(max-width:768px) {
       .nav-links { display:none; position:absolute; top:64px; right:0; left:0; flex-direction:column; background: rgba(8,9,15,0.97); padding:1.5rem 2rem; gap:1.25rem; border-bottom:1px solid var(--border); }
       .nav-links.open { display:flex; }
       .hamburger { display:flex; }
     }
-
-    /* HERO */
-    #hero {
-      position:relative; min-height:100vh;
-      display:flex; align-items:center;
-      padding: 8rem 2rem 5rem;
-      overflow:hidden; z-index:1;
-    }
-    .hero-bg {
-      position:absolute; inset:0; z-index:-1;
-      background: radial-gradient(ellipse at 50% 0%, rgba(0,200,255,0.18) 0%, transparent 60%);
-    }
-    .hero-inner {
-      max-width:1200px; margin:0 auto; width:100%;
-      display:grid; grid-template-columns: 7fr 5fr; gap:3rem; align-items:center;
-    }
-    .hero-kicker {
-      display:inline-flex; align-items:center; gap:0.5rem;
-      background: rgba(255,255,255,0.04); backdrop-filter:blur(10px);
-      border: 1px solid var(--border); border-radius:999px;
-      padding: 0.35rem 1rem; margin-bottom:1.5rem;
-      font-size:0.72rem; letter-spacing:0.25em; color:var(--muted); text-transform:uppercase;
-      animation: fadeUp 0.7s ease both;
-    }
+    #hero { position:relative; min-height:100vh; display:flex; align-items:center; padding: 8rem 2rem 5rem; overflow:hidden; z-index:1; }
+    .hero-bg { position:absolute; inset:0; z-index:-1; background: radial-gradient(ellipse at 50% 0%, rgba(0,200,255,0.18) 0%, transparent 60%); }
+    .hero-inner { max-width:1200px; margin:0 auto; width:100%; display:grid; grid-template-columns: 7fr 5fr; gap:3rem; align-items:center; }
+    .hero-kicker { display:inline-flex; align-items:center; gap:0.5rem; background: rgba(255,255,255,0.04); backdrop-filter:blur(10px); border: 1px solid var(--border); border-radius:999px; padding: 0.35rem 1rem; margin-bottom:1.5rem; font-size:0.72rem; letter-spacing:0.25em; color:var(--muted); text-transform:uppercase; animation: fadeUp 0.7s ease both; }
     .kicker-dot { width:6px; height:6px; border-radius:50%; background:var(--primary); animation: pulseGlow 3s ease-in-out infinite; }
-    .hero-title {
-      font-size: clamp(2.4rem, 5vw, 4.2rem);
-      font-weight:900; line-height:1.05;
-      margin-bottom:1.25rem;
-      animation: fadeUp 0.9s ease 0.05s both;
-    }
-    .hero-title .line2 {
-      display:block;
-      background: var(--electric-grad); -webkit-background-clip:text; background-clip:text; color:transparent;
-      margin-top:0.3rem;
-    }
-    .hero-tag {
-      font-size:1.1rem; color:var(--muted); max-width:520px; line-height:1.7;
-      margin-bottom:2.5rem;
-      animation: fadeUp 0.9s ease 0.15s both;
-    }
+    .hero-title { font-size: clamp(2.4rem, 5vw, 4.2rem); font-weight:900; line-height:1.05; margin-bottom:1.25rem; animation: fadeUp 0.9s ease 0.05s both; }
+    .hero-title .line2 { display:block; background: var(--electric-grad); -webkit-background-clip:text; background-clip:text; color:transparent; margin-top:0.3rem; }
+    .hero-tag { font-size:1.1rem; color:var(--muted); max-width:520px; line-height:1.7; margin-bottom:2.5rem; animation: fadeUp 0.9s ease 0.15s both; }
     .hero-btns { display:flex; flex-wrap:wrap; gap:1rem; animation: fadeUp 0.9s ease 0.25s both; }
-    .btn-primary {
-      display:inline-flex; align-items:center; gap:0.6rem;
-      background: var(--primary); color: #050508;
-      padding: 0.85rem 1.8rem; border-radius:999px;
-      font-weight:700; font-size:0.9rem; text-decoration:none;
-      box-shadow: var(--glow-blue);
-      transition: transform 0.2s, box-shadow 0.2s;
-      position:relative; overflow:hidden;
-    }
-    .btn-primary::after { content:''; position:absolute; inset:0; background:rgba(255,255,255,0.1); opacity:0; transition:opacity 0.2s; }
+    .btn-primary { display:inline-flex; align-items:center; gap:0.6rem; background: var(--primary); color: #050508; padding: 0.85rem 1.8rem; border-radius:999px; font-weight:700; font-size:0.9rem; text-decoration:none; box-shadow: var(--glow-blue); transition: transform 0.2s; position:relative; overflow:hidden; }
     .btn-primary:hover { transform:scale(1.03); }
-    .btn-primary:hover::after { opacity:1; }
-    .btn-secondary {
-      display:inline-flex; align-items:center; gap:0.5rem;
-      border: 1px solid rgba(255,255,255,0.15); color:var(--fg);
-      padding: 0.85rem 1.6rem; border-radius:999px;
-      font-weight:500; font-size:0.9rem; text-decoration:none;
-      transition: border-color 0.2s, color 0.2s;
-    }
+    .btn-secondary { display:inline-flex; align-items:center; gap:0.5rem; border: 1px solid rgba(255,255,255,0.15); color:var(--fg); padding: 0.85rem 1.6rem; border-radius:999px; font-weight:500; font-size:0.9rem; text-decoration:none; transition: border-color 0.2s, color 0.2s; }
     .btn-secondary:hover { border-color: rgba(0,200,255,0.5); color:var(--primary); }
     .btn-dot { width:8px; height:8px; border-radius:50%; background:var(--gold); }
     .hero-scroll { margin-top:3.5rem; display:flex; align-items:center; gap:1rem; color:rgba(255,255,255,0.3); font-size:0.75rem; letter-spacing:0.3em; }
     .scroll-line { height:1px; width:60px; background: linear-gradient(to left, transparent, rgba(0,200,255,0.5)); }
-
-    /* HERO CARD */
-    .hero-card {
-      background: rgba(255,255,255,0.03);
-      backdrop-filter: blur(20px); -webkit-backdrop-filter:blur(20px);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius:24px; padding:2rem;
-      box-shadow: var(--glow-blue);
-      animation: fadeUp 1s ease 0.1s both, floatSlow 6s ease-in-out 1s infinite;
-      position:relative;
-    }
-    .hero-badge {
-      position:absolute; top:-12px; left:-12px;
-      background: var(--gold); color:#050508;
-      font-size:0.65rem; font-weight:800; letter-spacing:0.15em;
-      padding:0.3rem 0.8rem; border-radius:999px;
-      box-shadow: var(--glow-gold); font-family: var(--font-en);
-    }
-    .track-art {
-      width:100%; aspect-ratio:4/3;
-      background: linear-gradient(135deg, rgba(0,200,255,0.05), rgba(91,107,255,0.08));
-      border-radius:12px; border:1px solid rgba(0,200,255,0.12);
-      display:flex; align-items:center; justify-content:center;
-      position:relative; overflow:hidden;
-    }
+    .hero-card { background: rgba(255,255,255,0.03); backdrop-filter: blur(20px); -webkit-backdrop-filter:blur(20px); border: 1px solid rgba(255,255,255,0.08); border-radius:24px; padding:2rem; box-shadow: var(--glow-blue); animation: fadeUp 1s ease 0.1s both, floatSlow 6s ease-in-out 1s infinite; position:relative; }
+    .hero-badge { position:absolute; top:-12px; left:-12px; background: var(--gold); color:#050508; font-size:0.65rem; font-weight:800; letter-spacing:0.15em; padding:0.3rem 0.8rem; border-radius:999px; box-shadow: var(--glow-gold); font-family: var(--font-en); }
+    .track-art { width:100%; aspect-ratio:4/3; background: linear-gradient(135deg, rgba(0,200,255,0.05), rgba(91,107,255,0.08)); border-radius:12px; border:1px solid rgba(0,200,255,0.12); display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; }
     .track-art svg { width:75%; height:75%; opacity:0.9; }
     .track-glow { position:absolute; inset:-30%; background: radial-gradient(circle, rgba(0,200,255,0.12), transparent 65%); }
-
-    /* SECTIONS COMMON */
     section { position:relative; z-index:1; }
     .section-inner { max-width:1100px; margin:0 auto; padding:6rem 2rem; }
-    .section-kicker {
-      display:inline-flex; align-items:center; gap:0.5rem;
-      font-size:0.72rem; letter-spacing:0.3em; text-transform:uppercase;
-      color:var(--primary); margin-bottom:1rem;
-    }
+    .section-kicker { display:inline-flex; align-items:center; gap:0.5rem; font-size:0.72rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--primary); margin-bottom:1rem; }
     .section-kicker::before { content:''; width:20px; height:1px; background:var(--primary); }
-    .section-title {
-      font-size: clamp(1.9rem, 4vw, 3rem);
-      font-weight:900; line-height:1.1; margin-bottom:1.25rem;
-    }
+    .section-title { font-size: clamp(1.9rem, 4vw, 3rem); font-weight:900; line-height:1.1; margin-bottom:1.25rem; }
     .section-lead { font-size:1.05rem; color:var(--muted); max-width:680px; line-height:1.75; margin-bottom:3rem; }
-
-    /* PROBLEM */
     #problem { background: linear-gradient(180deg, transparent, rgba(0,200,255,0.03) 50%, transparent); }
     .stats-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; }
-    .stat-card {
-      background:var(--card); border:1px solid var(--border);
-      border-radius:var(--radius); padding:2rem 1.5rem; text-align:center;
-      transition: border-color 0.3s, transform 0.3s;
-    }
+    .stat-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:2rem 1.5rem; text-align:center; transition: border-color 0.3s, transform 0.3s; }
     .stat-card:hover { border-color: rgba(0,200,255,0.3); transform:translateY(-4px); }
-    .stat-number {
-      font-size:2.5rem; font-weight:900; font-family:var(--font-en);
-      background: var(--electric-grad); -webkit-background-clip:text; background-clip:text; color:transparent;
-      display:block; margin-bottom:0.5rem;
-    }
+    .stat-number { font-size:2.5rem; font-weight:900; font-family:var(--font-en); background: var(--electric-grad); -webkit-background-clip:text; background-clip:text; color:transparent; display:block; margin-bottom:0.5rem; }
     .stat-label { font-size:0.88rem; color:var(--muted); line-height:1.5; }
-
-    /* SOLUTION */
-    #solution { }
     .solution-grid { display:grid; grid-template-columns:1fr 1fr; gap:2rem; }
-    .solution-card {
-      background:var(--card); border:1px solid var(--border);
-      border-radius:var(--radius); padding:2.5rem;
-      display:flex; flex-direction:column; gap:1rem;
-    }
+    .solution-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:2.5rem; display:flex; flex-direction:column; gap:1rem; }
     .solution-card.before { border-color: rgba(255,60,60,0.25); }
     .solution-card.after { border-color: rgba(0,200,255,0.3); box-shadow: var(--glow-blue); }
-    .sol-label {
-      font-size:0.75rem; letter-spacing:0.2em; text-transform:uppercase; font-weight:700;
-    }
-    .sol-label.bad { color:#ff6060; }
-    .sol-label.good { color:var(--primary); }
+    .sol-label { font-size:0.75rem; letter-spacing:0.2em; text-transform:uppercase; font-weight:700; }
+    .sol-label.bad { color:#ff6060; } .sol-label.good { color:var(--primary); }
     .sol-icon { font-size:2.5rem; }
     .sol-text { font-size:1rem; color:var(--muted); line-height:1.7; }
-
-    /* HOW IT WORKS */
     #how { background: linear-gradient(180deg, transparent, rgba(91,107,255,0.03) 50%, transparent); }
     .parts-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:1.25rem; }
-    .part-card {
-      background:var(--card); border:1px solid var(--border);
-      border-radius:var(--radius); padding:1.5rem;
-      cursor:default;
-      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
-    }
-    .part-card:hover {
-      border-color: rgba(0,200,255,0.4); transform:translateY(-5px);
-      box-shadow: 0 0 25px rgba(0,200,255,0.2);
-    }
-    .part-num {
-      font-size:0.7rem; font-weight:700; color:var(--primary);
-      letter-spacing:0.2em; margin-bottom:0.75rem; font-family:var(--font-en);
-    }
+    .part-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:1.5rem; cursor:default; transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s; }
+    .part-card:hover { border-color: rgba(0,200,255,0.4); transform:translateY(-5px); box-shadow: 0 0 25px rgba(0,200,255,0.2); }
+    .part-num { font-size:0.7rem; font-weight:700; color:var(--primary); letter-spacing:0.2em; margin-bottom:0.75rem; font-family:var(--font-en); }
     .part-name { font-size:0.95rem; font-weight:700; margin-bottom:0.5rem; }
     .part-desc { font-size:0.83rem; color:var(--muted); line-height:1.6; }
-
-    /* SPECS */
-    #specs { }
-    .specs-table {
-      width:100%; border-collapse:collapse;
-      background:var(--card); border:1px solid var(--border);
-      border-radius:var(--radius); overflow:hidden;
-    }
-    .specs-table th {
-      background: rgba(0,200,255,0.08);
-      padding:1rem 1.5rem; text-align:right;
-      font-size:0.8rem; letter-spacing:0.1em; color:var(--primary); font-weight:700;
-    }
-    .specs-table td {
-      padding:1rem 1.5rem; border-top:1px solid var(--border);
-      font-size:0.95rem; color:var(--muted);
-    }
+    .specs-table { width:100%; border-collapse:collapse; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+    .specs-table th { background: rgba(0,200,255,0.08); padding:1rem 1.5rem; text-align:right; font-size:0.8rem; letter-spacing:0.1em; color:var(--primary); font-weight:700; }
+    .specs-table td { padding:1rem 1.5rem; border-top:1px solid var(--border); font-size:0.95rem; color:var(--muted); }
     .specs-table tr:hover td { background: rgba(255,255,255,0.02); }
     .spec-val { color:var(--fg); font-weight:600; font-family:var(--font-en); }
-
-    /* PROTOTYPE */
     #prototype { background: linear-gradient(180deg, transparent, rgba(255,215,0,0.03) 50%, transparent); }
     .proto-steps { display:grid; grid-template-columns:repeat(2,1fr); gap:1.5rem; }
-    .proto-step {
-      background:var(--card); border:1px solid var(--border);
-      border-radius:var(--radius); padding:2rem;
-      display:flex; gap:1.25rem; align-items:flex-start;
-      transition: border-color 0.3s, transform 0.3s;
-    }
+    .proto-step { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:2rem; display:flex; gap:1.25rem; align-items:flex-start; transition: border-color 0.3s, transform 0.3s; }
     .proto-step:hover { border-color: rgba(255,215,0,0.3); transform:translateY(-3px); }
-    .step-num {
-      width:40px; height:40px; border-radius:50%;
-      background: var(--gold-grad); color:#050508;
-      display:flex; align-items:center; justify-content:center;
-      font-weight:900; font-size:0.9rem; flex-shrink:0; font-family:var(--font-en);
-      box-shadow: var(--glow-gold);
-    }
+    .step-num { width:40px; height:40px; border-radius:50%; background: var(--gold-grad); color:#050508; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:0.9rem; flex-shrink:0; font-family:var(--font-en); box-shadow: var(--glow-gold); }
     .step-content h4 { font-size:0.95rem; font-weight:700; margin-bottom:0.4rem; }
     .step-content p { font-size:0.85rem; color:var(--muted); line-height:1.65; }
-
-    /* TEAM */
-    #team { }
-    .team-card {
-      max-width:380px; margin:0 auto;
-      background:var(--card); border:1px solid var(--border);
-      border-radius:var(--radius); padding:3rem 2rem; text-align:center;
-      box-shadow: var(--glow-blue);
-    }
-    .avatar {
-      width:90px; height:90px; border-radius:50%; margin:0 auto 1.25rem;
-      background: linear-gradient(135deg, rgba(0,200,255,0.15), rgba(91,107,255,0.2));
-      border:2px solid rgba(0,200,255,0.3);
-      display:flex; align-items:center; justify-content:center;
-      font-size:2.2rem;
-    }
+    .team-card { max-width:380px; margin:0 auto; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:3rem 2rem; text-align:center; box-shadow: var(--glow-blue); }
+    .avatar { width:90px; height:90px; border-radius:50%; margin:0 auto 1.25rem; background: linear-gradient(135deg, rgba(0,200,255,0.15), rgba(91,107,255,0.2)); border:2px solid rgba(0,200,255,0.3); display:flex; align-items:center; justify-content:center; font-size:2.2rem; }
     .team-name { font-size:1.3rem; font-weight:800; margin-bottom:0.4rem; }
     .team-role { font-size:0.85rem; color:var(--muted); margin-bottom:1.5rem; }
-    .team-uni {
-      display:inline-block;
-      background: rgba(0,200,255,0.08); border:1px solid rgba(0,200,255,0.2);
-      color:var(--primary); padding:0.4rem 1rem; border-radius:999px;
-      font-size:0.8rem; font-weight:600;
-    }
-
-    /* CONTACT */
+    .team-uni { display:inline-block; background: rgba(0,200,255,0.08); border:1px solid rgba(0,200,255,0.2); color:var(--primary); padding:0.4rem 1rem; border-radius:999px; font-size:0.8rem; font-weight:600; }
     #contact { background: linear-gradient(180deg, transparent, rgba(0,200,255,0.04) 50%, transparent); }
-    .contact-box {
-      max-width:560px; margin:0 auto; text-align:center;
-    }
-    .contact-email {
-      display:inline-flex; align-items:center; gap:0.75rem;
-      background:var(--card); border:1px solid var(--border);
-      border-radius:var(--radius); padding:1.25rem 2rem;
-      margin:2rem 0;
-      font-size:1rem; color:var(--fg);
-      transition: border-color 0.3s;
-    }
+    .contact-box { max-width:560px; margin:0 auto; text-align:center; }
+    .contact-email { display:inline-flex; align-items:center; gap:0.75rem; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:1.25rem 2rem; margin:2rem 0; font-size:1rem; color:var(--fg); text-decoration:none; transition: border-color 0.3s; }
     .contact-email:hover { border-color: rgba(0,200,255,0.4); }
     .email-icon { color:var(--primary); font-size:1.2rem; }
-
-    /* FOOTER */
-    footer {
-      border-top:1px solid var(--border);
-      padding:2rem; text-align:center;
-      color:var(--muted); font-size:0.82rem; z-index:1; position:relative;
-    }
-    .footer-logo {
-      font-family:var(--font-en); font-weight:800;
-      background: var(--electric-grad); -webkit-background-clip:text; background-clip:text; color:transparent;
-      font-size:1.1rem; margin-bottom:0.5rem; display:block;
-    }
-
-    /* ANIMATIONS */
-    @keyframes fadeUp {
-      from { opacity:0; transform:translateY(20px); }
-      to { opacity:1; transform:translateY(0); }
-    }
-    @keyframes pulseGlow {
-      0%,100% { opacity:0.6; transform:scale(1); }
-      50% { opacity:1; transform:scale(1.1); }
-    }
-    @keyframes floatSlow {
-      0%,100% { transform:translateY(0); }
-      50% { transform:translateY(-10px); }
-    }
-    @keyframes trackMove {
-      from { stroke-dashoffset:80; }
-      to { stroke-dashoffset:0; }
-    }
-    .reveal {
-      opacity:0; transform:translateY(24px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
+    footer { border-top:1px solid var(--border); padding:2rem; text-align:center; color:var(--muted); font-size:0.82rem; z-index:1; position:relative; }
+    .footer-logo { font-family:var(--font-en); font-weight:800; background: var(--electric-grad); -webkit-background-clip:text; background-clip:text; color:transparent; font-size:1.1rem; margin-bottom:0.5rem; display:block; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes pulseGlow { 0%,100% { opacity:0.6; transform:scale(1); } 50% { opacity:1; transform:scale(1.1); } }
+    @keyframes floatSlow { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-10px); } }
+    .reveal { opacity:0; transform:translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
     .reveal.visible { opacity:1; transform:translateY(0); }
-
-    /* RESPONSIVE */
-    @media(max-width:900px) {
-      .hero-inner { grid-template-columns:1fr; }
-      .hero-card { max-width:400px; margin:0 auto; }
-      .stats-grid { grid-template-columns:1fr; }
-      .solution-grid { grid-template-columns:1fr; }
-      .proto-steps { grid-template-columns:1fr; }
-    }
-    @media(max-width:600px) {
-      .section-inner { padding:4rem 1.25rem; }
-      .hero-title { font-size:2rem; }
-    }
+    @media(max-width:900px) { .hero-inner { grid-template-columns:1fr; } .hero-card { max-width:400px; margin:0 auto; } .stats-grid { grid-template-columns:1fr; } .solution-grid { grid-template-columns:1fr; } .proto-steps { grid-template-columns:1fr; } }
+    @media(max-width:600px) { .section-inner { padding:4rem 1.25rem; } .hero-title { font-size:2rem; } }
   </style>
 </head>
-<body class="dark">
-
-  <!-- CURSOR -->
+<body>
   <div class="cursor-dot" id="cursorDot"></div>
   <div class="cursor-ring" id="cursorRing"></div>
-
-  <!-- PARTICLES -->
   <canvas id="particles-canvas"></canvas>
 
-  <!-- NAVBAR -->
   <nav>
     <span class="nav-logo">StepUp ↑</span>
-    <button class="hamburger" id="hamburger" aria-label="menu">
-      <span></span><span></span><span></span>
-    </button>
+    <button class="hamburger" id="hamburger" aria-label="menu"><span></span><span></span><span></span></button>
     <ul class="nav-links" id="navLinks">
-      <li><a href="#hero">البداية</a></li>
-      <li><a href="#problem">المشكلة</a></li>
-      <li><a href="#solution">الحل</a></li>
-      <li><a href="#how">كيف تعمل</a></li>
-      <li><a href="#specs">المواصفات</a></li>
-      <li><a href="#prototype">النموذج</a></li>
-      <li><a href="#team">الفريق</a></li>
-      <li><a href="#contact">تواصل</a></li>
+      <li><a href="#hero" data-ar="البداية" data-en="Home">البداية</a></li>
+      <li><a href="#problem" data-ar="المشكلة" data-en="Problem">المشكلة</a></li>
+      <li><a href="#solution" data-ar="الحل" data-en="Solution">الحل</a></li>
+      <li><a href="#how" data-ar="كيف تعمل" data-en="How it Works">كيف تعمل</a></li>
+      <li><a href="#specs" data-ar="المواصفات" data-en="Specs">المواصفات</a></li>
+      <li><a href="#prototype" data-ar="النموذج" data-en="Prototype">النموذج</a></li>
+      <li><a href="#team" data-ar="الفريق" data-en="Team">الفريق</a></li>
+      <li><a href="#contact" data-ar="تواصل" data-en="Contact">تواصل</a></li>
     </ul>
     <button class="lang-btn" id="langBtn">EN</button>
   </nav>
 
-  <!-- HERO -->
   <section id="hero">
     <div class="hero-bg"></div>
     <div class="hero-inner">
       <div>
-        <div class="hero-kicker">
-          <span class="kicker-dot"></span>
-          <span class="hero-kicker-text">مشروع تخرج — هندسة ميكانيكية</span>
-        </div>
+        <div class="hero-kicker"><span class="kicker-dot"></span><span data-ar="مشروع تخرج — هندسة ميكانيكية" data-en="Graduation Project — Mechanical Engineering">مشروع تخرج — هندسة ميكانيكية</span></div>
         <h1 class="hero-title">
-          <span class="line1">وحدة جنزيرية معيارية</span>
-          <span class="line2">لتسلّق السلالم</span>
+          <span class="line1" data-ar="وحدة جنزيرية معيارية" data-en="Modular Stair-Climbing">وحدة جنزيرية معيارية</span>
+          <span class="line2" data-ar="لتسلّق السلالم" data-en="Track Unit for Wheelchairs">لتسلّق السلالم</span>
         </h1>
-        <p class="hero-tag">تقنية تكسر الحواجز — خطوة على السلالم في كل مرة</p>
+        <p class="hero-tag" data-ar="تقنية تكسر الحواجز — خطوة على السلالم في كل مرة" data-en="Breaking Barriers — One Stair at a Time">تقنية تكسر الحواجز — خطوة على السلالم في كل مرة</p>
         <div class="hero-btns">
-          <a href="#problem" class="btn-primary">
-            <span class="hero-cta-text">اكتشف المشروع</span>
-            <span>←</span>
-          </a>
-          <a href="#how" class="btn-secondary">
-            <span class="btn-dot"></span>
-            <span class="hero-how-text">كيف تعمل</span>
-          </a>
+          <a href="#problem" class="btn-primary"><span data-ar="اكتشف المشروع" data-en="Discover the Project">اكتشف المشروع</span><span>←</span></a>
+          <a href="#how" class="btn-secondary"><span class="btn-dot"></span><span data-ar="كيف تعمل" data-en="How it Works">كيف تعمل</span></a>
         </div>
-        <div class="hero-scroll">
-          <span class="hero-scroll-text">اسحب للأسفل</span>
-          <span class="scroll-line"></span>
-        </div>
+        <div class="hero-scroll"><span data-ar="اسحب للأسفل" data-en="Scroll Down">اسحب للأسفل</span><span class="scroll-line"></span></div>
       </div>
       <div class="hero-card">
         <div class="hero-badge">SOLIDWORKS · 2024</div>
         <div class="track-art">
           <div class="track-glow"></div>
           <svg viewBox="0 0 200 150" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Track body -->
             <rect x="15" y="45" width="170" height="60" rx="30" stroke="rgba(0,200,255,0.5)" stroke-width="2" fill="rgba(0,200,255,0.05)"/>
-            <!-- Big sprockets -->
             <circle cx="45" cy="75" r="22" stroke="rgba(0,200,255,0.7)" stroke-width="2" fill="rgba(0,200,255,0.08)"/>
             <circle cx="155" cy="75" r="22" stroke="rgba(0,200,255,0.7)" stroke-width="2" fill="rgba(0,200,255,0.08)"/>
             <circle cx="100" cy="75" r="18" stroke="rgba(0,200,255,0.5)" stroke-width="1.5" fill="rgba(0,200,255,0.05)"/>
-            <!-- Small idlers -->
             <circle cx="72" cy="95" r="8" stroke="rgba(91,107,255,0.7)" stroke-width="1.5" fill="rgba(91,107,255,0.1)"/>
             <circle cx="128" cy="95" r="8" stroke="rgba(91,107,255,0.7)" stroke-width="1.5" fill="rgba(91,107,255,0.1)"/>
-            <!-- Track chain line -->
-            <path d="M45 53 Q100 43 155 53" stroke="rgba(255,215,0,0.6)" stroke-width="3" stroke-dasharray="6 4" stroke-linecap="round">
-              <animate attributeName="stroke-dashoffset" from="0" to="-20" dur="1s" repeatCount="indefinite"/>
-            </path>
-            <path d="M45 97 Q100 107 155 97" stroke="rgba(255,215,0,0.6)" stroke-width="3" stroke-dasharray="6 4" stroke-linecap="round">
-              <animate attributeName="stroke-dashoffset" from="-20" to="0" dur="1s" repeatCount="indefinite"/>
-            </path>
-            <!-- Center hub -->
+            <path d="M45 53 Q100 43 155 53" stroke="rgba(255,215,0,0.6)" stroke-width="3" stroke-dasharray="6 4" stroke-linecap="round"><animate attributeName="stroke-dashoffset" from="0" to="-20" dur="1s" repeatCount="indefinite"/></path>
+            <path d="M45 97 Q100 107 155 97" stroke="rgba(255,215,0,0.6)" stroke-width="3" stroke-dasharray="6 4" stroke-linecap="round"><animate attributeName="stroke-dashoffset" from="-20" to="0" dur="1s" repeatCount="indefinite"/></path>
             <circle cx="100" cy="75" r="6" fill="rgba(0,200,255,0.8)"/>
-            <!-- Yellow side covers hint -->
             <rect x="15" y="48" width="20" height="54" rx="8" fill="rgba(255,215,0,0.15)" stroke="rgba(255,215,0,0.4)" stroke-width="1"/>
             <rect x="165" y="48" width="20" height="54" rx="8" fill="rgba(255,215,0,0.15)" stroke="rgba(255,215,0,0.4)" stroke-width="1"/>
-            <!-- Stair steps -->
-            <g stroke="rgba(255,255,255,0.15)" stroke-width="1">
-              <path d="M15 140 h20 v-15 h20 v-15 h20 v-15 h20 v-15 h20"/>
-            </g>
+            <g stroke="rgba(255,255,255,0.15)" stroke-width="1"><path d="M15 140 h20 v-15 h20 v-15 h20 v-15 h20 v-15 h20"/></g>
           </svg>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- PROBLEM -->
   <section id="problem">
     <div class="section-inner">
-      <div class="section-kicker reveal">المشكلة</div>
-      <h2 class="section-title reveal">السلالم لا تزال جداراً</h2>
-      <p class="section-lead reveal">يعيش أكثر من 75 مليون شخص حول العالم باعتمادهم على الكراسي المتحركة، وتظل السلالم العائق اليومي الأكبر أمام استقلاليتهم في المباني، البيوت، والأماكن العامة.</p>
+      <div class="section-kicker reveal" data-ar="المشكلة" data-en="The Problem">المشكلة</div>
+      <h2 class="section-title reveal" data-ar="السلالم لا تزال جداراً" data-en="Stairs Are Still a Wall">السلالم لا تزال جداراً</h2>
+      <p class="section-lead reveal" data-ar="يعيش أكثر من 75 مليون شخص حول العالم باعتمادهم على الكراسي المتحركة، وتظل السلالم العائق اليومي الأكبر أمام استقلاليتهم في المباني، البيوت، والأماكن العامة." data-en="Over 75 million people worldwide depend on wheelchairs. Stairs remain the single largest daily barrier to their independence in homes, workplaces, and public spaces.">يعيش أكثر من 75 مليون شخص حول العالم باعتمادهم على الكراسي المتحركة، وتظل السلالم العائق اليومي الأكبر أمام استقلاليتهم في المباني، البيوت، والأماكن العامة.</p>
       <div class="stats-grid">
-        <div class="stat-card reveal">
-          <span class="stat-number">75M+</span>
-          <span class="stat-label">مستخدم كرسي متحرك حول العالم</span>
-        </div>
-        <div class="stat-card reveal">
-          <span class="stat-number">70%</span>
-          <span class="stat-label">يواجهون عوائق يومية في الوصول للسلالم</span>
-        </div>
-        <div class="stat-card reveal">
-          <span class="stat-number">2%</span>
-          <span class="stat-label">فقط من المباني العامة مهيّأة بالكامل</span>
-        </div>
+        <div class="stat-card reveal"><span class="stat-number">75M+</span><span class="stat-label" data-ar="مستخدم كرسي متحرك حول العالم" data-en="Wheelchair users globally">مستخدم كرسي متحرك حول العالم</span></div>
+        <div class="stat-card reveal"><span class="stat-number">70%</span><span class="stat-label" data-ar="يواجهون عوائق يومية في الوصول للسلالم" data-en="Face daily stair-access barriers">يواجهون عوائق يومية في الوصول للسلالم</span></div>
+        <div class="stat-card reveal"><span class="stat-number">2%</span><span class="stat-label" data-ar="فقط من المباني العامة مهيّأة بالكامل" data-en="Of public buildings are fully accessible">فقط من المباني العامة مهيّأة بالكامل</span></div>
       </div>
     </div>
   </section>
 
-  <!-- SOLUTION -->
   <section id="solution">
     <div class="section-inner">
-      <div class="section-kicker reveal">الحل</div>
-      <h2 class="section-title reveal">وحدة واحدة. كل سُلَّم.</h2>
-      <p class="section-lead reveal">وحدة جنزيرية مدمجة تُركَّب على الكراسي المتحركة القياسية، تعتمد على نظام مسننات وجنزير لتمنح المستخدم استقلالية كاملة في الصعود والهبوط على السلالم بأمان.</p>
+      <div class="section-kicker reveal" data-ar="الحل" data-en="The Solution">الحل</div>
+      <h2 class="section-title reveal" data-ar="وحدة واحدة. كل سُلَّم." data-en="One Unit. Any Stair.">وحدة واحدة. كل سُلَّم.</h2>
+      <p class="section-lead reveal" data-ar="وحدة جنزيرية مدمجة تُركَّب على الكراسي المتحركة القياسية، تعتمد على نظام مسننات وجنزير لتمنح المستخدم استقلالية كاملة في الصعود والهبوط على السلالم بأمان." data-en="A compact track-drive module that mounts onto standard wheelchairs. A sprocket-and-track system gives the user full, safe, independent stair travel — up and down.">وحدة جنزيرية مدمجة تُركَّب على الكراسي المتحركة القياسية، تعتمد على نظام مسننات وجنزير لتمنح المستخدم استقلالية كاملة في الصعود والهبوط على السلالم بأمان.</p>
       <div class="solution-grid reveal">
         <div class="solution-card before">
-          <span class="sol-label bad">قبل: عائق دائم</span>
+          <span class="sol-label bad" data-ar="قبل: عائق دائم" data-en="Before: A Permanent Barrier">قبل: عائق دائم</span>
           <span class="sol-icon">🚧</span>
-          <p class="sol-text">الكرسي المتحرك التقليدي عاجز أمام أي درجة سُلَّم — يعيق الاستقلالية ويتطلب مساعدة خارجية دائمة.</p>
+          <p class="sol-text" data-ar="الكرسي المتحرك التقليدي عاجز أمام أي درجة سُلَّم — يعيق الاستقلالية ويتطلب مساعدة خارجية دائمة." data-en="A traditional wheelchair is helpless against any stair — limiting independence and requiring constant outside assistance.">الكرسي المتحرك التقليدي عاجز أمام أي درجة سُلَّم — يعيق الاستقلالية ويتطلب مساعدة خارجية دائمة.</p>
         </div>
         <div class="solution-card after">
-          <span class="sol-label good">بعد: حركة مستقلة</span>
+          <span class="sol-label good" data-ar="بعد: حركة مستقلة" data-en="After: Independent Motion">بعد: حركة مستقلة</span>
           <span class="sol-icon">🚀</span>
-          <p class="sol-text">مع الوحدة الجنزيرية، يستطيع المستخدم صعود وهبوط السلالم باستقلالية تامة وأمان كامل، دون الحاجة لأي مساعدة.</p>
+          <p class="sol-text" data-ar="مع الوحدة الجنزيرية، يستطيع المستخدم صعود وهبوط السلالم باستقلالية تامة وأمان كامل، دون الحاجة لأي مساعدة." data-en="With the track unit, the user can navigate stairs fully and safely on their own — complete freedom, zero assistance needed.">مع الوحدة الجنزيرية، يستطيع المستخدم صعود وهبوط السلالم باستقلالية تامة وأمان كامل، دون الحاجة لأي مساعدة.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- HOW IT WORKS -->
   <section id="how">
     <div class="section-inner">
-      <div class="section-kicker reveal">كيف تعمل</div>
-      <h2 class="section-title reveal">كل قطعة لها دور</h2>
-      <p class="section-lead reveal">مرّر فوق المكوّنات لاستكشاف الوحدة.</p>
+      <div class="section-kicker reveal" data-ar="كيف تعمل" data-en="How It Works">كيف تعمل</div>
+      <h2 class="section-title reveal" data-ar="كل قطعة لها دور" data-en="Every Part Has a Purpose">كل قطعة لها دور</h2>
+      <p class="section-lead reveal" data-ar="مرّر فوق المكوّنات لاستكشاف الوحدة." data-en="Hover over the components to explore the assembly.">مرّر فوق المكوّنات لاستكشاف الوحدة.</p>
       <div class="parts-grid">
-        <div class="part-card reveal">
-          <div class="part-num">01</div>
-          <div class="part-name">الأغطية الصفراء</div>
-          <div class="part-desc">حماية المكونات الداخلية ولمسة الهوية البصرية.</div>
-        </div>
-        <div class="part-card reveal">
-          <div class="part-num">02</div>
-          <div class="part-name">البكرات الكبيرة ×6</div>
-          <div class="part-desc">تنقل العزم وتدعم الجنزير على طول المسار.</div>
-        </div>
-        <div class="part-card reveal">
-          <div class="part-num">03</div>
-          <div class="part-name">البكرات الصغيرة</div>
-          <div class="part-desc">تحافظ على شدّ الجنزير وتُنعّم الحركة.</div>
-        </div>
-        <div class="part-card reveal">
-          <div class="part-num">04</div>
-          <div class="part-name">الجنزير</div>
-          <div class="part-desc">السطح الذي يلامس درجات السُلَّم ويوزّع الوزن.</div>
-        </div>
-        <div class="part-card reveal">
-          <div class="part-num">05</div>
-          <div class="part-name">البوكس المركزي</div>
-          <div class="part-desc">قلب الوحدة — يربط المحرك بالمسننات.</div>
-        </div>
+        <div class="part-card reveal"><div class="part-num">01</div><div class="part-name" data-ar="الأغطية الصفراء" data-en="Yellow Side Covers">الأغطية الصفراء</div><div class="part-desc" data-ar="حماية المكونات الداخلية ولمسة الهوية البصرية." data-en="Protect internal components and define the unit's visual identity.">حماية المكونات الداخلية ولمسة الهوية البصرية.</div></div>
+        <div class="part-card reveal"><div class="part-num">02</div><div class="part-name" data-ar="البكرات الكبيرة ×6" data-en="6 Large Sprockets">البكرات الكبيرة ×6</div><div class="part-desc" data-ar="تنقل العزم وتدعم الجنزير على طول المسار." data-en="Transmit torque and carry the track along the full path.">تنقل العزم وتدعم الجنزير على طول المسار.</div></div>
+        <div class="part-card reveal"><div class="part-num">03</div><div class="part-name" data-ar="البكرات الصغيرة" data-en="Small Idler Wheels">البكرات الصغيرة</div><div class="part-desc" data-ar="تحافظ على شدّ الجنزير وتُنعّم الحركة." data-en="Maintain track tension and ensure smooth, stable motion.">تحافظ على شدّ الجنزير وتُنعّم الحركة.</div></div>
+        <div class="part-card reveal"><div class="part-num">04</div><div class="part-name" data-ar="الجنزير" data-en="Track / Chain">الجنزير</div><div class="part-desc" data-ar="السطح الذي يلامس درجات السُلَّم ويوزّع الوزن." data-en="Contacts stair edges and distributes load evenly across the steps.">السطح الذي يلامس درجات السُلَّم ويوزّع الوزن.</div></div>
+        <div class="part-card reveal"><div class="part-num">05</div><div class="part-name" data-ar="البوكس المركزي" data-en="Central Gearbox">البوكس المركزي</div><div class="part-desc" data-ar="قلب الوحدة — يربط المحرك بالمسننات." data-en="The unit's core — links the motor directly to the drive sprockets.">قلب الوحدة — يربط المحرك بالمسننات.</div></div>
       </div>
     </div>
   </section>
 
-  <!-- SPECS -->
   <section id="specs">
     <div class="section-inner">
-      <div class="section-kicker reveal">المواصفات</div>
-      <h2 class="section-title reveal">تصميم هندسي دقيق</h2>
+      <div class="section-kicker reveal" data-ar="المواصفات" data-en="Tech Specs">المواصفات</div>
+      <h2 class="section-title reveal" data-ar="تصميم هندسي دقيق" data-en="Engineered with Precision">تصميم هندسي دقيق</h2>
       <table class="specs-table reveal">
-        <thead><tr><th>المواصفة</th><th>القيمة</th></tr></thead>
+        <thead><tr><th data-ar="المواصفة" data-en="Specification">المواصفة</th><th data-ar="القيمة" data-en="Value">القيمة</th></tr></thead>
         <tbody>
-          <tr><td>الأبعاد الكاملة</td><td class="spec-val">90 × 50 cm</td></tr>
-          <tr><td>البروتوتايب</td><td class="spec-val">40 × 25 cm</td></tr>
-          <tr><td>المادة</td><td class="spec-val">eSUN PLA+</td></tr>
-          <tr><td>البيليات</td><td class="spec-val">6202-2RS + 696-2RS</td></tr>
-          <tr><td>المحور</td><td class="spec-val">12 mm</td></tr>
-          <tr><td>التصميم</td><td class="spec-val">SolidWorks 2024</td></tr>
+          <tr><td data-ar="الأبعاد الكاملة" data-en="Full-scale Dimensions">الأبعاد الكاملة</td><td class="spec-val">90 × 50 cm</td></tr>
+          <tr><td data-ar="البروتوتايب" data-en="Prototype Scale">البروتوتايب</td><td class="spec-val">40 × 25 cm</td></tr>
+          <tr><td data-ar="المادة" data-en="Material">المادة</td><td class="spec-val">eSUN PLA+</td></tr>
+          <tr><td data-ar="البيليات" data-en="Bearings">البيليات</td><td class="spec-val">6202-2RS + 696-2RS</td></tr>
+          <tr><td data-ar="المحور" data-en="Main Shaft">المحور</td><td class="spec-val">12 mm</td></tr>
+          <tr><td data-ar="التصميم" data-en="CAD Software">التصميم</td><td class="spec-val">SolidWorks 2024</td></tr>
         </tbody>
       </table>
     </div>
   </section>
 
-  <!-- PROTOTYPE -->
   <section id="prototype">
     <div class="section-inner">
-      <div class="section-kicker reveal">النموذج الأولي</div>
-      <h2 class="section-title reveal">من الفكرة إلى الطباعة</h2>
+      <div class="section-kicker reveal" data-ar="النموذج الأولي" data-en="Prototype">النموذج الأولي</div>
+      <h2 class="section-title reveal" data-ar="من الفكرة إلى الطباعة" data-en="From Sketch to Print">من الفكرة إلى الطباعة</h2>
       <div class="proto-steps">
-        <div class="proto-step reveal">
-          <div class="step-num">01</div>
-          <div class="step-content">
-            <h4>النمذجة على SolidWorks</h4>
-            <p>بناء كل قطعة، تجميع كامل، فحص التداخلات.</p>
-          </div>
-        </div>
-        <div class="proto-step reveal">
-          <div class="step-num">02</div>
-          <div class="step-content">
-            <h4>التحليل والمحاكاة</h4>
-            <p>محاكاة الحركة والأحمال على درجات السلم.</p>
-          </div>
-        </div>
-        <div class="proto-step reveal">
-          <div class="step-num">03</div>
-          <div class="step-content">
-            <h4>الطباعة ثلاثية الأبعاد</h4>
-            <p>طباعة PLA+ بمقياس 40×25 سم.</p>
-          </div>
-        </div>
-        <div class="proto-step reveal">
-          <div class="step-num">04</div>
-          <div class="step-content">
-            <h4>التجميع والاختبار</h4>
-            <p>تركيب البيليات والمحور واختبار الحركة.</p>
-          </div>
-        </div>
+        <div class="proto-step reveal"><div class="step-num">01</div><div class="step-content"><h4 data-ar="النمذجة على SolidWorks" data-en="SolidWorks Modeling">النمذجة على SolidWorks</h4><p data-ar="بناء كل قطعة، تجميع كامل، فحص التداخلات." data-en="Every part modeled from scratch, fully assembled, and interference-checked.">بناء كل قطعة، تجميع كامل، فحص التداخلات.</p></div></div>
+        <div class="proto-step reveal"><div class="step-num">02</div><div class="step-content"><h4 data-ar="التحليل والمحاكاة" data-en="Analysis & Simulation">التحليل والمحاكاة</h4><p data-ar="محاكاة الحركة والأحمال على درجات السلم." data-en="Motion and load simulation across various stair geometries.">محاكاة الحركة والأحمال على درجات السلم.</p></div></div>
+        <div class="proto-step reveal"><div class="step-num">03</div><div class="step-content"><h4 data-ar="الطباعة ثلاثية الأبعاد" data-en="3D Printing">الطباعة ثلاثية الأبعاد</h4><p data-ar="طباعة PLA+ بمقياس 40×25 سم." data-en="All parts printed in PLA+ at 40 × 25 cm prototype scale.">طباعة PLA+ بمقياس 40×25 سم.</p></div></div>
+        <div class="proto-step reveal"><div class="step-num">04</div><div class="step-content"><h4 data-ar="التجميع والاختبار" data-en="Assembly & Testing">التجميع والاختبار</h4><p data-ar="تركيب البيليات والمحور واختبار الحركة." data-en="Bearings and shaft installed, followed by a live motion test on real stairs.">تركيب البيليات والمحور واختبار الحركة.</p></div></div>
       </div>
     </div>
   </section>
 
-  <!-- TEAM -->
   <section id="team">
     <div class="section-inner" style="text-align:center">
-      <div class="section-kicker reveal" style="justify-content:center">الفريق</div>
-      <h2 class="section-title reveal">صُنع بشغف هندسي</h2>
+      <div class="section-kicker reveal" style="justify-content:center" data-ar="الفريق" data-en="The Team">الفريق</div>
+      <h2 class="section-title reveal" data-ar="صُنع بشغف هندسي" data-en="Built with Engineering Passion">صُنع بشغف هندسي</h2>
       <div class="team-card reveal">
         <div class="avatar">👨‍🔧</div>
-        <div class="team-name">عمرو عموري</div>
-        <div class="team-role">طالب هندسة ميكانيكية</div>
-        <span class="team-uni">جامعة حلب — هندسة الإنتاج والتصميم</span>
+        <div class="team-name">Amr Ammory</div>
+        <div class="team-role" data-ar="طالب هندسة ميكانيكية" data-en="Mechanical Engineering Student">طالب هندسة ميكانيكية</div>
+        <span class="team-uni" data-ar="جامعة حلب — هندسة الإنتاج والتصميم" data-en="University of Aleppo — Design & Production Engineering">جامعة حلب — هندسة الإنتاج والتصميم</span>
       </div>
     </div>
   </section>
 
-  <!-- CONTACT -->
   <section id="contact">
     <div class="section-inner">
       <div class="contact-box reveal">
-        <div class="section-kicker" style="justify-content:center">تواصل</div>
-        <h2 class="section-title">هل لديك سؤال أو فرصة تعاون؟</h2>
-        <a href="mailto:amrammory13@gmail.com" class="contact-email">
-          <span class="email-icon">✉️</span>
-          <span>amrammory13@gmail.com</span>
-        </a>
+        <div class="section-kicker" style="justify-content:center" data-ar="تواصل" data-en="Get in Touch">تواصل</div>
+        <h2 class="section-title" data-ar="هل لديك سؤال أو فرصة تعاون؟" data-en="Have a Question or Want to Collaborate?">هل لديك سؤال أو فرصة تعاون؟</h2>
+        <a href="mailto:amrammory13@gmail.com" class="contact-email"><span class="email-icon">✉️</span><span>amrammory13@gmail.com</span></a>
         <a href="mailto:amrammory13@gmail.com" class="btn-primary" style="display:inline-flex; margin:0 auto">
-          <span>راسلنا الآن</span>
-          <span>←</span>
+          <span data-ar="راسلنا الآن" data-en="Send a Message">راسلنا الآن</span><span>←</span>
         </a>
       </div>
     </div>
   </section>
 
-  <!-- FOOTER -->
   <footer>
     <span class="footer-logo">StepUp ↑</span>
-    <p>© 2026 — مشروع تخرج. كل الحقوق محفوظة.</p>
+    <p data-ar="© 2026 — مشروع تخرج. كل الحقوق محفوظة." data-en="© 2026 — Graduation Project. All rights reserved.">© 2026 — مشروع تخرج. كل الحقوق محفوظة.</p>
   </footer>
 
   <script>
-    // ===================== PARTICLES =====================
+    // PARTICLES
     const canvas = document.getElementById('particles-canvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
     function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
     resize(); window.addEventListener('resize', resize);
-    function createParticle() {
-      return {
-        x: Math.random() * canvas.width, y: Math.random() * canvas.height,
-        r: Math.random() * 1.5 + 0.3,
-        vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3,
-        alpha: Math.random() * 0.5 + 0.1,
-        color: Math.random() > 0.6 ? '0,200,255' : Math.random() > 0.5 ? '91,107,255' : '255,215,0'
-      };
-    }
-    for (let i = 0; i < 90; i++) particles.push(createParticle());
+    function createParticle() { return { x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: Math.random()*1.5+0.3, vx: (Math.random()-0.5)*0.3, vy: (Math.random()-0.5)*0.3, alpha: Math.random()*0.5+0.1, color: Math.random()>0.6?'0,200,255':Math.random()>0.5?'91,107,255':'255,215,0' }; }
+    for(let i=0;i<90;i++) particles.push(createParticle());
     function animateParticles() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach(p => {
-        p.x += p.vx; p.y += p.vy;
-        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${p.color},${p.alpha})`;
-        ctx.fill();
-      });
-      // Draw connections
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx*dx + dy*dy);
-          if (dist < 100) {
-            ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(0,200,255,${0.08 * (1 - dist/100)})`;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
-          }
-        }
-      }
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      particles.forEach(p => { p.x+=p.vx; p.y+=p.vy; if(p.x<0||p.x>canvas.width)p.vx*=-1; if(p.y<0||p.y>canvas.height)p.vy*=-1; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fillStyle=`rgba(${p.color},${p.alpha})`; ctx.fill(); });
+      for(let i=0;i<particles.length;i++) for(let j=i+1;j<particles.length;j++) { const dx=particles[i].x-particles[j].x,dy=particles[i].y-particles[j].y,d=Math.sqrt(dx*dx+dy*dy); if(d<100){ctx.beginPath();ctx.moveTo(particles[i].x,particles[i].y);ctx.lineTo(particles[j].x,particles[j].y);ctx.strokeStyle=`rgba(0,200,255,${0.08*(1-d/100)})`;ctx.lineWidth=0.5;ctx.stroke();} }
       requestAnimationFrame(animateParticles);
     }
     animateParticles();
 
-    // ===================== CURSOR =====================
-    const dot = document.getElementById('cursorDot');
-    const ring = document.getElementById('cursorRing');
-    let mx = 0, my = 0, rx = 0, ry = 0;
-    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-    function animateCursor() {
-      dot.style.left = mx + 'px'; dot.style.top = my + 'px';
-      rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
-      ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
-      requestAnimationFrame(animateCursor);
-    }
+    // CURSOR
+    const dot=document.getElementById('cursorDot'),ring=document.getElementById('cursorRing');
+    let mx=0,my=0,rx=0,ry=0;
+    document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+    function animateCursor(){dot.style.left=mx+'px';dot.style.top=my+'px';rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animateCursor);}
     animateCursor();
-    document.querySelectorAll('a, button, .part-card, .stat-card').forEach(el => {
-      el.addEventListener('mouseenter', () => ring.classList.add('hover'));
-      el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
-    });
+    document.querySelectorAll('a,button,.part-card,.stat-card').forEach(el=>{el.addEventListener('mouseenter',()=>ring.classList.add('hover'));el.addEventListener('mouseleave',()=>ring.classList.remove('hover'));});
 
-    // ===================== SCROLL REVEAL =====================
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
-    }, { threshold: 0.12 });
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    // SCROLL REVEAL
+    const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.12});
+    document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
 
-    // ===================== NAVBAR HAMBURGER =====================
-    document.getElementById('hamburger').addEventListener('click', () => {
-      document.getElementById('navLinks').classList.toggle('open');
-    });
+    // HAMBURGER
+    document.getElementById('hamburger').addEventListener('click',()=>document.getElementById('navLinks').classList.toggle('open'));
 
-    // ===================== LANGUAGE TOGGLE =====================
+    // NAVBAR SCROLL
+    window.addEventListener('scroll',()=>{const nav=document.querySelector('nav');nav.style.background=window.scrollY>50?'rgba(8,9,15,0.95)':'rgba(8,9,15,0.75)';});
+
+    // LANGUAGE TOGGLE — full page
     let isAr = true;
-    const translations = {
-      ar: {
-        kicker: 'مشروع تخرج — هندسة ميكانيكية',
-        title1: 'وحدة جنزيرية معيارية', title2: 'لتسلّق السلالم',
-        tag: 'تقنية تكسر الحواجز — خطوة على السلالم في كل مرة',
-        cta: 'اكتشف المشروع', how: 'كيف تعمل', scroll: 'اسحب للأسفل',
-      },
-      en: {
-        kicker: 'Graduation Project — Mechanical Engineering',
-        title1: 'Modular Stair-Climbing', title2: 'Track Unit for Wheelchairs',
-        tag: 'Breaking Barriers — One Stair at a Time',
-        cta: 'Discover the project', how: 'How it works', scroll: 'Scroll',
-      }
-    };
     document.getElementById('langBtn').addEventListener('click', () => {
       isAr = !isAr;
       const lang = isAr ? 'ar' : 'en';
-      const t = translations[lang];
+      const dir = isAr ? 'rtl' : 'ltr';
       document.documentElement.lang = lang;
-      document.documentElement.dir = isAr ? 'rtl' : 'ltr';
+      document.documentElement.dir = dir;
       document.getElementById('langBtn').textContent = isAr ? 'EN' : 'ع';
-      document.querySelector('.hero-kicker-text').textContent = t.kicker;
-      document.querySelector('.line1').textContent = t.title1;
-      document.querySelector('.line2').textContent = t.title2;
-      document.querySelector('.hero-tag').textContent = t.tag;
-      document.querySelector('.hero-cta-text').textContent = t.cta;
-      document.querySelector('.hero-how-text').textContent = t.how;
-      document.querySelector('.hero-scroll-text').textContent = t.scroll;
-      document.body.style.fontFamily = isAr ? "'Cairo', system-ui" : "'Inter', system-ui";
-    });
-
-    // ===================== NAVBAR SCROLL EFFECT =====================
-    window.addEventListener('scroll', () => {
-      const nav = document.querySelector('nav');
-      if (window.scrollY > 50) nav.style.background = 'rgba(8,9,15,0.95)';
-      else nav.style.background = 'rgba(8,9,15,0.75)';
+      document.body.className = isAr ? '' : 'en';
+      // Update all elements with data-ar / data-en
+      document.querySelectorAll('[data-ar][data-en]').forEach(el => {
+        el.textContent = isAr ? el.dataset.ar : el.dataset.en;
+      });
+      // Page title
+      document.title = isAr ? 'StepUp — وحدة جنزيرية معيارية لتسلّق السلالم' : 'StepUp — Modular Stair-Climbing Track Unit for Wheelchairs';
     });
   </script>
 </body>
