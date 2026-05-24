@@ -1,326 +1,424 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>StepUp — وحدة جنزيرية معيارية لتسلّق السلالم</title>
-  <meta name="description" content="مشروع تخرج هندسة ميكانيكية — وحدة جنزيرية مدمجة لتمكين الكراسي المتحركة من تسلق السلالم" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+  <meta name="description" content="مشروع تخرج هندسة ميكانيكية — وحدة جنزيرية مدمجة لتمكين الكراسي المتحركة من تسلق السلالم"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet"/>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{
       --bg:#08090f;--card:#12141e;
       --border:rgba(255,255,255,0.07);
-      --primary:#00c8ff;
-      --gold:#ffd700;
+      --primary:#00c8ff;--gold:#ffd700;
       --fg:#f0f2ff;--muted:#8892a4;
-      --electric-grad:linear-gradient(135deg,#00c8ff,#5b6bff);
-      --gold-grad:linear-gradient(135deg,#ffd700,#d4960a);
-      --glow-blue:0 0 40px rgba(0,200,255,0.3),0 0 80px rgba(0,200,255,0.12);
-      --glow-gold:0 0 25px rgba(255,215,0,0.3),0 0 50px rgba(255,215,0,0.1);
-      --radius:14px;
-      --font-ar:'Cairo',system-ui,sans-serif;
-      --font-en:'Space Grotesk','Inter',system-ui,sans-serif;
+      --eg:linear-gradient(135deg,#00c8ff,#5b6bff);
+      --gg:linear-gradient(135deg,#ffd700,#d4960a);
+      --r:14px;
+      --fa:'Cairo',system-ui,sans-serif;
+      --fe:'Space Grotesk',system-ui,sans-serif;
     }
     html{scroll-behavior:smooth}
-    body{
-      background:#08090f;color:var(--fg);font-family:var(--font-ar);
-      -webkit-font-smoothing:antialiased;overflow-x:hidden;
-    }
-    body.en{font-family:var(--font-en)}
-    ::selection{background:rgba(0,200,255,0.3);color:var(--fg)}
-    ::-webkit-scrollbar{width:5px}
+    body{background:var(--bg);color:var(--fg);font-family:var(--fa);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    body.en{font-family:var(--fe)}
+    ::selection{background:rgba(0,200,255,0.25);color:var(--fg)}
+    ::-webkit-scrollbar{width:4px}
     ::-webkit-scrollbar-track{background:var(--bg)}
-    ::-webkit-scrollbar-thumb{background:rgba(0,200,255,0.3);border-radius:10px}
-
-    /* ── GPU-promoted layers ── */
-    .hero-orb,.hero-card,#particles-canvas,.cursor-dot,.cursor-ring{
-      will-change:transform;
-      transform:translateZ(0);
-    }
-
-    #progress-bar{position:fixed;top:0;left:0;height:3px;width:0%;background:linear-gradient(90deg,#00c8ff,#ffd700,#5b6bff);z-index:9999;transition:width 0.15s linear;box-shadow:0 0 8px rgba(0,200,255,0.7)}
-
-    .cursor-dot,.cursor-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:9998;border-radius:9999px}
-    .cursor-dot{width:6px;height:6px;background:var(--primary);transform:translate(-50%,-50%)}
-    .cursor-ring{width:36px;height:36px;border:1.5px solid rgba(255,215,0,0.7);transform:translate(-50%,-50%);transition:width .2s cubic-bezier(.23,1,.32,1),height .2s cubic-bezier(.23,1,.32,1),border-color .2s,opacity .25s}
-    .cursor-ring.hover{width:60px;height:60px;border-color:var(--primary);opacity:0.55}
-    @media(pointer:coarse){.cursor-dot,.cursor-ring{display:none}}
-
-    #particles-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:1}
+    ::-webkit-scrollbar-thumb{background:rgba(0,200,255,0.25);border-radius:10px}
 
     /* ── NAV ── */
-    nav{position:fixed;top:0;width:100%;z-index:100;backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);background:rgba(8,9,15,0.72);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;transition:background 0.4s,box-shadow 0.4s;will-change:transform}
-    nav.scrolled{background:rgba(8,9,15,0.96);box-shadow:0 1px 30px rgba(0,0,0,0.5)}
-    .nav-logo{font-weight:900;font-size:1.25rem;letter-spacing:-0.02em;background:var(--electric-grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-family:var(--font-en);position:relative}
-    .nav-logo::after{content:'';position:absolute;bottom:-3px;left:0;right:0;height:1px;background:var(--electric-grad);transform:scaleX(0);transform-origin:left;transition:transform 0.3s}
-    .nav-logo:hover::after{transform:scaleX(1)}
-    .nav-links{display:flex;gap:1.75rem;list-style:none}
-    .nav-links a{color:var(--muted);text-decoration:none;font-size:0.82rem;font-weight:500;transition:color 0.2s;position:relative;padding-bottom:2px}
-    .nav-links a::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:var(--primary);transform:scaleX(0);transform-origin:center;transition:transform 0.25s}
-    .nav-links a:hover{color:var(--primary)}
+    nav{position:fixed;top:0;width:100%;z-index:100;
+      backdrop-filter:blur(16px) saturate(140%);
+      -webkit-backdrop-filter:blur(16px) saturate(140%);
+      background:rgba(8,9,15,0.7);
+      border-bottom:1px solid var(--border);
+      padding:0 2rem;height:62px;
+      display:flex;align-items:center;justify-content:space-between;
+      transition:background .3s,box-shadow .3s}
+    nav.scrolled{background:rgba(8,9,15,0.97);box-shadow:0 2px 24px rgba(0,0,0,0.5)}
+    .nav-logo{font-weight:900;font-size:1.2rem;letter-spacing:-.02em;
+      background:var(--eg);-webkit-background-clip:text;background-clip:text;color:transparent;
+      font-family:var(--fe)}
+    .nav-links{display:flex;gap:1.6rem;list-style:none}
+    .nav-links a{color:var(--muted);text-decoration:none;font-size:.82rem;font-weight:500;
+      transition:color .2s;position:relative;padding-bottom:2px}
+    .nav-links a::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+      background:var(--primary);transform:scaleX(0);transform-origin:center;transition:transform .22s}
+    .nav-links a:hover,.nav-links a.active{color:var(--primary)}
     .nav-links a:hover::after,.nav-links a.active::after{transform:scaleX(1)}
-    .nav-links a.active{color:var(--primary)}
-    .lang-btn{background:rgba(0,200,255,0.08);border:1px solid rgba(0,200,255,0.25);color:var(--primary);padding:0.3rem 0.9rem;border-radius:999px;cursor:pointer;font-size:0.8rem;font-weight:600;transition:background 0.2s}
+    .lang-btn{background:rgba(0,200,255,0.08);border:1px solid rgba(0,200,255,0.22);
+      color:var(--primary);padding:.28rem .85rem;border-radius:999px;cursor:pointer;
+      font-size:.78rem;font-weight:700;transition:background .2s}
     .lang-btn:hover{background:rgba(0,200,255,0.18)}
     .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none}
-    .hamburger span{width:24px;height:2px;background:var(--fg);border-radius:2px;display:block;transition:all 0.25s}
+    .hamburger span{width:24px;height:2px;background:var(--fg);border-radius:2px;display:block;transition:all .22s}
     .hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
     .hamburger.open span:nth-child(2){opacity:0}
     .hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
     @media(max-width:768px){
-      .nav-links{display:none;position:absolute;top:64px;right:0;left:0;flex-direction:column;background:rgba(8,9,15,0.98);padding:1.5rem 2rem;gap:1.25rem;border-bottom:1px solid var(--border)}
-      .nav-links.open{display:flex;animation:slideDown 0.25s ease}
+      .nav-links{display:none;position:absolute;top:62px;right:0;left:0;flex-direction:column;
+        background:rgba(8,9,15,0.99);padding:1.5rem 2rem;gap:1.2rem;border-bottom:1px solid var(--border)}
+      .nav-links.open{display:flex;animation:slideDown .22s ease}
       .hamburger{display:flex}
     }
-    @keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes slideDown{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+
+    /* ── PARTICLES ── */
+    #pc{position:fixed;inset:0;z-index:0;pointer-events:none}
 
     /* ── HERO ── */
-    #hero{position:relative;min-height:100vh;display:flex;align-items:center;padding:8rem 2rem 5rem;overflow:hidden;z-index:1}
-    .hero-bg{position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 50% -10%,rgba(0,200,255,0.18) 0%,transparent 65%)}
-    .hero-orb{position:absolute;border-radius:50%;pointer-events:none;filter:blur(70px);z-index:-1;backface-visibility:hidden}
-    .hero-orb-1{width:480px;height:480px;background:rgba(0,200,255,0.07);top:-100px;right:-100px;animation:orbFloat1 14s ease-in-out infinite}
-    .hero-orb-2{width:320px;height:320px;background:rgba(255,215,0,0.05);bottom:-50px;left:-50px;animation:orbFloat2 18s ease-in-out infinite}
-    .hero-orb-3{width:220px;height:220px;background:rgba(91,107,255,0.05);top:40%;left:40%;animation:orbFloat1 11s ease-in-out 2s infinite reverse}
-    @keyframes orbFloat1{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(28px,-36px,0) scale(1.07)}}
-    @keyframes orbFloat2{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(-18px,28px,0)}}
-    .hero-inner{max-width:1200px;margin:0 auto;width:100%;display:grid;grid-template-columns:7fr 5fr;gap:3rem;align-items:center}
-    .hero-kicker{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:999px;padding:0.35rem 1rem;margin-bottom:1.5rem;font-size:0.72rem;letter-spacing:0.25em;color:var(--muted);text-transform:uppercase;animation:heroIn 0.8s cubic-bezier(.16,1,.3,1) both}
-    .kicker-dot{width:6px;height:6px;border-radius:50%;background:var(--primary);animation:pulseGlow 2.5s ease-in-out infinite}
-    .hero-title{font-size:clamp(2.4rem,5vw,4.2rem);font-weight:900;line-height:1.05;margin-bottom:1.25rem;animation:heroIn 0.9s cubic-bezier(.16,1,.3,1) 0.1s both}
-    .hero-title .line2{display:block;background:var(--electric-grad);-webkit-background-clip:text;background-clip:text;color:transparent;margin-top:0.3rem;background-size:200% auto;animation:shimmerText 4s linear infinite}
-    .hero-tag{font-size:1.05rem;color:var(--muted);max-width:520px;line-height:1.7;margin-bottom:2.5rem;animation:heroIn 0.9s cubic-bezier(.16,1,.3,1) 0.2s both}
-    .hero-btns{display:flex;flex-wrap:wrap;gap:1rem;animation:heroIn 0.9s cubic-bezier(.16,1,.3,1) 0.3s both}
-    .btn-primary{display:inline-flex;align-items:center;gap:0.6rem;background:var(--primary);color:#050508;padding:0.85rem 1.8rem;border-radius:999px;font-weight:700;font-size:0.9rem;text-decoration:none;box-shadow:var(--glow-blue);transition:transform 0.2s cubic-bezier(.23,1,.32,1),box-shadow 0.2s;position:relative;overflow:hidden}
-    .btn-primary::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,0.16);transform:translateX(-100%) skewX(-15deg);transition:transform 0.35s}
-    .btn-primary:hover{transform:scale(1.04) translateY(-2px);box-shadow:0 0 50px rgba(0,200,255,0.45),0 0 100px rgba(0,200,255,0.18)}
-    .btn-primary:hover::after{transform:translateX(200%) skewX(-15deg)}
-    .btn-secondary{display:inline-flex;align-items:center;gap:0.5rem;border:1px solid rgba(255,255,255,0.15);color:var(--fg);padding:0.85rem 1.6rem;border-radius:999px;font-weight:500;font-size:0.9rem;text-decoration:none;transition:border-color 0.25s,color 0.25s,background 0.25s}
-    .btn-secondary:hover{border-color:rgba(0,200,255,0.5);color:var(--primary);background:rgba(0,200,255,0.05)}
-    .btn-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);animation:pulseGlow 2s infinite}
-    .hero-scroll{margin-top:3rem;display:flex;align-items:center;gap:1rem;color:rgba(255,255,255,0.3);font-size:0.75rem;letter-spacing:0.3em;animation:heroIn 1s ease 0.5s both}
-    .scroll-line{height:1px;width:60px;background:linear-gradient(to left,transparent,rgba(0,200,255,0.5));animation:scrollPulse 2.5s ease-in-out infinite}
-    @keyframes scrollPulse{0%,100%{opacity:0.4;width:38px}50%{opacity:1;width:65px}}
+    #hero{position:relative;min-height:100vh;display:flex;align-items:center;
+      padding:8rem 2rem 5rem;overflow:hidden;z-index:1}
+    .hero-bg{position:absolute;inset:0;z-index:-1;
+      background:radial-gradient(ellipse at 50% -5%,rgba(0,200,255,0.14) 0%,transparent 60%)}
+    /* orbs: pure CSS transform animations → compositor only */
+    .orb{position:absolute;border-radius:50%;pointer-events:none;z-index:-1;
+      will-change:transform;backface-visibility:hidden}
+    .orb1{width:440px;height:440px;background:rgba(0,200,255,0.06);
+      filter:blur(60px);top:-80px;right:-80px;
+      animation:o1 16s ease-in-out infinite}
+    .orb2{width:300px;height:300px;background:rgba(255,215,0,0.045);
+      filter:blur(55px);bottom:-40px;left:-40px;
+      animation:o2 20s ease-in-out infinite}
+    @media(pointer:coarse){
+      .orb1{width:300px;height:300px;filter:blur(45px)}
+      .orb2{width:200px;height:200px;filter:blur(40px)}
+    }
+    @keyframes o1{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(22px,-28px,0)}}
+    @keyframes o2{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(-14px,22px,0)}}
 
-    .hero-card{background:rgba(255,255,255,0.03);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:2rem;box-shadow:var(--glow-blue);animation:heroIn 1s cubic-bezier(.16,1,.3,1) 0.2s both,floatSlow 8s ease-in-out 1.5s infinite;position:relative;backface-visibility:hidden}
-    .hero-badge{position:absolute;top:-12px;left:-12px;background:var(--gold);color:#050508;font-size:0.65rem;font-weight:800;letter-spacing:0.15em;padding:0.3rem 0.8rem;border-radius:999px;box-shadow:var(--glow-gold);font-family:var(--font-en);animation:badgePop 0.6s cubic-bezier(.34,1.56,.64,1) 1s both}
-    @keyframes badgePop{from{opacity:0;transform:scale(0.5) rotate(-10deg)}to{opacity:1;transform:scale(1) rotate(0deg)}}
-    .track-art{width:100%;aspect-ratio:4/3;background:linear-gradient(135deg,rgba(0,200,255,0.05),rgba(91,107,255,0.08));border-radius:12px;border:1px solid rgba(0,200,255,0.12);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-    .track-art svg{width:75%;height:75%;opacity:0.9}
-    .track-glow{position:absolute;inset:-30%;background:radial-gradient(circle,rgba(0,200,255,0.1),transparent 65%);animation:glowPulse 3.5s ease-in-out infinite}
-    @keyframes glowPulse{0%,100%{opacity:0.5}50%{opacity:0.9}}
+    .hero-inner{max-width:1200px;margin:0 auto;width:100%;
+      display:grid;grid-template-columns:7fr 5fr;gap:3rem;align-items:center}
+    .hero-kicker{display:inline-flex;align-items:center;gap:.5rem;
+      background:rgba(255,255,255,0.04);border:1px solid var(--border);
+      border-radius:999px;padding:.32rem .95rem;margin-bottom:1.4rem;
+      font-size:.7rem;letter-spacing:.25em;color:var(--muted);text-transform:uppercase;
+      animation:hIn .8s cubic-bezier(.16,1,.3,1) both}
+    .kd{width:6px;height:6px;border-radius:50%;background:var(--primary);
+      animation:pg 2.5s ease-in-out infinite}
+    .hero-title{font-size:clamp(2.2rem,5vw,4rem);font-weight:900;line-height:1.05;
+      margin-bottom:1.2rem;animation:hIn .9s cubic-bezier(.16,1,.3,1) .08s both}
+    .hero-title .l2{display:block;background:var(--eg);-webkit-background-clip:text;
+      background-clip:text;color:transparent;margin-top:.25rem;
+      background-size:200% auto;animation:sh 4s linear infinite}
+    .hero-tag{font-size:1rem;color:var(--muted);max-width:500px;line-height:1.7;
+      margin-bottom:2.2rem;animation:hIn .9s cubic-bezier(.16,1,.3,1) .16s both}
+    .hero-btns{display:flex;flex-wrap:wrap;gap:.9rem;
+      animation:hIn .9s cubic-bezier(.16,1,.3,1) .24s both}
+    .btn-p{display:inline-flex;align-items:center;gap:.55rem;
+      background:var(--primary);color:#050508;padding:.8rem 1.7rem;
+      border-radius:999px;font-weight:700;font-size:.88rem;text-decoration:none;
+      box-shadow:0 0 30px rgba(0,200,255,0.3);
+      transition:transform .2s cubic-bezier(.23,1,.32,1),box-shadow .2s;
+      position:relative;overflow:hidden}
+    .btn-p::after{content:'';position:absolute;inset:0;
+      background:rgba(255,255,255,0.15);
+      transform:translateX(-100%) skewX(-15deg);transition:transform .3s}
+    .btn-p:hover{transform:scale(1.04) translateY(-2px);
+      box-shadow:0 0 45px rgba(0,200,255,0.45)}
+    .btn-p:hover::after{transform:translateX(200%) skewX(-15deg)}
+    .btn-s{display:inline-flex;align-items:center;gap:.5rem;
+      border:1px solid rgba(255,255,255,0.13);color:var(--fg);
+      padding:.8rem 1.5rem;border-radius:999px;font-weight:500;font-size:.88rem;
+      text-decoration:none;transition:border-color .22s,color .22s,background .22s}
+    .btn-s:hover{border-color:rgba(0,200,255,0.45);color:var(--primary);
+      background:rgba(0,200,255,0.05)}
+    .bdot{width:7px;height:7px;border-radius:50%;background:var(--gold);
+      animation:pg 2s infinite}
+    .hero-scroll{margin-top:2.8rem;display:flex;align-items:center;gap:.9rem;
+      color:rgba(255,255,255,0.28);font-size:.73rem;letter-spacing:.3em;
+      animation:hIn 1s ease .42s both}
+    .sline{height:1px;width:55px;
+      background:linear-gradient(to left,transparent,rgba(0,200,255,0.45));
+      animation:sp 2.5s ease-in-out infinite}
+    @keyframes sp{0%,100%{opacity:.4;width:35px}50%{opacity:1;width:60px}}
+
+    .hero-card{background:rgba(255,255,255,0.03);
+      backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+      border:1px solid rgba(255,255,255,0.07);border-radius:22px;padding:1.8rem;
+      box-shadow:0 0 35px rgba(0,200,255,0.2);
+      animation:hIn 1s cubic-bezier(.16,1,.3,1) .18s both,fl 9s ease-in-out 1.5s infinite;
+      position:relative;will-change:transform;backface-visibility:hidden}
+    .hero-badge{position:absolute;top:-11px;left:-11px;background:var(--gold);
+      color:#050508;font-size:.62rem;font-weight:800;letter-spacing:.15em;
+      padding:.28rem .75rem;border-radius:999px;
+      box-shadow:0 0 20px rgba(255,215,0,0.3);font-family:var(--fe);
+      animation:bp .6s cubic-bezier(.34,1.56,.64,1) 1s both}
+    @keyframes bp{from{opacity:0;transform:scale(.5) rotate(-10deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+    .track-art{width:100%;aspect-ratio:4/3;
+      background:linear-gradient(135deg,rgba(0,200,255,0.04),rgba(91,107,255,0.07));
+      border-radius:10px;border:1px solid rgba(0,200,255,0.1);
+      display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+    .track-art svg{width:74%;height:74%;opacity:.88}
+    .tglow{position:absolute;inset:-30%;
+      background:radial-gradient(circle,rgba(0,200,255,0.08),transparent 65%);
+      animation:gp 4s ease-in-out infinite}
+    @keyframes gp{0%,100%{opacity:.5}50%{opacity:.9}}
 
     /* ── SECTIONS ── */
     section{position:relative;z-index:1;contain:layout style}
-    .section-inner{max-width:1100px;margin:0 auto;padding:5.5rem 2rem}
-    .section-kicker{display:inline-flex;align-items:center;gap:0.5rem;font-size:0.72rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--primary);margin-bottom:1rem}
-    .section-kicker::before{content:'';width:20px;height:1px;background:var(--primary);transition:width 0.4s}
-    .section-kicker.visible::before{width:32px}
-    .section-title{font-size:clamp(1.9rem,4vw,3rem);font-weight:900;line-height:1.1;margin-bottom:1.25rem}
-    .section-lead{font-size:1rem;color:var(--muted);max-width:680px;line-height:1.75;margin-bottom:2.75rem}
-    .section-divider{height:1px;max-width:1100px;margin:0 auto;background:linear-gradient(90deg,transparent,rgba(0,200,255,0.18),transparent)}
+    .si{max-width:1100px;margin:0 auto;padding:5rem 2rem}
+    .sk{display:inline-flex;align-items:center;gap:.5rem;
+      font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;
+      color:var(--primary);margin-bottom:.9rem}
+    .sk::before{content:'';width:18px;height:1px;background:var(--primary);
+      transition:width .4s}
+    .sk.visible::before{width:30px}
+    .st{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;line-height:1.1;margin-bottom:1.1rem}
+    .sl{font-size:.97rem;color:var(--muted);max-width:660px;line-height:1.75;margin-bottom:2.5rem}
+    .sdiv{height:1px;max-width:1100px;margin:0 auto;
+      background:linear-gradient(90deg,transparent,rgba(0,200,255,0.15),transparent)}
 
     /* ── PROBLEM ── */
-    #problem{background:linear-gradient(180deg,transparent,rgba(0,200,255,0.025) 50%,transparent)}
-    .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
-    .stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:2rem 1.5rem;text-align:center;transition:border-color 0.3s,transform 0.3s,box-shadow 0.3s;position:relative;overflow:hidden}
-    .stat-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,200,255,0.04),transparent);opacity:0;transition:opacity 0.3s}
-    .stat-card:hover{border-color:rgba(0,200,255,0.35);transform:translateY(-5px);box-shadow:0 16px 50px rgba(0,0,0,0.35),0 0 25px rgba(0,200,255,0.1)}
-    .stat-card:hover::before{opacity:1}
-    .stat-number{font-size:2.8rem;font-weight:900;font-family:var(--font-en);background:var(--electric-grad);-webkit-background-clip:text;background-clip:text;color:transparent;display:block;margin-bottom:0.5rem;line-height:1}
-    .stat-label{font-size:0.88rem;color:var(--muted);line-height:1.5}
+    .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
+    .sc{background:var(--card);border:1px solid var(--border);border-radius:var(--r);
+      padding:1.8rem 1.4rem;text-align:center;
+      transition:border-color .25s,transform .25s,box-shadow .25s;
+      position:relative;overflow:hidden}
+    .sc::before{content:'';position:absolute;inset:0;
+      background:linear-gradient(135deg,rgba(0,200,255,0.04),transparent);
+      opacity:0;transition:opacity .25s}
+    .sc:hover{border-color:rgba(0,200,255,0.32);transform:translateY(-4px);
+      box-shadow:0 14px 40px rgba(0,0,0,0.3),0 0 20px rgba(0,200,255,0.08)}
+    .sc:hover::before{opacity:1}
+    .sn{font-size:2.6rem;font-weight:900;font-family:var(--fe);
+      background:var(--eg);-webkit-background-clip:text;background-clip:text;
+      color:transparent;display:block;margin-bottom:.4rem;line-height:1}
+    .slb{font-size:.86rem;color:var(--muted);line-height:1.5}
 
     /* ── SOLUTION ── */
-    .solution-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
-    .solution-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:2.5rem;display:flex;flex-direction:column;gap:1rem;transition:transform 0.3s cubic-bezier(.23,1,.32,1),box-shadow 0.3s}
-    .solution-card:hover{transform:translateY(-4px)}
-    .solution-card.before{border-color:rgba(255,60,60,0.25)}
-    .solution-card.before:hover{box-shadow:0 16px 50px rgba(255,60,60,0.07)}
-    .solution-card.after{border-color:rgba(0,200,255,0.3);box-shadow:var(--glow-blue)}
-    .solution-card.after:hover{box-shadow:0 0 50px rgba(0,200,255,0.28),0 16px 50px rgba(0,0,0,0.35)}
-    .sol-label{font-size:0.75rem;letter-spacing:0.2em;text-transform:uppercase;font-weight:700}
-    .sol-label.bad{color:#ff6060}.sol-label.good{color:var(--primary)}
-    .sol-text{font-size:1rem;color:var(--muted);line-height:1.7}
-    .sol-icon-wrap{width:80px;height:80px;margin:0.5rem 0}
-    .sol-icon-wrap svg{width:100%;height:100%;overflow:visible}
+    .sol-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.8rem}
+    .sol-card{background:var(--card);border:1px solid var(--border);
+      border-radius:var(--r);padding:2.2rem;display:flex;flex-direction:column;gap:.9rem;
+      transition:transform .25s cubic-bezier(.23,1,.32,1),box-shadow .25s}
+    .sol-card:hover{transform:translateY(-4px)}
+    .sol-card.bef{border-color:rgba(255,60,60,0.22)}
+    .sol-card.bef:hover{box-shadow:0 14px 40px rgba(255,60,60,0.06)}
+    .sol-card.aft{border-color:rgba(0,200,255,0.28);box-shadow:0 0 30px rgba(0,200,255,0.15)}
+    .sol-card.aft:hover{box-shadow:0 0 45px rgba(0,200,255,0.25),0 14px 40px rgba(0,0,0,0.3)}
+    .sol-lbl{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;font-weight:700}
+    .sol-lbl.bad{color:#ff6060}.sol-lbl.good{color:var(--primary)}
+    .sol-txt{font-size:.97rem;color:var(--muted);line-height:1.7}
+    .siw{width:72px;height:72px;margin:.4rem 0}
+    .siw svg{width:100%;height:100%;overflow:visible}
 
-    @keyframes barrierShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-4px)}40%{transform:translateX(4px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
-    @keyframes barrierGlow{0%,100%{filter:drop-shadow(0 0 4px rgba(255,80,80,0.4))}50%{filter:drop-shadow(0 0 12px rgba(255,80,80,0.8))}}
-    .icon-barrier{animation:barrierShake 3.5s ease-in-out infinite,barrierGlow 2s ease-in-out infinite}
-    @keyframes rocketFloat{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-9px) rotate(-5deg)}}
-    @keyframes thrustFlicker{0%,100%{opacity:1;transform:scaleY(1)}50%{opacity:0.7;transform:scaleY(1.25)}}
-    @keyframes sparkle{0%,100%{opacity:0;transform:scale(0)}50%{opacity:1;transform:scale(1)}}
-    .icon-rocket{animation:rocketFloat 2.5s ease-in-out infinite;transform-origin:center}
-    .rocket-flame{animation:thrustFlicker 0.35s ease-in-out infinite;transform-origin:top center}
-    .rocket-spark1{animation:sparkle 1.2s ease-in-out 0.1s infinite}
-    .rocket-spark2{animation:sparkle 1.2s ease-in-out 0.4s infinite}
-    .rocket-spark3{animation:sparkle 1.2s ease-in-out 0.7s infinite}
-
-    @keyframes gearSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-    @keyframes gearSpinRev{from{transform:rotate(0deg)}to{transform:rotate(-360deg)}}
-    @keyframes wrenchWave{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(15deg)}}
-    @keyframes avatarBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-    @keyframes helmetGlow{0%,100%{filter:drop-shadow(0 0 3px rgba(0,200,255,0.3))}50%{filter:drop-shadow(0 0 9px rgba(0,200,255,0.75))}}
-    .icon-engineer{animation:avatarBob 3s ease-in-out infinite}
-    .eng-gear-big{transform-origin:38px 62px;animation:gearSpin 5s linear infinite}
-    .eng-gear-small{transform-origin:58px 70px;animation:gearSpinRev 3s linear infinite}
-    .eng-wrench{transform-origin:70px 30px;animation:wrenchWave 2.5s ease-in-out infinite}
-    .eng-helmet{animation:helmetGlow 3s ease-in-out infinite}
-
-    @keyframes envelopeOpen{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-3px)}}
-    @keyframes letterSlide{0%,40%{transform:translateY(8px);opacity:0}70%,100%{transform:translateY(0);opacity:1}}
-    @keyframes dotPing{0%,100%{r:3;opacity:0.8}50%{r:6;opacity:0.2}}
-    @keyframes envelopeGlow{0%,100%{filter:drop-shadow(0 0 4px rgba(0,200,255,0.3))}50%{filter:drop-shadow(0 0 11px rgba(0,200,255,0.75))}}
-    .icon-email{animation:envelopeOpen 3s ease-in-out infinite,envelopeGlow 3s ease-in-out infinite}
-    .email-letter{animation:letterSlide 3s ease-in-out infinite}
-    .email-dot{animation:dotPing 1.5s ease-in-out infinite}
+    /* icon animations */
+    @keyframes bShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+    @keyframes bGlow{0%,100%{filter:drop-shadow(0 0 3px rgba(255,80,80,0.35))}50%{filter:drop-shadow(0 0 10px rgba(255,80,80,0.75))}}
+    .icon-barrier{animation:bShake 3.5s ease-in-out infinite,bGlow 2s ease-in-out infinite}
+    @keyframes rFloat{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-8px) rotate(-5deg)}}
+    @keyframes tFlick{0%,100%{opacity:1;transform:scaleY(1)}50%{opacity:.7;transform:scaleY(1.2)}}
+    @keyframes spk{0%,100%{opacity:0;transform:scale(0)}50%{opacity:1;transform:scale(1)}}
+    .icon-rocket{animation:rFloat 2.5s ease-in-out infinite;transform-origin:center}
+    .rf{animation:tFlick .35s ease-in-out infinite;transform-origin:top center}
+    .rs1{animation:spk 1.2s ease-in-out .1s infinite}
+    .rs2{animation:spk 1.2s ease-in-out .4s infinite}
+    .rs3{animation:spk 1.2s ease-in-out .7s infinite}
+    @keyframes gSpin{to{transform:rotate(360deg)}}
+    @keyframes gSpinR{to{transform:rotate(-360deg)}}
+    @keyframes wWave{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(14deg)}}
+    @keyframes aBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+    @keyframes hGlow{0%,100%{filter:drop-shadow(0 0 2px rgba(0,200,255,0.3))}50%{filter:drop-shadow(0 0 8px rgba(0,200,255,0.7))}}
+    .icon-eng{animation:aBob 3s ease-in-out infinite}
+    .eg-gb{transform-origin:38px 62px;animation:gSpin 5s linear infinite}
+    .eg-gs{transform-origin:58px 70px;animation:gSpinR 3s linear infinite}
+    .eg-w{transform-origin:70px 30px;animation:wWave 2.5s ease-in-out infinite}
+    .eg-h{animation:hGlow 3s ease-in-out infinite}
+    @keyframes eOpen{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-3px)}}
+    @keyframes lSlide{0%,40%{transform:translateY(8px);opacity:0}70%,100%{transform:translateY(0);opacity:1}}
+    @keyframes dPing{0%,100%{r:3;opacity:.8}50%{r:6;opacity:.15}}
+    @keyframes eGlow{0%,100%{filter:drop-shadow(0 0 3px rgba(0,200,255,0.3))}50%{filter:drop-shadow(0 0 10px rgba(0,200,255,0.7))}}
+    .icon-email{animation:eOpen 3s ease-in-out infinite,eGlow 3s ease-in-out infinite}
+    .el{animation:lSlide 3s ease-in-out infinite}
+    .ed{animation:dPing 1.5s ease-in-out infinite}
 
     /* ── HOW ── */
-    #how{background:linear-gradient(180deg,transparent,rgba(91,107,255,0.025) 50%,transparent)}
-    .parts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.25rem}
-    .part-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;cursor:default;position:relative;overflow:hidden;transition:border-color 0.3s,transform 0.3s cubic-bezier(.23,1,.32,1),box-shadow 0.3s}
-    .part-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--electric-grad);transform:scaleX(0);transform-origin:left;transition:transform 0.35s cubic-bezier(.23,1,.32,1)}
-    .part-card:hover{border-color:rgba(0,200,255,0.4);transform:translateY(-5px);box-shadow:0 16px 40px rgba(0,0,0,0.35),0 0 25px rgba(0,200,255,0.12)}
-    .part-card:hover::after{transform:scaleX(1)}
-    .part-num{font-size:0.7rem;font-weight:700;color:var(--primary);letter-spacing:0.2em;margin-bottom:0.75rem;font-family:var(--font-en)}
-    .part-name{font-size:0.95rem;font-weight:700;margin-bottom:0.5rem}
-    .part-desc{font-size:0.83rem;color:var(--muted);line-height:1.6}
+    .parts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1.1rem}
+    .pc2{background:var(--card);border:1px solid var(--border);border-radius:var(--r);
+      padding:1.4rem;position:relative;overflow:hidden;
+      transition:border-color .25s,transform .25s cubic-bezier(.23,1,.32,1),box-shadow .25s}
+    .pc2::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+      background:var(--eg);transform:scaleX(0);transform-origin:left;transition:transform .3s}
+    .pc2:hover{border-color:rgba(0,200,255,0.38);transform:translateY(-4px);
+      box-shadow:0 14px 35px rgba(0,0,0,0.3),0 0 20px rgba(0,200,255,0.1)}
+    .pc2:hover::after{transform:scaleX(1)}
+    .pn{font-size:.68rem;font-weight:700;color:var(--primary);letter-spacing:.2em;
+      margin-bottom:.65rem;font-family:var(--fe)}
+    .pm{font-size:.92rem;font-weight:700;margin-bottom:.4rem}
+    .pd{font-size:.81rem;color:var(--muted);line-height:1.6}
 
     /* ── SPECS ── */
-    .specs-table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
-    .specs-table th{background:rgba(0,200,255,0.07);padding:1rem 1.5rem;text-align:right;font-size:0.8rem;letter-spacing:0.1em;color:var(--primary);font-weight:700}
-    .specs-table td{padding:1rem 1.5rem;border-top:1px solid var(--border);font-size:0.95rem;color:var(--muted);transition:background 0.2s}
-    .specs-table tbody tr:hover td{background:rgba(0,200,255,0.04);color:var(--fg)}
-    .spec-val{color:var(--fg);font-weight:600;font-family:var(--font-en)}
-    .specs-table tbody tr.reveal{opacity:0;transform:translateX(-10px);transition:opacity 0.45s,transform 0.45s}
-    .specs-table tbody tr.reveal.visible{opacity:1;transform:translateX(0)}
+    .specs-t{width:100%;border-collapse:collapse;background:var(--card);
+      border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+    .specs-t th{background:rgba(0,200,255,0.06);padding:.9rem 1.4rem;text-align:right;
+      font-size:.78rem;letter-spacing:.1em;color:var(--primary);font-weight:700}
+    .specs-t td{padding:.9rem 1.4rem;border-top:1px solid var(--border);
+      font-size:.93rem;color:var(--muted);transition:background .2s}
+    .specs-t tbody tr:hover td{background:rgba(0,200,255,0.04);color:var(--fg)}
+    .sv{color:var(--fg);font-weight:600;font-family:var(--fe)}
 
     /* ── PROTOTYPE ── */
-    #prototype{background:linear-gradient(180deg,transparent,rgba(255,215,0,0.025) 50%,transparent)}
-    .proto-steps{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem}
-    .proto-step{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;display:flex;gap:1.25rem;align-items:flex-start;transition:border-color 0.3s,transform 0.3s cubic-bezier(.23,1,.32,1),box-shadow 0.3s;position:relative;overflow:hidden}
-    .proto-step::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,215,0,0.03),transparent);opacity:0;transition:opacity 0.3s}
-    .proto-step:hover{border-color:rgba(255,215,0,0.35);transform:translateY(-4px);box-shadow:0 16px 45px rgba(0,0,0,0.35),0 0 25px rgba(255,215,0,0.09)}
-    .proto-step:hover::before{opacity:1}
-    .step-num{width:40px;height:40px;border-radius:50%;background:var(--gold-grad);color:#050508;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:0.9rem;flex-shrink:0;font-family:var(--font-en);box-shadow:var(--glow-gold);transition:transform 0.25s,box-shadow 0.25s}
-    .proto-step:hover .step-num{transform:scale(1.12) rotate(5deg);box-shadow:0 0 30px rgba(255,215,0,0.45)}
-    .step-content h4{font-size:0.95rem;font-weight:700;margin-bottom:0.4rem}
-    .step-content p{font-size:0.85rem;color:var(--muted);line-height:1.65}
+    .proto-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.4rem}
+    .pstep{background:var(--card);border:1px solid var(--border);border-radius:var(--r);
+      padding:1.8rem;display:flex;gap:1.1rem;align-items:flex-start;
+      position:relative;overflow:hidden;
+      transition:border-color .25s,transform .25s cubic-bezier(.23,1,.32,1),box-shadow .25s}
+    .pstep::before{content:'';position:absolute;inset:0;
+      background:linear-gradient(135deg,rgba(255,215,0,0.025),transparent);
+      opacity:0;transition:opacity .25s}
+    .pstep:hover{border-color:rgba(255,215,0,0.3);transform:translateY(-3px);
+      box-shadow:0 14px 40px rgba(0,0,0,0.3),0 0 20px rgba(255,215,0,0.07)}
+    .pstep:hover::before{opacity:1}
+    .pnum{width:38px;height:38px;border-radius:50%;background:var(--gg);
+      color:#050508;display:flex;align-items:center;justify-content:center;
+      font-weight:900;font-size:.86rem;flex-shrink:0;font-family:var(--fe);
+      box-shadow:0 0 18px rgba(255,215,0,0.25);
+      transition:transform .22s,box-shadow .22s}
+    .pstep:hover .pnum{transform:scale(1.1) rotate(5deg);box-shadow:0 0 28px rgba(255,215,0,0.4)}
+    .pstep h4{font-size:.93rem;font-weight:700;margin-bottom:.35rem}
+    .pstep p{font-size:.83rem;color:var(--muted);line-height:1.6}
 
     /* ── TEAM ── */
-    .team-card{max-width:400px;margin:0 auto;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:3rem 2rem;text-align:center;box-shadow:var(--glow-blue);transition:transform 0.35s cubic-bezier(.23,1,.32,1),box-shadow 0.35s}
-    .team-card:hover{transform:translateY(-7px);box-shadow:0 0 70px rgba(0,200,255,0.28),0 25px 70px rgba(0,0,0,0.45)}
-    .avatar{width:110px;height:110px;border-radius:50%;margin:0 auto 1.25rem;background:linear-gradient(135deg,rgba(0,200,255,0.1),rgba(91,107,255,0.15));border:2px solid rgba(0,200,255,0.3);display:flex;align-items:center;justify-content:center;transition:transform 0.35s cubic-bezier(.34,1.56,.64,1),border-color 0.35s,box-shadow 0.35s;overflow:hidden}
-    .team-card:hover .avatar{transform:scale(1.08);border-color:var(--primary);box-shadow:0 0 25px rgba(0,200,255,0.35)}
-    .team-name{font-size:1.3rem;font-weight:800;margin-bottom:0.4rem}
-    .team-role{font-size:0.85rem;color:var(--muted);margin-bottom:1.5rem}
-    .team-uni{display:inline-block;background:rgba(0,200,255,0.08);border:1px solid rgba(0,200,255,0.2);color:var(--primary);padding:0.4rem 1rem;border-radius:999px;font-size:0.8rem;font-weight:600;transition:background 0.25s}
-    .team-card:hover .team-uni{background:rgba(0,200,255,0.14)}
+    .team-card{max-width:390px;margin:0 auto;background:var(--card);
+      border:1px solid var(--border);border-radius:var(--r);
+      padding:2.8rem 2rem;text-align:center;
+      box-shadow:0 0 30px rgba(0,200,255,0.15);
+      transition:transform .3s cubic-bezier(.23,1,.32,1),box-shadow .3s}
+    .team-card:hover{transform:translateY(-6px);
+      box-shadow:0 0 55px rgba(0,200,255,0.22),0 20px 55px rgba(0,0,0,0.4)}
+    .avatar{width:100px;height:100px;border-radius:50%;margin:0 auto 1.1rem;
+      background:linear-gradient(135deg,rgba(0,200,255,0.1),rgba(91,107,255,0.14));
+      border:2px solid rgba(0,200,255,0.28);
+      display:flex;align-items:center;justify-content:center;
+      transition:transform .3s,border-color .3s,box-shadow .3s;overflow:hidden}
+    .team-card:hover .avatar{transform:scale(1.07);border-color:var(--primary);
+      box-shadow:0 0 22px rgba(0,200,255,0.32)}
+    .tn{font-size:1.25rem;font-weight:800;margin-bottom:.35rem}
+    .tr{font-size:.83rem;color:var(--muted);margin-bottom:1.3rem}
+    .tu{display:inline-block;background:rgba(0,200,255,0.07);
+      border:1px solid rgba(0,200,255,0.18);color:var(--primary);
+      padding:.38rem .95rem;border-radius:999px;font-size:.78rem;font-weight:600;
+      transition:background .22s}
+    .team-card:hover .tu{background:rgba(0,200,255,0.13)}
 
     /* ── CONTACT ── */
-    #contact{background:linear-gradient(180deg,transparent,rgba(0,200,255,0.03) 50%,transparent)}
-    .contact-box{max-width:560px;margin:0 auto;text-align:center}
-    .contact-email{display:inline-flex;align-items:center;gap:0.75rem;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem 2rem;margin:2rem 0;font-size:1rem;color:var(--fg);text-decoration:none;transition:border-color 0.25s,transform 0.25s,box-shadow 0.25s}
-    .contact-email:hover{border-color:rgba(0,200,255,0.4);transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,200,255,0.09)}
-    .email-svg-wrap{width:36px;height:36px;flex-shrink:0}
-    .email-svg-wrap svg{width:100%;height:100%;overflow:visible}
+    .cbox{max-width:540px;margin:0 auto;text-align:center}
+    .cemail{display:inline-flex;align-items:center;gap:.7rem;background:var(--card);
+      border:1px solid var(--border);border-radius:var(--r);
+      padding:1.1rem 1.8rem;margin:1.8rem 0;font-size:.97rem;color:var(--fg);
+      text-decoration:none;transition:border-color .22s,transform .22s,box-shadow .22s}
+    .cemail:hover{border-color:rgba(0,200,255,0.38);transform:translateY(-2px);
+      box-shadow:0 6px 24px rgba(0,200,255,0.08)}
+    .esw{width:34px;height:34px;flex-shrink:0}
+    .esw svg{width:100%;height:100%;overflow:visible}
 
     /* ── FOOTER ── */
-    footer{border-top:1px solid var(--border);padding:2.5rem 2rem;text-align:center;color:var(--muted);font-size:0.82rem;z-index:1;position:relative}
-    .footer-logo{font-family:var(--font-en);font-weight:900;background:var(--electric-grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-size:1.1rem;margin-bottom:0.5rem;display:block;background-size:200% auto;animation:shimmerText 4s linear infinite}
-    .footer-links{display:flex;justify-content:center;gap:2rem;margin:1rem 0}
-    .footer-links a{color:var(--muted);text-decoration:none;font-size:0.8rem;transition:color 0.2s}
-    .footer-links a:hover{color:var(--primary)}
+    footer{border-top:1px solid var(--border);padding:2.2rem 2rem;text-align:center;
+      color:var(--muted);font-size:.8rem;position:relative;z-index:1}
+    .flogo{font-family:var(--fe);font-weight:900;
+      background:var(--eg);-webkit-background-clip:text;background-clip:text;
+      color:transparent;font-size:1.05rem;margin-bottom:.45rem;display:block;
+      background-size:200% auto;animation:sh 4s linear infinite}
+    .flinks{display:flex;justify-content:center;gap:2rem;margin:.9rem 0}
+    .flinks a{color:var(--muted);text-decoration:none;font-size:.78rem;transition:color .2s}
+    .flinks a:hover{color:var(--primary)}
 
     /* ── KEYFRAMES ── */
-    @keyframes heroIn{from{opacity:0;transform:translateY(24px);filter:blur(3px)}to{opacity:1;transform:translateY(0);filter:blur(0)}}
-    @keyframes pulseGlow{0%,100%{opacity:0.6;transform:scale(1)}50%{opacity:1;transform:scale(1.14)}}
-    @keyframes floatSlow{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-7px,0)}}
-    @keyframes shimmerText{0%{background-position:0% center}100%{background-position:200% center}}
+    @keyframes hIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes pg{0%,100%{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.12)}}
+    @keyframes fl{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-6px,0)}}
+    @keyframes sh{0%{background-position:0% center}100%{background-position:200% center}}
 
-    /* ── REVEAL ── */
-    .reveal{opacity:0;transform:translateY(22px);transition:opacity 0.6s cubic-bezier(.16,1,.3,1),transform 0.6s cubic-bezier(.16,1,.3,1)}
-    .reveal.visible{opacity:1;transform:translateY(0)}
-    .reveal-left{opacity:0;transform:translateX(-24px);transition:opacity 0.6s cubic-bezier(.16,1,.3,1),transform 0.6s cubic-bezier(.16,1,.3,1)}
-    .reveal-left.visible{opacity:1;transform:translateX(0)}
-    .reveal-right{opacity:0;transform:translateX(24px);transition:opacity 0.6s cubic-bezier(.16,1,.3,1),transform 0.6s cubic-bezier(.16,1,.3,1)}
-    .reveal-right.visible{opacity:1;transform:translateX(0)}
-    .reveal-scale{opacity:0;transform:scale(0.93);transition:opacity 0.6s cubic-bezier(.16,1,.3,1),transform 0.6s cubic-bezier(.16,1,.3,1)}
-    .reveal-scale.visible{opacity:1;transform:scale(1)}
-    .stagger-1{transition-delay:0.04s}.stagger-2{transition-delay:0.1s}.stagger-3{transition-delay:0.16s}.stagger-4{transition-delay:0.22s}.stagger-5{transition-delay:0.28s}
-    .shimmer-card{position:relative;overflow:hidden}
-    .shimmer-card::before{content:'';position:absolute;top:0;left:-150%;width:70%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.025),transparent);transform:skewX(-15deg)}
-    .shimmer-card.visible::before{animation:shimmerSlide 1.8s ease 0.3s 1 forwards}
-    @keyframes shimmerSlide{from{left:-150%}to{left:250%}}
-    .title-accent{display:inline-block;position:relative}
-    .title-accent::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:2px;background:var(--electric-grad);border-radius:2px;transform:scaleX(0);transform-origin:left;transition:transform 0.6s cubic-bezier(.16,1,.3,1) 0.25s}
-    .reveal.visible .title-accent::after{transform:scaleX(1)}
+    /* ── REVEAL (IntersectionObserver) ── */
+    .rv{opacity:0;transform:translateY(18px);
+      transition:opacity .55s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1)}
+    .rv.on{opacity:1;transform:translateY(0)}
+    .rl{opacity:0;transform:translateX(-20px);
+      transition:opacity .55s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1)}
+    .rl.on{opacity:1;transform:translateX(0)}
+    .rr{opacity:0;transform:translateX(20px);
+      transition:opacity .55s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1)}
+    .rr.on{opacity:1;transform:translateX(0)}
+    .rs{opacity:0;transform:scale(.94);
+      transition:opacity .55s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1)}
+    .rs.on{opacity:1;transform:scale(1)}
+    .d1{transition-delay:.04s}.d2{transition-delay:.1s}.d3{transition-delay:.16s}
+    .d4{transition-delay:.22s}.d5{transition-delay:.28s}
+    .ta{display:inline-block;position:relative}
+    .ta::after{content:'';position:absolute;bottom:-3px;left:0;right:0;height:2px;
+      background:var(--eg);border-radius:2px;transform:scaleX(0);
+      transform-origin:left;transition:transform .55s cubic-bezier(.16,1,.3,1) .2s}
+    .rv.on .ta::after{transform:scaleX(1)}
+
+    /* ── specs row reveal ── */
+    .specs-t tbody tr.rv{opacity:0;transform:translateX(-8px);
+      transition:opacity .4s,transform .4s}
+    .specs-t tbody tr.rv.on{opacity:1;transform:translateX(0)}
 
     @media(max-width:900px){
       .hero-inner{grid-template-columns:1fr}
-      .hero-card{max-width:400px;margin:0 auto}
+      .hero-card{max-width:390px;margin:0 auto}
       .stats-grid{grid-template-columns:1fr}
-      .solution-grid{grid-template-columns:1fr}
-      .proto-steps{grid-template-columns:1fr}
+      .sol-grid{grid-template-columns:1fr}
+      .proto-grid{grid-template-columns:1fr}
     }
     @media(max-width:600px){
-      .section-inner{padding:3.5rem 1.25rem}
-      .hero-title{font-size:2rem}
-    }
-    /* on mobile: reduce hero orbs blur (expensive) */
-    @media(pointer:coarse){
-      .hero-orb{filter:blur(55px)}
-      .hero-orb-3{display:none}
+      .si{padding:3.2rem 1.2rem}
+      .hero-title{font-size:1.95rem}
     }
   </style>
 </head>
 <body>
-<div id="progress-bar"></div>
-<div class="cursor-dot" id="cursorDot"></div>
-<div class="cursor-ring" id="cursorRing"></div>
-<canvas id="particles-canvas"></canvas>
+<canvas id="pc"></canvas>
 
-<nav id="mainNav">
+<nav id="nav">
   <span class="nav-logo">StepUp ↑</span>
-  <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
-  <ul class="nav-links" id="navLinks">
-    <li><a href="#hero" data-ar="البداية" data-en="Home">البداية</a></li>
-    <li><a href="#problem" data-ar="المشكلة" data-en="Problem">المشكلة</a></li>
-    <li><a href="#solution" data-ar="الحل" data-en="Solution">الحل</a></li>
-    <li><a href="#how" data-ar="كيف تعمل" data-en="How it Works">كيف تعمل</a></li>
-    <li><a href="#specs" data-ar="المواصفات" data-en="Specs">المواصفات</a></li>
-    <li><a href="#prototype" data-ar="النموذج" data-en="Prototype">النموذج</a></li>
-    <li><a href="#team" data-ar="الفريق" data-en="Team">الفريق</a></li>
-    <li><a href="#contact" data-ar="تواصل" data-en="Contact">تواصل</a></li>
+  <button class="hamburger" id="hbg" aria-label="Menu"><span></span><span></span><span></span></button>
+  <ul class="nav-links" id="nl">
+    <li><a href="#hero"      data-ar="البداية"    data-en="Home">البداية</a></li>
+    <li><a href="#problem"   data-ar="المشكلة"    data-en="Problem">المشكلة</a></li>
+    <li><a href="#solution"  data-ar="الحل"       data-en="Solution">الحل</a></li>
+    <li><a href="#how"       data-ar="كيف تعمل"  data-en="How it Works">كيف تعمل</a></li>
+    <li><a href="#specs"     data-ar="المواصفات"  data-en="Specs">المواصفات</a></li>
+    <li><a href="#prototype" data-ar="النموذج"    data-en="Prototype">النموذج</a></li>
+    <li><a href="#team"      data-ar="الفريق"     data-en="Team">الفريق</a></li>
+    <li><a href="#contact"   data-ar="تواصل"      data-en="Contact">تواصل</a></li>
   </ul>
-  <button class="lang-btn" id="langBtn">EN</button>
+  <button class="lang-btn" id="lb">EN</button>
 </nav>
 
+<!-- HERO -->
 <section id="hero">
   <div class="hero-bg"></div>
-  <div class="hero-orb hero-orb-1"></div>
-  <div class="hero-orb hero-orb-2"></div>
-  <div class="hero-orb hero-orb-3"></div>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
   <div class="hero-inner">
     <div>
-      <div class="hero-kicker"><span class="kicker-dot"></span><span data-ar="مشروع تخرج — هندسة ميكانيكية" data-en="Graduation Project — Mechanical Engineering">مشروع تخرج — هندسة ميكانيكية</span></div>
+      <div class="hero-kicker">
+        <span class="kd"></span>
+        <span data-ar="مشروع تخرج — هندسة ميكانيكية" data-en="Graduation Project — Mechanical Engineering">مشروع تخرج — هندسة ميكانيكية</span>
+      </div>
       <h1 class="hero-title">
-        <span class="line1" data-ar="وحدة جنزيرية معيارية" data-en="Modular Stair-Climbing">وحدة جنزيرية معيارية</span>
-        <span class="line2" data-ar="لتسلّق السلالم" data-en="Track Unit for Wheelchairs">لتسلّق السلالم</span>
+        <span data-ar="وحدة جنزيرية معيارية" data-en="Modular Stair-Climbing">وحدة جنزيرية معيارية</span>
+        <span class="l2" data-ar="لتسلّق السلالم" data-en="Track Unit for Wheelchairs">لتسلّق السلالم</span>
       </h1>
       <p class="hero-tag" data-ar="تقنية تكسر الحواجز — خطوة على السلالم في كل مرة" data-en="Breaking Barriers — One Stair at a Time">تقنية تكسر الحواجز — خطوة على السلالم في كل مرة</p>
       <div class="hero-btns">
-        <a href="#problem" class="btn-primary"><span data-ar="اكتشف المشروع" data-en="Discover the Project">اكتشف المشروع</span><span>←</span></a>
-        <a href="#how" class="btn-secondary"><span class="btn-dot"></span><span data-ar="كيف تعمل" data-en="How it Works">كيف تعمل</span></a>
+        <a href="#problem" class="btn-p"><span data-ar="اكتشف المشروع" data-en="Discover">اكتشف المشروع</span><span>←</span></a>
+        <a href="#how" class="btn-s"><span class="bdot"></span><span data-ar="كيف تعمل" data-en="How it Works">كيف تعمل</span></a>
       </div>
-      <div class="hero-scroll"><span data-ar="اسحب للأسفل" data-en="Scroll Down">اسحب للأسفل</span><span class="scroll-line"></span></div>
+      <div class="hero-scroll">
+        <span data-ar="اسحب للأسفل" data-en="Scroll Down">اسحب للأسفل</span>
+        <span class="sline"></span>
+      </div>
     </div>
-    <div class="hero-card" id="heroCard">
+    <div class="hero-card" id="hc">
       <div class="hero-badge">SOLIDWORKS · 2024</div>
       <div class="track-art">
-        <div class="track-glow"></div>
+        <div class="tglow"></div>
         <svg viewBox="0 0 200 150" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect x="15" y="45" width="170" height="60" rx="30" stroke="rgba(0,200,255,0.5)" stroke-width="2" fill="rgba(0,200,255,0.05)"/>
           <circle cx="45" cy="75" r="22" stroke="rgba(0,200,255,0.7)" stroke-width="2" fill="rgba(0,200,255,0.08)"/>
@@ -331,190 +429,195 @@
           <path d="M45 53 Q100 43 155 53" stroke="rgba(255,215,0,0.6)" stroke-width="3" stroke-dasharray="6 4" stroke-linecap="round"><animate attributeName="stroke-dashoffset" from="0" to="-20" dur="1s" repeatCount="indefinite"/></path>
           <path d="M45 97 Q100 107 155 97" stroke="rgba(255,215,0,0.6)" stroke-width="3" stroke-dasharray="6 4" stroke-linecap="round"><animate attributeName="stroke-dashoffset" from="-20" to="0" dur="1s" repeatCount="indefinite"/></path>
           <circle cx="100" cy="75" r="6" fill="rgba(0,200,255,0.8)"/>
-          <rect x="15" y="48" width="20" height="54" rx="8" fill="rgba(255,215,0,0.15)" stroke="rgba(255,215,0,0.4)" stroke-width="1"/>
-          <rect x="165" y="48" width="20" height="54" rx="8" fill="rgba(255,215,0,0.15)" stroke="rgba(255,215,0,0.4)" stroke-width="1"/>
-          <g stroke="rgba(255,255,255,0.15)" stroke-width="1"><path d="M15 140 h20 v-15 h20 v-15 h20 v-15 h20 v-15 h20"/></g>
+          <rect x="15" y="48" width="20" height="54" rx="8" fill="rgba(255,215,0,0.12)" stroke="rgba(255,215,0,0.35)" stroke-width="1"/>
+          <rect x="165" y="48" width="20" height="54" rx="8" fill="rgba(255,215,0,0.12)" stroke="rgba(255,215,0,0.35)" stroke-width="1"/>
+          <g stroke="rgba(255,255,255,0.12)" stroke-width="1"><path d="M15 140 h20 v-15 h20 v-15 h20 v-15 h20 v-15 h20"/></g>
         </svg>
       </div>
     </div>
   </div>
 </section>
 
-<div class="section-divider"></div>
+<div class="sdiv"></div>
 
+<!-- PROBLEM -->
 <section id="problem">
-  <div class="section-inner">
-    <div class="section-kicker reveal" data-ar="المشكلة" data-en="The Problem">المشكلة</div>
-    <h2 class="section-title reveal" data-ar="السلالم لا تزال جداراً" data-en="Stairs Are Still a Wall">السلالم لا تزال <span class="title-accent" data-ar="جداراً" data-en="a Wall">جداراً</span></h2>
-    <p class="section-lead reveal" data-ar="يعيش أكثر من 75 مليون شخص حول العالم باعتمادهم على الكراسي المتحركة، وتظل السلالم العائق اليومي الأكبر أمام استقلاليتهم في المباني، البيوت، والأماكن العامة." data-en="Over 75 million people worldwide depend on wheelchairs. Stairs remain the single largest daily barrier to their independence in homes, workplaces, and public spaces.">يعيش أكثر من 75 مليون شخص حول العالم باعتمادهم على الكراسي المتحركة، وتظل السلالم العائق اليومي الأكبر أمام استقلاليتهم في المباني، البيوت، والأماكن العامة.</p>
+  <div class="si">
+    <div class="sk rv" data-ar="المشكلة" data-en="The Problem">المشكلة</div>
+    <h2 class="st rv" data-ar="السلالم لا تزال جداراً" data-en="Stairs Are Still a Wall">السلالم لا تزال <span class="ta" data-ar="جداراً" data-en="a Wall">جداراً</span></h2>
+    <p class="sl rv" data-ar="يعيش أكثر من 75 مليون شخص حول العالم باعتمادهم على الكراسي المتحركة، وتظل السلالم العائق اليومي الأكبر أمام استقلاليتهم." data-en="Over 75 million people worldwide depend on wheelchairs. Stairs remain the single largest daily barrier to their independence.">يعيش أكثر من 75 مليون شخص حول العالم باعتمادهم على الكراسي المتحركة، وتظل السلالم العائق اليومي الأكبر أمام استقلاليتهم.</p>
     <div class="stats-grid">
-      <div class="stat-card shimmer-card reveal stagger-1"><span class="stat-number" data-target="75" data-suffix="M+">0</span><span class="stat-label" data-ar="مستخدم كرسي متحرك حول العالم" data-en="Wheelchair users globally">مستخدم كرسي متحرك حول العالم</span></div>
-      <div class="stat-card shimmer-card reveal stagger-2"><span class="stat-number" data-target="70" data-suffix="%">0</span><span class="stat-label" data-ar="يواجهون عوائق يومية في الوصول للسلالم" data-en="Face daily stair-access barriers">يواجهون عوائق يومية في الوصول للسلالم</span></div>
-      <div class="stat-card shimmer-card reveal stagger-3"><span class="stat-number" data-target="2" data-suffix="%">0</span><span class="stat-label" data-ar="فقط من المباني العامة مهيّأة بالكامل" data-en="Of public buildings are fully accessible">فقط من المباني العامة مهيّأة بالكامل</span></div>
+      <div class="sc rv d1"><span class="sn" data-target="75" data-suffix="M+">0</span><span class="slb" data-ar="مستخدم كرسي متحرك حول العالم" data-en="Wheelchair users globally">مستخدم كرسي متحرك حول العالم</span></div>
+      <div class="sc rv d2"><span class="sn" data-target="70" data-suffix="%">0</span><span class="slb" data-ar="يواجهون عوائق يومية في السلالم" data-en="Face daily stair-access barriers">يواجهون عوائق يومية في السلالم</span></div>
+      <div class="sc rv d3"><span class="sn" data-target="2" data-suffix="%">0</span><span class="slb" data-ar="فقط من المباني العامة مهيّأة بالكامل" data-en="Of public buildings fully accessible">فقط من المباني العامة مهيّأة بالكامل</span></div>
     </div>
   </div>
 </section>
 
-<div class="section-divider"></div>
+<div class="sdiv"></div>
 
+<!-- SOLUTION -->
 <section id="solution">
-  <div class="section-inner">
-    <div class="section-kicker reveal" data-ar="الحل" data-en="The Solution">الحل</div>
-    <h2 class="section-title reveal" data-ar="وحدة واحدة. كل سُلَّم." data-en="One Unit. Any Stair.">وحدة واحدة. كل سُلَّم.</h2>
-    <p class="section-lead reveal" data-ar="وحدة جنزيرية مدمجة تُركَّب على الكراسي المتحركة القياسية، تعتمد على نظام مسننات وجنزير لتمنح المستخدم استقلالية كاملة في الصعود والهبوط على السلالم بأمان." data-en="A compact track-drive module that mounts onto standard wheelchairs. A sprocket-and-track system gives the user full, safe, independent stair travel — up and down.">وحدة جنزيرية مدمجة تُركَّب على الكراسي المتحركة القياسية، تعتمد على نظام مسننات وجنزير لتمنح المستخدم استقلالية كاملة في الصعود والهبوط على السلالم بأمان.</p>
-    <div class="solution-grid">
-      <div class="solution-card before reveal-left">
-        <span class="sol-label bad" data-ar="قبل: عائق دائم" data-en="Before: A Permanent Barrier">قبل: عائق دائم</span>
-        <div class="sol-icon-wrap">
-          <svg class="icon-barrier" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="4" y="52" width="20" height="8" rx="2" fill="rgba(255,80,80,0.15)" stroke="rgba(255,80,80,0.5)" stroke-width="1.5"/>
-            <rect x="4" y="44" width="14" height="8" rx="2" fill="rgba(255,80,80,0.15)" stroke="rgba(255,80,80,0.5)" stroke-width="1.5"/>
-            <rect x="4" y="36" width="8" height="8" rx="2" fill="rgba(255,80,80,0.15)" stroke="rgba(255,80,80,0.5)" stroke-width="1.5"/>
-            <rect x="28" y="28" width="6" height="36" rx="3" fill="rgba(255,80,80,0.3)" stroke="#ff5050" stroke-width="1.5"/>
+  <div class="si">
+    <div class="sk rv" data-ar="الحل" data-en="The Solution">الحل</div>
+    <h2 class="st rv" data-ar="وحدة واحدة. كل سُلَّم." data-en="One Unit. Any Stair.">وحدة واحدة. كل سُلَّم.</h2>
+    <p class="sl rv" data-ar="وحدة جنزيرية مدمجة تُركَّب على الكراسي المتحركة القياسية لتمنح المستخدم استقلالية كاملة في الصعود والهبوط بأمان." data-en="A compact track-drive module that mounts onto standard wheelchairs, giving full safe independent stair travel — up and down.">وحدة جنزيرية مدمجة تُركَّب على الكراسي المتحركة القياسية لتمنح المستخدم استقلالية كاملة في الصعود والهبوط بأمان.</p>
+    <div class="sol-grid">
+      <div class="sol-card bef rl">
+        <span class="sol-lbl bad" data-ar="قبل: عائق دائم" data-en="Before: A Permanent Barrier">قبل: عائق دائم</span>
+        <div class="siw">
+          <svg class="icon-barrier" viewBox="0 0 80 80" fill="none">
+            <rect x="4" y="52" width="20" height="8" rx="2" fill="rgba(255,80,80,0.12)" stroke="rgba(255,80,80,0.5)" stroke-width="1.5"/>
+            <rect x="4" y="44" width="14" height="8" rx="2" fill="rgba(255,80,80,0.12)" stroke="rgba(255,80,80,0.5)" stroke-width="1.5"/>
+            <rect x="4" y="36" width="8" height="8" rx="2" fill="rgba(255,80,80,0.12)" stroke="rgba(255,80,80,0.5)" stroke-width="1.5"/>
+            <rect x="28" y="28" width="6" height="36" rx="3" fill="rgba(255,80,80,0.28)" stroke="#ff5050" stroke-width="1.5"/>
             <line x1="25" y1="35" x2="37" y2="55" stroke="#ff5050" stroke-width="2" stroke-linecap="round"/>
             <line x1="37" y1="35" x2="25" y2="55" stroke="#ff5050" stroke-width="2" stroke-linecap="round"/>
-            <circle cx="58" cy="44" r="7" stroke="rgba(255,80,80,0.6)" stroke-width="1.5" fill="none"/>
-            <circle cx="58" cy="44" r="2" fill="rgba(255,80,80,0.6)"/>
-            <circle cx="66" cy="58" r="5" stroke="rgba(255,80,80,0.6)" stroke-width="1.5" fill="none"/>
-            <circle cx="50" cy="58" r="5" stroke="rgba(255,80,80,0.6)" stroke-width="1.5" fill="none"/>
-            <path d="M58 51 L58 58 L66 58" stroke="rgba(255,80,80,0.6)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-            <path d="M53 44 L58 51" stroke="rgba(255,80,80,0.5)" stroke-width="1.5" stroke-linecap="round"/>
-            <circle cx="31" cy="46" r="18" stroke="rgba(255,80,80,0.15)" stroke-width="1" fill="none"><animate attributeName="r" from="14" to="22" dur="1.8s" repeatCount="indefinite"/><animate attributeName="opacity" from="0.4" to="0" dur="1.8s" repeatCount="indefinite"/></circle>
+            <circle cx="58" cy="44" r="7" stroke="rgba(255,80,80,0.55)" stroke-width="1.5" fill="none"/>
+            <circle cx="58" cy="44" r="2" fill="rgba(255,80,80,0.55)"/>
+            <circle cx="66" cy="58" r="5" stroke="rgba(255,80,80,0.55)" stroke-width="1.5" fill="none"/>
+            <circle cx="50" cy="58" r="5" stroke="rgba(255,80,80,0.55)" stroke-width="1.5" fill="none"/>
+            <circle cx="31" cy="46" r="18" stroke="rgba(255,80,80,0.12)" stroke-width="1" fill="none"><animate attributeName="r" from="14" to="22" dur="1.8s" repeatCount="indefinite"/><animate attributeName="opacity" from="0.4" to="0" dur="1.8s" repeatCount="indefinite"/></circle>
           </svg>
         </div>
-        <p class="sol-text" data-ar="الكرسي المتحرك التقليدي عاجز أمام أي درجة سُلَّم — يعيق الاستقلالية ويتطلب مساعدة خارجية دائمة." data-en="A traditional wheelchair is helpless against any stair — limiting independence and requiring constant outside assistance.">الكرسي المتحرك التقليدي عاجز أمام أي درجة سُلَّم — يعيق الاستقلالية ويتطلب مساعدة خارجية دائمة.</p>
+        <p class="sol-txt" data-ar="الكرسي التقليدي عاجز أمام أي درجة سُلَّم — يقيّد الاستقلالية ويتطلب مساعدة دائمة." data-en="A traditional wheelchair is helpless against stairs — limiting independence and requiring constant assistance.">الكرسي التقليدي عاجز أمام أي درجة سُلَّم — يقيّد الاستقلالية ويتطلب مساعدة دائمة.</p>
       </div>
-      <div class="solution-card after reveal-right">
-        <span class="sol-label good" data-ar="بعد: حركة مستقلة" data-en="After: Independent Motion">بعد: حركة مستقلة</span>
-        <div class="sol-icon-wrap">
-          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <div class="sol-card aft rr">
+        <span class="sol-lbl good" data-ar="بعد: حركة مستقلة" data-en="After: Independent Motion">بعد: حركة مستقلة</span>
+        <div class="siw">
+          <svg viewBox="0 0 80 80" fill="none">
             <g class="icon-rocket">
-              <path d="M40 10 C30 10 22 22 22 38 L22 52 L40 58 L58 52 L58 38 C58 22 50 10 40 10Z" fill="rgba(0,200,255,0.12)" stroke="rgba(0,200,255,0.8)" stroke-width="1.5"/>
-              <path d="M40 10 C36 10 32 16 32 22 L48 22 C48 16 44 10 40 10Z" fill="rgba(0,200,255,0.25)" stroke="rgba(0,200,255,0.9)" stroke-width="1"/>
+              <path d="M40 10 C30 10 22 22 22 38 L22 52 L40 58 L58 52 L58 38 C58 22 50 10 40 10Z" fill="rgba(0,200,255,0.1)" stroke="rgba(0,200,255,0.8)" stroke-width="1.5"/>
+              <path d="M40 10 C36 10 32 16 32 22 L48 22 C48 16 44 10 40 10Z" fill="rgba(0,200,255,0.22)" stroke="rgba(0,200,255,0.9)" stroke-width="1"/>
               <circle cx="40" cy="34" r="6" fill="rgba(0,200,255,0.1)" stroke="rgba(0,200,255,0.9)" stroke-width="1.5"/>
               <circle cx="40" cy="34" r="3" fill="rgba(0,200,255,0.4)"/>
-              <path d="M22 44 L12 56 L22 52Z" fill="rgba(91,107,255,0.3)" stroke="rgba(91,107,255,0.8)" stroke-width="1"/>
-              <path d="M58 44 L68 56 L58 52Z" fill="rgba(91,107,255,0.3)" stroke="rgba(91,107,255,0.8)" stroke-width="1"/>
-              <g class="rocket-flame"><path d="M33 58 Q36 68 40 72 Q44 68 47 58Z" fill="rgba(255,180,0,0.8)"/><path d="M35 58 Q38 64 40 67 Q42 64 45 58Z" fill="rgba(255,220,0,0.9)"/><path d="M37 58 Q39 61 40 63 Q41 61 43 58Z" fill="white" opacity="0.8"/></g>
-              <circle class="rocket-spark1" cx="36" cy="72" r="2" fill="rgba(255,200,0,0.9)"/>
-              <circle class="rocket-spark2" cx="44" cy="70" r="1.5" fill="rgba(255,150,0,0.9)"/>
-              <circle class="rocket-spark3" cx="40" cy="75" r="1.5" fill="rgba(255,220,50,0.9)"/>
+              <path d="M22 44 L12 56 L22 52Z" fill="rgba(91,107,255,0.28)" stroke="rgba(91,107,255,0.8)" stroke-width="1"/>
+              <path d="M58 44 L68 56 L58 52Z" fill="rgba(91,107,255,0.28)" stroke="rgba(91,107,255,0.8)" stroke-width="1"/>
+              <g class="rf"><path d="M33 58 Q36 68 40 72 Q44 68 47 58Z" fill="rgba(255,180,0,0.8)"/><path d="M35 58 Q38 64 40 67 Q42 64 45 58Z" fill="rgba(255,220,0,0.9)"/><path d="M37 58 Q39 61 40 63 Q41 61 43 58Z" fill="white" opacity=".8"/></g>
+              <circle class="rs1" cx="36" cy="72" r="2" fill="rgba(255,200,0,0.9)"/>
+              <circle class="rs2" cx="44" cy="70" r="1.5" fill="rgba(255,150,0,0.9)"/>
+              <circle class="rs3" cx="40" cy="75" r="1.5" fill="rgba(255,220,50,0.9)"/>
             </g>
           </svg>
         </div>
-        <p class="sol-text" data-ar="مع الوحدة الجنزيرية، يستطيع المستخدم صعود وهبوط السلالم باستقلالية تامة وأمان كامل، دون الحاجة لأي مساعدة." data-en="With the track unit, the user can navigate stairs fully and safely on their own — complete freedom, zero assistance needed.">مع الوحدة الجنزيرية، يستطيع المستخدم صعود وهبوط السلالم باستقلالية تامة وأمان كامل، دون الحاجة لأي مساعدة.</p>
+        <p class="sol-txt" data-ar="مع الوحدة الجنزيرية، يصعد المستخدم ويهبط السلالم باستقلالية تامة وأمان كامل." data-en="With the track unit, the user navigates any stair fully and safely — complete freedom, zero assistance.">مع الوحدة الجنزيرية، يصعد المستخدم ويهبط السلالم باستقلالية تامة وأمان كامل.</p>
       </div>
     </div>
   </div>
 </section>
 
-<div class="section-divider"></div>
+<div class="sdiv"></div>
 
+<!-- HOW -->
 <section id="how">
-  <div class="section-inner">
-    <div class="section-kicker reveal" data-ar="كيف تعمل" data-en="How It Works">كيف تعمل</div>
-    <h2 class="section-title reveal" data-ar="كل قطعة لها دور" data-en="Every Part Has a Purpose">كل قطعة لها دور</h2>
-    <p class="section-lead reveal" data-ar="مرّر فوق المكوّنات لاستكشاف الوحدة." data-en="Hover over the components to explore the assembly.">مرّر فوق المكوّنات لاستكشاف الوحدة.</p>
+  <div class="si">
+    <div class="sk rv" data-ar="كيف تعمل" data-en="How It Works">كيف تعمل</div>
+    <h2 class="st rv" data-ar="كل قطعة لها دور" data-en="Every Part Has a Purpose">كل قطعة لها دور</h2>
+    <p class="sl rv" data-ar="مرّر فوق المكوّنات لاستكشاف الوحدة." data-en="Hover over the components to explore the assembly.">مرّر فوق المكوّنات لاستكشاف الوحدة.</p>
     <div class="parts-grid">
-      <div class="part-card shimmer-card reveal stagger-1"><div class="part-num">01</div><div class="part-name" data-ar="الأغطية الصفراء" data-en="Yellow Side Covers">الأغطية الصفراء</div><div class="part-desc" data-ar="حماية المكونات الداخلية ولمسة الهوية البصرية." data-en="Protect internal components and define the unit's visual identity.">حماية المكونات الداخلية ولمسة الهوية البصرية.</div></div>
-      <div class="part-card shimmer-card reveal stagger-2"><div class="part-num">02</div><div class="part-name" data-ar="البكرات الكبيرة ×6" data-en="6 Large Sprockets">البكرات الكبيرة ×6</div><div class="part-desc" data-ar="تنقل العزم وتدعم الجنزير على طول المسار." data-en="Transmit torque and carry the track along the full path.">تنقل العزم وتدعم الجنزير على طول المسار.</div></div>
-      <div class="part-card shimmer-card reveal stagger-3"><div class="part-num">03</div><div class="part-name" data-ar="البكرات الصغيرة" data-en="Small Idler Wheels">البكرات الصغيرة</div><div class="part-desc" data-ar="تحافظ على شدّ الجنزير وتُنعّم الحركة." data-en="Maintain track tension and ensure smooth, stable motion.">تحافظ على شدّ الجنزير وتُنعّم الحركة.</div></div>
-      <div class="part-card shimmer-card reveal stagger-4"><div class="part-num">04</div><div class="part-name" data-ar="الجنزير" data-en="Track / Chain">الجنزير</div><div class="part-desc" data-ar="السطح الذي يلامس درجات السُلَّم ويوزّع الوزن." data-en="Contacts stair edges and distributes load evenly across the steps.">السطح الذي يلامس درجات السُلَّم ويوزّع الوزن.</div></div>
-      <div class="part-card shimmer-card reveal stagger-5"><div class="part-num">05</div><div class="part-name" data-ar="البوكس المركزي" data-en="Central Gearbox">البوكس المركزي</div><div class="part-desc" data-ar="قلب الوحدة — يربط المحرك بالمسننات." data-en="The unit's core — links the motor directly to the drive sprockets.">قلب الوحدة — يربط المحرك بالمسننات.</div></div>
+      <div class="pc2 rv d1"><div class="pn">01</div><div class="pm" data-ar="الأغطية الصفراء" data-en="Yellow Side Covers">الأغطية الصفراء</div><div class="pd" data-ar="حماية المكونات الداخلية ولمسة الهوية البصرية." data-en="Protect internal components and define the visual identity.">حماية المكونات الداخلية ولمسة الهوية البصرية.</div></div>
+      <div class="pc2 rv d2"><div class="pn">02</div><div class="pm" data-ar="البكرات الكبيرة ×6" data-en="6 Large Sprockets">البكرات الكبيرة ×6</div><div class="pd" data-ar="تنقل العزم وتدعم الجنزير على طول المسار." data-en="Transmit torque and carry the track along the full path.">تنقل العزم وتدعم الجنزير على طول المسار.</div></div>
+      <div class="pc2 rv d3"><div class="pn">03</div><div class="pm" data-ar="البكرات الصغيرة" data-en="Small Idler Wheels">البكرات الصغيرة</div><div class="pd" data-ar="تحافظ على شدّ الجنزير وتُنعّم الحركة." data-en="Maintain track tension and ensure smooth stable motion.">تحافظ على شدّ الجنزير وتُنعّم الحركة.</div></div>
+      <div class="pc2 rv d4"><div class="pn">04</div><div class="pm" data-ar="الجنزير" data-en="Track / Chain">الجنزير</div><div class="pd" data-ar="يلامس درجات السُلَّم ويوزّع الوزن بالتساوي." data-en="Contacts stair edges and distributes load evenly.">يلامس درجات السُلَّم ويوزّع الوزن بالتساوي.</div></div>
+      <div class="pc2 rv d5"><div class="pn">05</div><div class="pm" data-ar="البوكس المركزي" data-en="Central Gearbox">البوكس المركزي</div><div class="pd" data-ar="قلب الوحدة — يربط المحرك بالمسننات." data-en="The unit's core — links the motor to the drive sprockets.">قلب الوحدة — يربط المحرك بالمسننات.</div></div>
     </div>
   </div>
 </section>
 
-<div class="section-divider"></div>
+<div class="sdiv"></div>
 
+<!-- SPECS -->
 <section id="specs">
-  <div class="section-inner">
-    <div class="section-kicker reveal" data-ar="المواصفات" data-en="Tech Specs">المواصفات</div>
-    <h2 class="section-title reveal" data-ar="تصميم هندسي دقيق" data-en="Engineered with Precision">تصميم هندسي دقيق</h2>
-    <table class="specs-table">
+  <div class="si">
+    <div class="sk rv" data-ar="المواصفات" data-en="Tech Specs">المواصفات</div>
+    <h2 class="st rv" data-ar="تصميم هندسي دقيق" data-en="Engineered with Precision">تصميم هندسي دقيق</h2>
+    <table class="specs-t">
       <thead><tr><th data-ar="المواصفة" data-en="Specification">المواصفة</th><th data-ar="القيمة" data-en="Value">القيمة</th></tr></thead>
       <tbody>
-        <tr class="reveal stagger-1"><td data-ar="الأبعاد الكاملة" data-en="Full-scale Dimensions">الأبعاد الكاملة</td><td class="spec-val">90 × 50 cm</td></tr>
-        <tr class="reveal stagger-2"><td data-ar="البروتوتايب" data-en="Prototype Scale">البروتوتايب</td><td class="spec-val">40 × 25 cm</td></tr>
-        <tr class="reveal stagger-3"><td data-ar="المادة" data-en="Material">المادة</td><td class="spec-val">eSUN PLA+</td></tr>
-        <tr class="reveal stagger-4"><td data-ar="البيليات" data-en="Bearings">البيليات</td><td class="spec-val">6202-2RS + 696-2RS</td></tr>
-        <tr class="reveal stagger-5"><td data-ar="المحور" data-en="Main Shaft">المحور</td><td class="spec-val">12 mm</td></tr>
-        <tr class="reveal stagger-5"><td data-ar="التصميم" data-en="CAD Software">التصميم</td><td class="spec-val">SolidWorks 2024</td></tr>
+        <tr class="rv d1"><td data-ar="الأبعاد الكاملة"  data-en="Full-scale Dimensions">الأبعاد الكاملة</td><td class="sv">90 × 50 cm</td></tr>
+        <tr class="rv d2"><td data-ar="البروتوتايب"       data-en="Prototype Scale">البروتوتايب</td><td class="sv">40 × 25 cm</td></tr>
+        <tr class="rv d3"><td data-ar="المادة"             data-en="Material">المادة</td><td class="sv">eSUN PLA+</td></tr>
+        <tr class="rv d4"><td data-ar="البيليات"           data-en="Bearings">البيليات</td><td class="sv">6202-2RS + 696-2RS</td></tr>
+        <tr class="rv d5"><td data-ar="المحور"             data-en="Main Shaft">المحور</td><td class="sv">12 mm</td></tr>
+        <tr class="rv d5"><td data-ar="التصميم"            data-en="CAD Software">التصميم</td><td class="sv">SolidWorks 2024</td></tr>
       </tbody>
     </table>
   </div>
 </section>
 
-<div class="section-divider"></div>
+<div class="sdiv"></div>
 
+<!-- PROTOTYPE -->
 <section id="prototype">
-  <div class="section-inner">
-    <div class="section-kicker reveal" data-ar="النموذج الأولي" data-en="Prototype">النموذج الأولي</div>
-    <h2 class="section-title reveal" data-ar="من الفكرة إلى الطباعة" data-en="From Sketch to Print">من الفكرة إلى الطباعة</h2>
-    <div class="proto-steps">
-      <div class="proto-step reveal-left stagger-1"><div class="step-num">01</div><div class="step-content"><h4 data-ar="النمذجة على SolidWorks" data-en="SolidWorks Modeling">النمذجة على SolidWorks</h4><p data-ar="بناء كل قطعة، تجميع كامل، فحص التداخلات." data-en="Every part modeled from scratch, fully assembled, and interference-checked.">بناء كل قطعة، تجميع كامل، فحص التداخلات.</p></div></div>
-      <div class="proto-step reveal-right stagger-1"><div class="step-num">02</div><div class="step-content"><h4 data-ar="التحليل والمحاكاة" data-en="Analysis & Simulation">التحليل والمحاكاة</h4><p data-ar="محاكاة الحركة والأحمال على درجات السلم." data-en="Motion and load simulation across various stair geometries.">محاكاة الحركة والأحمال على درجات السلم.</p></div></div>
-      <div class="proto-step reveal-left stagger-2"><div class="step-num">03</div><div class="step-content"><h4 data-ar="الطباعة ثلاثية الأبعاد" data-en="3D Printing">الطباعة ثلاثية الأبعاد</h4><p data-ar="طباعة PLA+ بمقياس 40×25 سم." data-en="All parts printed in PLA+ at 40 × 25 cm prototype scale.">طباعة PLA+ بمقياس 40×25 سم.</p></div></div>
-      <div class="proto-step reveal-right stagger-2"><div class="step-num">04</div><div class="step-content"><h4 data-ar="التجميع والاختبار" data-en="Assembly & Testing">التجميع والاختبار</h4><p data-ar="تركيب البيليات والمحور واختبار الحركة." data-en="Bearings and shaft installed, followed by a live motion test on real stairs.">تركيب البيليات والمحور واختبار الحركة.</p></div></div>
+  <div class="si">
+    <div class="sk rv" data-ar="النموذج الأولي" data-en="Prototype">النموذج الأولي</div>
+    <h2 class="st rv" data-ar="من الفكرة إلى الطباعة" data-en="From Sketch to Print">من الفكرة إلى الطباعة</h2>
+    <div class="proto-grid">
+      <div class="pstep rl d1"><div class="pnum">01</div><div><h4 data-ar="النمذجة على SolidWorks" data-en="SolidWorks Modeling">النمذجة على SolidWorks</h4><p data-ar="بناء كل قطعة، تجميع كامل، فحص التداخلات." data-en="Every part modeled, fully assembled, interference-checked.">بناء كل قطعة، تجميع كامل، فحص التداخلات.</p></div></div>
+      <div class="pstep rr d1"><div class="pnum">02</div><div><h4 data-ar="التحليل والمحاكاة" data-en="Analysis & Simulation">التحليل والمحاكاة</h4><p data-ar="محاكاة الحركة والأحمال على درجات السلم." data-en="Motion and load simulation across various stair geometries.">محاكاة الحركة والأحمال على درجات السلم.</p></div></div>
+      <div class="pstep rl d2"><div class="pnum">03</div><div><h4 data-ar="الطباعة ثلاثية الأبعاد" data-en="3D Printing">الطباعة ثلاثية الأبعاد</h4><p data-ar="طباعة PLA+ بمقياس 40×25 سم." data-en="All parts printed in PLA+ at 40×25 cm prototype scale.">طباعة PLA+ بمقياس 40×25 سم.</p></div></div>
+      <div class="pstep rr d2"><div class="pnum">04</div><div><h4 data-ar="التجميع والاختبار" data-en="Assembly & Testing">التجميع والاختبار</h4><p data-ar="تركيب البيليات والمحور واختبار الحركة الحقيقي." data-en="Bearings and shaft installed, live motion test on real stairs.">تركيب البيليات والمحور واختبار الحركة الحقيقي.</p></div></div>
     </div>
   </div>
 </section>
 
-<div class="section-divider"></div>
+<div class="sdiv"></div>
 
+<!-- TEAM -->
 <section id="team">
-  <div class="section-inner" style="text-align:center">
-    <div class="section-kicker reveal" style="justify-content:center" data-ar="الفريق" data-en="The Team">الفريق</div>
-    <h2 class="section-title reveal" data-ar="صُنع بشغف هندسي" data-en="Built with Engineering Passion">صُنع بشغف هندسي</h2>
-    <div class="team-card reveal-scale">
+  <div class="si" style="text-align:center">
+    <div class="sk rv" style="justify-content:center" data-ar="الفريق" data-en="The Team">الفريق</div>
+    <h2 class="st rv" data-ar="صُنع بشغف هندسي" data-en="Built with Engineering Passion">صُنع بشغف هندسي</h2>
+    <div class="team-card rs">
       <div class="avatar">
-        <svg class="icon-engineer" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" width="70" height="70">
-          <g class="eng-helmet">
-            <path d="M24 36 Q24 16 40 14 Q56 16 56 36 L56 38 L24 38Z" fill="rgba(0,200,255,0.15)" stroke="rgba(0,200,255,0.8)" stroke-width="1.5"/>
-            <rect x="20" y="36" width="40" height="5" rx="2.5" fill="rgba(0,200,255,0.2)" stroke="rgba(0,200,255,0.7)" stroke-width="1"/>
-            <rect x="28" y="14" width="24" height="4" rx="2" fill="rgba(255,215,0,0.6)" stroke="rgba(255,215,0,0.9)" stroke-width="1"/>
+        <svg class="icon-eng" viewBox="0 0 80 80" fill="none" width="68" height="68">
+          <g class="eg-h">
+            <path d="M24 36 Q24 16 40 14 Q56 16 56 36 L56 38 L24 38Z" fill="rgba(0,200,255,0.13)" stroke="rgba(0,200,255,0.8)" stroke-width="1.5"/>
+            <rect x="20" y="36" width="40" height="5" rx="2.5" fill="rgba(0,200,255,0.18)" stroke="rgba(0,200,255,0.65)" stroke-width="1"/>
+            <rect x="28" y="14" width="24" height="4" rx="2" fill="rgba(255,215,0,0.55)" stroke="rgba(255,215,0,0.9)" stroke-width="1"/>
           </g>
-          <circle cx="40" cy="48" r="12" fill="rgba(255,200,150,0.15)" stroke="rgba(255,200,150,0.5)" stroke-width="1.5"/>
+          <circle cx="40" cy="48" r="12" fill="rgba(255,200,150,0.12)" stroke="rgba(255,200,150,0.45)" stroke-width="1.5"/>
           <circle cx="36" cy="46" r="2" fill="rgba(0,200,255,0.9)"/>
           <circle cx="44" cy="46" r="2" fill="rgba(0,200,255,0.9)"/>
-          <path d="M36 52 Q40 55 44 52" stroke="rgba(0,200,255,0.7)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-          <rect x="30" y="60" width="20" height="14" rx="4" fill="rgba(0,200,255,0.1)" stroke="rgba(0,200,255,0.4)" stroke-width="1"/>
-          <g class="eng-gear-big"><circle cx="38" cy="62" r="6" stroke="rgba(255,215,0,0.7)" stroke-width="1.5" fill="none" stroke-dasharray="3 2"/><circle cx="38" cy="62" r="2" fill="rgba(255,215,0,0.5)"/></g>
-          <g class="eng-gear-small"><circle cx="58" cy="70" r="4" stroke="rgba(0,200,255,0.7)" stroke-width="1.5" fill="none" stroke-dasharray="2 2"/><circle cx="58" cy="70" r="1.5" fill="rgba(0,200,255,0.5)"/></g>
-          <g class="eng-wrench"><rect x="64" y="22" width="4" height="16" rx="2" fill="rgba(255,215,0,0.2)" stroke="rgba(255,215,0,0.8)" stroke-width="1.5"/><rect x="62" y="20" width="8" height="4" rx="2" fill="rgba(255,215,0,0.3)" stroke="rgba(255,215,0,0.8)" stroke-width="1"/><rect x="62" y="36" width="8" height="4" rx="2" fill="rgba(255,215,0,0.3)" stroke="rgba(255,215,0,0.8)" stroke-width="1"/></g>
+          <path d="M36 52 Q40 55 44 52" stroke="rgba(0,200,255,0.65)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+          <rect x="30" y="60" width="20" height="14" rx="4" fill="rgba(0,200,255,0.08)" stroke="rgba(0,200,255,0.35)" stroke-width="1"/>
+          <g class="eg-gb"><circle cx="38" cy="62" r="6" stroke="rgba(255,215,0,0.65)" stroke-width="1.5" fill="none" stroke-dasharray="3 2"/><circle cx="38" cy="62" r="2" fill="rgba(255,215,0,0.45)"/></g>
+          <g class="eg-gs"><circle cx="58" cy="70" r="4" stroke="rgba(0,200,255,0.65)" stroke-width="1.5" fill="none" stroke-dasharray="2 2"/><circle cx="58" cy="70" r="1.5" fill="rgba(0,200,255,0.45)"/></g>
+          <g class="eg-w"><rect x="64" y="22" width="4" height="16" rx="2" fill="rgba(255,215,0,0.18)" stroke="rgba(255,215,0,0.75)" stroke-width="1.5"/><rect x="62" y="20" width="8" height="4" rx="2" fill="rgba(255,215,0,0.28)" stroke="rgba(255,215,0,0.75)" stroke-width="1"/><rect x="62" y="36" width="8" height="4" rx="2" fill="rgba(255,215,0,0.28)" stroke="rgba(255,215,0,0.75)" stroke-width="1"/></g>
         </svg>
       </div>
-      <div class="team-name">Amr Ammory</div>
-      <div class="team-role" data-ar="طالب هندسة ميكانيكية" data-en="Mechanical Engineering Student">طالب هندسة ميكانيكية</div>
-      <span class="team-uni" data-ar="جامعة حلب — هندسة الإنتاج والتصميم" data-en="University of Aleppo — Design & Production Engineering">جامعة حلب — هندسة الإنتاج والتصميم</span>
+      <div class="tn">Amr Ammory</div>
+      <div class="tr" data-ar="طالب هندسة ميكانيكية" data-en="Mechanical Engineering Student">طالب هندسة ميكانيكية</div>
+      <span class="tu" data-ar="جامعة حلب — هندسة الإنتاج والتصميم" data-en="University of Aleppo — Design & Production Engineering">جامعة حلب — هندسة الإنتاج والتصميم</span>
     </div>
   </div>
 </section>
 
-<div class="section-divider"></div>
+<div class="sdiv"></div>
 
+<!-- CONTACT -->
 <section id="contact">
-  <div class="section-inner">
-    <div class="contact-box reveal-scale">
-      <div class="section-kicker" style="justify-content:center" data-ar="تواصل" data-en="Get in Touch">تواصل</div>
-      <h2 class="section-title" data-ar="هل لديك سؤال أو فرصة تعاون؟" data-en="Have a Question or Want to Collaborate?">هل لديك سؤال أو فرصة تعاون؟</h2>
-      <a href="mailto:amrammory13@gmail.com" class="contact-email">
-        <span class="email-svg-wrap">
-          <svg class="icon-email" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="3" y="9" width="30" height="20" rx="3" fill="rgba(0,200,255,0.08)" stroke="rgba(0,200,255,0.8)" stroke-width="1.5"/>
-            <path d="M3 12 L18 21 L33 12" stroke="rgba(0,200,255,0.8)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-            <g class="email-letter">
-              <rect x="11" y="4" width="14" height="10" rx="2" fill="rgba(0,200,255,0.12)" stroke="rgba(0,200,255,0.6)" stroke-width="1"/>
-              <line x1="13" y1="7" x2="23" y2="7" stroke="rgba(0,200,255,0.5)" stroke-width="1" stroke-linecap="round"/>
-              <line x1="13" y1="9" x2="21" y2="9" stroke="rgba(0,200,255,0.4)" stroke-width="1" stroke-linecap="round"/>
-              <line x1="13" y1="11" x2="22" y2="11" stroke="rgba(0,200,255,0.3)" stroke-width="1" stroke-linecap="round"/>
+  <div class="si">
+    <div class="cbox rs">
+      <div class="sk" style="justify-content:center" data-ar="تواصل" data-en="Get in Touch">تواصل</div>
+      <h2 class="st" data-ar="هل لديك سؤال أو فرصة تعاون؟" data-en="Have a Question or Want to Collaborate?">هل لديك سؤال أو فرصة تعاون؟</h2>
+      <a href="mailto:amrammory13@gmail.com" class="cemail">
+        <span class="esw">
+          <svg class="icon-email" viewBox="0 0 36 36" fill="none">
+            <rect x="3" y="9" width="30" height="20" rx="3" fill="rgba(0,200,255,0.07)" stroke="rgba(0,200,255,0.78)" stroke-width="1.5"/>
+            <path d="M3 12 L18 21 L33 12" stroke="rgba(0,200,255,0.78)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+            <g class="el">
+              <rect x="11" y="4" width="14" height="10" rx="2" fill="rgba(0,200,255,0.1)" stroke="rgba(0,200,255,0.55)" stroke-width="1"/>
+              <line x1="13" y1="7" x2="23" y2="7" stroke="rgba(0,200,255,0.45)" stroke-width="1" stroke-linecap="round"/>
+              <line x1="13" y1="9" x2="21" y2="9" stroke="rgba(0,200,255,0.35)" stroke-width="1" stroke-linecap="round"/>
+              <line x1="13" y1="11" x2="22" y2="11" stroke="rgba(0,200,255,0.28)" stroke-width="1" stroke-linecap="round"/>
             </g>
-            <circle class="email-dot" cx="30" cy="8" r="3" fill="rgba(0,200,255,0.9)"/>
+            <circle class="ed" cx="30" cy="8" r="3" fill="rgba(0,200,255,0.9)"/>
           </svg>
         </span>
         <span>amrammory13@gmail.com</span>
       </a>
-      <a href="mailto:amrammory13@gmail.com" class="btn-primary" style="display:inline-flex;margin:0 auto">
+      <a href="mailto:amrammory13@gmail.com" class="btn-p" style="display:inline-flex;margin:0 auto">
         <span data-ar="راسلنا الآن" data-en="Send a Message">راسلنا الآن</span><span>←</span>
       </a>
     </div>
@@ -522,253 +625,166 @@
 </section>
 
 <footer>
-  <span class="footer-logo">StepUp ↑</span>
-  <div class="footer-links">
-    <a href="#hero" data-ar="البداية" data-en="Home">البداية</a>
+  <span class="flogo">StepUp ↑</span>
+  <div class="flinks">
+    <a href="#hero"    data-ar="البداية"  data-en="Home">البداية</a>
     <a href="#problem" data-ar="المشكلة" data-en="Problem">المشكلة</a>
-    <a href="#how" data-ar="كيف تعمل" data-en="How it Works">كيف تعمل</a>
-    <a href="#contact" data-ar="تواصل" data-en="Contact">تواصل</a>
+    <a href="#how"     data-ar="كيف تعمل" data-en="How it Works">كيف تعمل</a>
+    <a href="#contact" data-ar="تواصل"   data-en="Contact">تواصل</a>
   </div>
   <p data-ar="© 2026 — مشروع تخرج. كل الحقوق محفوظة." data-en="© 2026 — Graduation Project. All rights reserved.">© 2026 — مشروع تخرج. كل الحقوق محفوظة.</p>
 </footer>
 
 <script>
-// ─── detect mobile once ───────────────────────────────────
-const IS_MOBILE = window.matchMedia('(pointer:coarse)').matches;
+'use strict';
+const MOBILE = matchMedia('(pointer:coarse)').matches;
 
-// ─── Particle system ──────────────────────────────────────
-const canvas = document.getElementById('particles-canvas');
-const ctx    = canvas.getContext('2d', { alpha: true });
-let W, H;
-function resize() {
-  W = canvas.width  = window.innerWidth;
-  H = canvas.height = window.innerHeight;
-}
-resize();
-window.addEventListener('resize', resize, { passive: true });
+/* ── PARTICLES (canvas, fixed bg) ─────────────────────── */
+(function(){
+  const cv = document.getElementById('pc');
+  const cx = cv.getContext('2d',{alpha:true});
+  let W,H;
+  function resize(){W=cv.width=innerWidth;H=cv.height=innerHeight}
+  resize();
+  addEventListener('resize',resize,{passive:true});
 
-// fewer dots + shorter links on mobile → much cheaper
-const COUNT     = IS_MOBILE ? 45  : 100;
-const LINK_DIST = IS_MOBILE ? 100 : 130;
-const LINK_SQ   = LINK_DIST * LINK_DIST;
-const MAX_LINE  = IS_MOBILE ? 0.13 : 0.17;
+  const N    = MOBILE ? 35  : 80;
+  const DIST = MOBILE ? 90  : 120;
+  const DSQ  = DIST*DIST;
 
-const PALETTE = [
-  {r:0,  g:200,b:255},{r:0,  g:200,b:255},{r:0,  g:200,b:255},
-  {r:40, g:180,b:255},{r:40, g:180,b:255},
-  {r:91, g:147,b:255},{r:91, g:147,b:255},
-  {r:140,g:220,b:255},
-  {r:180,g:235,b:255},
-];
+  const pts = Array.from({length:N},()=>({
+    x:Math.random()*W, y:Math.random()*H,
+    vx:(Math.random()-.5)*(MOBILE?.14:.2),
+    vy:(Math.random()-.5)*(MOBILE?.14:.2),
+    r:Math.random()*1.6+.5,
+    a:Math.random()*.35+.45,
+    ph:Math.random()*Math.PI*2,
+    ps:Math.random()*.006+.003
+  }));
 
-function mkDot() {
-  return {
-    x: Math.random() * W, y: Math.random() * H,
-    vx:(Math.random()-.5)*(IS_MOBILE?.16:.22),
-    vy:(Math.random()-.5)*(IS_MOBILE?.16:.22),
-    r: Math.random()*2+0.7,
-    col:PALETTE[Math.floor(Math.random()*PALETTE.length)],
-    phase:Math.random()*Math.PI*2,
-    pSpeed:Math.random()*.007+.003,
-    baseA:Math.random()*.3+.5,
-  };
-}
-const DOTS = Array.from({length:COUNT}, mkDot);
-
-// skip gradient lines on mobile; use solid colour instead (faster)
-let raf;
-(function tick() {
-  ctx.clearRect(0,0,W,H);
-
-  // update
-  for (let i=0;i<DOTS.length;i++) {
-    const p=DOTS[i];
-    p.x+=p.vx; p.y+=p.vy;
-    if(p.x<-20)p.x=W+20; else if(p.x>W+20)p.x=-20;
-    if(p.y<-20)p.y=H+20; else if(p.y>H+20)p.y=-20;
-    p.phase+=p.pSpeed;
-  }
-
-  // lines
-  for (let i=0;i<DOTS.length;i++) {
-    const a=DOTS[i];
-    for (let j=i+1;j<DOTS.length;j++) {
-      const b=DOTS[j];
-      const dx=a.x-b.x, dy=a.y-b.y;
-      const d2=dx*dx+dy*dy;
-      if(d2>LINK_SQ) continue;
-      const t=1-Math.sqrt(d2)/LINK_DIST;
-      const tSq=t*t;
-      const pulse=0.5+0.25*(Math.sin(a.phase)+Math.sin(b.phase));
-      const alpha=(MAX_LINE*tSq*(0.5+0.5*pulse)).toFixed(3);
-      if (IS_MOBILE) {
-        // cheap: single solid colour
-        ctx.beginPath();
-        ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
-        ctx.strokeStyle=`rgba(0,200,255,${alpha})`;
-        ctx.lineWidth=0.4;
-        ctx.stroke();
-      } else {
-        const g=ctx.createLinearGradient(a.x,a.y,b.x,b.y);
-        const c=`rgba(${a.col.r},${a.col.g},${a.col.b},${alpha})`;
-        const d=`rgba(${b.col.r},${b.col.g},${b.col.b},${alpha})`;
-        g.addColorStop(0,c); g.addColorStop(1,d);
-        ctx.beginPath();
-        ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
-        ctx.strokeStyle=g;
-        ctx.lineWidth=0.4+tSq*0.45;
-        ctx.stroke();
+  let rid;
+  function tick(){
+    cx.clearRect(0,0,W,H);
+    for(let i=0;i<N;i++){
+      const p=pts[i];
+      p.x+=p.vx; p.y+=p.vy; p.ph+=p.ps;
+      if(p.x<-10)p.x=W+10; else if(p.x>W+10)p.x=-10;
+      if(p.y<-10)p.y=H+10; else if(p.y>H+10)p.y=-10;
+    }
+    // lines
+    cx.lineWidth=.45;
+    for(let i=0;i<N;i++){
+      const a=pts[i];
+      for(let j=i+1;j<N;j++){
+        const b=pts[j];
+        const dx=a.x-b.x,dy=a.y-b.y,d2=dx*dx+dy*dy;
+        if(d2>DSQ) continue;
+        const t=1-Math.sqrt(d2)/DIST;
+        const al=(0.12*t*t).toFixed(3);
+        cx.beginPath(); cx.moveTo(a.x,a.y); cx.lineTo(b.x,b.y);
+        cx.strokeStyle=`rgba(0,200,255,${al})`; cx.stroke();
       }
     }
-  }
-
-  // dots
-  for (let i=0;i<DOTS.length;i++) {
-    const p=DOTS[i];
-    const pulse=0.5+0.5*Math.sin(p.phase);
-    const alpha=p.baseA*(0.65+0.35*pulse);
-    const gm=0.6+0.7*pulse;
-    const {r:cr,g,b}=p.col;
-    const s=p.r*(0.88+0.22*pulse);
-
-    if (!IS_MOBILE) {
-      // outer halo — skip on mobile
-      const halo=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,s*5);
-      halo.addColorStop(0,`rgba(${cr},${g},${b},${(alpha*.16*gm).toFixed(3)})`);
-      halo.addColorStop(1,`rgba(${cr},${g},${b},0)`);
-      ctx.beginPath(); ctx.arc(p.x,p.y,s*5,0,Math.PI*2);
-      ctx.fillStyle=halo; ctx.fill();
+    // dots
+    for(let i=0;i<N;i++){
+      const p=pts[i];
+      const pulse=.5+.5*Math.sin(p.ph);
+      const al=p.a*(.7+.3*pulse);
+      const s=p.r*(.9+.2*pulse);
+      // mid glow
+      const mg=cx.createRadialGradient(p.x,p.y,0,p.x,p.y,s*2.5);
+      mg.addColorStop(0,`rgba(0,200,255,${(al*.4).toFixed(3)})`);
+      mg.addColorStop(1,'rgba(0,200,255,0)');
+      cx.beginPath(); cx.arc(p.x,p.y,s*2.5,0,Math.PI*2);
+      cx.fillStyle=mg; cx.fill();
+      // core
+      cx.beginPath(); cx.arc(p.x,p.y,s,0,Math.PI*2);
+      cx.fillStyle=`rgba(0,200,255,${al.toFixed(3)})`;
+      cx.shadowColor='rgba(0,200,255,.7)'; cx.shadowBlur=s*6*(0.7+0.6*pulse);
+      cx.fill(); cx.shadowBlur=0;
     }
-
-    // mid glow
-    const mid=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,s*2.6);
-    mid.addColorStop(0,`rgba(${cr},${g},${b},${(alpha*.45*gm).toFixed(3)})`);
-    mid.addColorStop(1,`rgba(${cr},${g},${b},0)`);
-    ctx.beginPath(); ctx.arc(p.x,p.y,s*2.6,0,Math.PI*2);
-    ctx.fillStyle=mid; ctx.fill();
-
-    // core
-    ctx.beginPath(); ctx.arc(p.x,p.y,s,0,Math.PI*2);
-    ctx.fillStyle=`rgba(${cr},${g},${b},${alpha.toFixed(3)})`;
-    ctx.shadowColor=`rgba(${cr},${g},${b},0.85)`;
-    ctx.shadowBlur=s*8*gm;
-    ctx.fill();
-    ctx.shadowBlur=0;
-
-    // specular
-    ctx.beginPath(); ctx.arc(p.x,p.y,s*.28,0,Math.PI*2);
-    ctx.fillStyle=`rgba(255,255,255,${(alpha*.65).toFixed(3)})`;
-    ctx.fill();
+    rid=requestAnimationFrame(tick);
   }
-
-  raf = requestAnimationFrame(tick);
+  tick();
+  document.addEventListener('visibilitychange',()=>{
+    if(document.hidden) cancelAnimationFrame(rid);
+    else rid=requestAnimationFrame(tick);
+  });
 })();
 
-// pause canvas when tab hidden
-document.addEventListener('visibilitychange', () => {
-  if(document.hidden) cancelAnimationFrame(raf);
-  else raf = requestAnimationFrame(() => { /* restarts loop on next tick */ });
-});
-
-// ─── Progress bar (throttled) ─────────────────────────────
-const bar = document.getElementById('progress-bar');
-let ticking = false;
-window.addEventListener('scroll', () => {
-  if (!ticking) {
-    requestAnimationFrame(() => {
-      bar.style.width = (scrollY/(document.body.scrollHeight-innerHeight)*100)+'%';
-      ticking = false;
-    });
-    ticking = true;
-  }
-}, { passive:true });
-
-// ─── Custom cursor (desktop only) ────────────────────────
-if (!IS_MOBILE) {
-  const dot=document.getElementById('cursorDot');
-  const ring=document.getElementById('cursorRing');
-  let mx=0,my=0,rx=0,ry=0;
-  document.addEventListener('mousemove', e=>{mx=e.clientX;my=e.clientY;},{passive:true});
-  (function animCursor(){
-    dot.style.transform=`translate(${mx-3}px,${my-3}px)`;
-    rx+=(mx-rx)*.12; ry+=(my-ry)*.12;
-    ring.style.transform=`translate(${rx-18}px,${ry-18}px)`;
-    requestAnimationFrame(animCursor);
-  })();
-  document.querySelectorAll('a,button,.part-card,.stat-card,.solution-card,.proto-step,.team-card').forEach(el=>{
-    el.addEventListener('mouseenter',()=>ring.classList.add('hover'),{passive:true});
-    el.addEventListener('mouseleave',()=>ring.classList.remove('hover'),{passive:true});
-  });
-}
-
-// ─── Hero card 3-D tilt (desktop only) ───────────────────
-if (!IS_MOBILE) {
-  const heroCard=document.getElementById('heroCard');
-  heroCard.addEventListener('mousemove', e=>{
-    const {left,top,width,height}=heroCard.getBoundingClientRect();
+/* ── HERO CARD TILT (desktop only) ──────────────────────── */
+if(!MOBILE){
+  const hc=document.getElementById('hc');
+  hc.addEventListener('mousemove',e=>{
+    const {left,top,width,height}=hc.getBoundingClientRect();
     const x=(e.clientX-left)/width-.5, y=(e.clientY-top)/height-.5;
-    heroCard.style.transform=`perspective(600px) rotateY(${x*13}deg) rotateX(${-y*9}deg) scale(1.025)`;
-  });
-  heroCard.addEventListener('mouseleave',()=>{heroCard.style.transform='';});
+    hc.style.transform=`perspective(550px) rotateY(${x*11}deg) rotateX(${-y*8}deg) scale(1.02)`;
+  },{passive:true});
+  hc.addEventListener('mouseleave',()=>hc.style.transform='');
 }
 
-// ─── Scroll reveal ────────────────────────────────────────
-const revObs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
-},{threshold:0.08});
-document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-scale').forEach(el=>revObs.observe(el));
+/* ── SCROLL REVEAL ───────────────────────────────────────── */
+const io=new IntersectionObserver(es=>{
+  es.forEach(e=>{if(e.isIntersecting) e.target.classList.add('on')});
+},{threshold:.07});
+document.querySelectorAll('.rv,.rl,.rr,.rs').forEach(el=>io.observe(el));
 
-// ─── Counter animation ────────────────────────────────────
-const cntObs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
+/* ── COUNTER ─────────────────────────────────────────────── */
+const co=new IntersectionObserver(es=>{
+  es.forEach(e=>{
     if(!e.isIntersecting) return;
-    const el=e.target,target=+el.dataset.target,suf=el.dataset.suffix||'';
+    const el=e.target,tgt=+el.dataset.target,sf=el.dataset.suffix||'';
     let t0=null;
-    function step(ts){
+    (function step(ts){
       if(!t0)t0=ts;
-      const p=Math.min((ts-t0)/1600,1);
-      el.textContent=Math.round(p*target)+suf;
+      const p=Math.min((ts-t0)/1400,1);
+      el.textContent=Math.round(p*tgt)+sf;
       if(p<1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-    cntObs.unobserve(el);
+    })(performance.now());
+    co.unobserve(el);
   });
-},{threshold:0.5});
-document.querySelectorAll('.stat-number[data-target]').forEach(el=>cntObs.observe(el));
+},{threshold:.5});
+document.querySelectorAll('.sn[data-target]').forEach(el=>co.observe(el));
 
-// ─── Active nav ───────────────────────────────────────────
-const navObs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
+/* ── ACTIVE NAV ──────────────────────────────────────────── */
+const no=new IntersectionObserver(es=>{
+  es.forEach(e=>{
     if(e.isIntersecting){
       document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
       const a=document.querySelector(`.nav-links a[href="#${e.target.id}"]`);
-      if(a) a.classList.add('active');
+      if(a)a.classList.add('active');
     }
   });
-},{rootMargin:'-40% 0px -55% 0px'});
-document.querySelectorAll('section[id]').forEach(s=>navObs.observe(s));
+},{rootMargin:'-38% 0px -55% 0px'});
+document.querySelectorAll('section[id]').forEach(s=>no.observe(s));
 
-// ─── Navbar scroll ────────────────────────────────────────
-const mainNav=document.getElementById('mainNav');
-window.addEventListener('scroll',()=>mainNav.classList.toggle('scrolled',scrollY>50),{passive:true});
+/* ── NAV SCROLL ──────────────────────────────────────────── */
+const nav=document.getElementById('nav');
+let nTick=false;
+addEventListener('scroll',()=>{
+  if(!nTick){requestAnimationFrame(()=>{nav.classList.toggle('scrolled',scrollY>40);nTick=false});nTick=true;}
+},{passive:true});
 
-// ─── Hamburger ────────────────────────────────────────────
-document.getElementById('hamburger').addEventListener('click',function(){
+/* ── HAMBURGER ───────────────────────────────────────────── */
+document.getElementById('hbg').addEventListener('click',function(){
   this.classList.toggle('open');
-  document.getElementById('navLinks').classList.toggle('open');
+  document.getElementById('nl').classList.toggle('open');
 });
+// close menu on link click
+document.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',()=>{
+  document.getElementById('hbg').classList.remove('open');
+  document.getElementById('nl').classList.remove('open');
+}));
 
-// ─── Language toggle ──────────────────────────────────────
+/* ── LANGUAGE ────────────────────────────────────────────── */
 let isAr=true;
-document.getElementById('langBtn').addEventListener('click',()=>{
+document.getElementById('lb').addEventListener('click',()=>{
   isAr=!isAr;
   document.documentElement.lang=isAr?'ar':'en';
   document.documentElement.dir=isAr?'rtl':'ltr';
-  document.getElementById('langBtn').textContent=isAr?'EN':'ع';
+  document.getElementById('lb').textContent=isAr?'EN':'ع';
   document.body.className=isAr?'':'en';
-  document.querySelectorAll('[data-ar][data-en]').forEach(el=>{
-    el.textContent=isAr?el.dataset.ar:el.dataset.en;
-  });
+  document.querySelectorAll('[data-ar][data-en]').forEach(el=>el.textContent=isAr?el.dataset.ar:el.dataset.en);
   document.title=isAr
     ?'StepUp — وحدة جنزيرية معيارية لتسلّق السلالم'
     :'StepUp — Modular Stair-Climbing Track Unit for Wheelchairs';
