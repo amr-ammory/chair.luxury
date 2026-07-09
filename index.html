@@ -74,7 +74,6 @@
       padding:8rem 2rem 5rem;overflow:hidden;z-index:1}
     .hero-bg{position:absolute;inset:0;z-index:-1;
       background:radial-gradient(ellipse at 50% -5%,rgba(0,200,255,0.14) 0%,transparent 60%)}
-    /* orbs: pure CSS transform animations → compositor only */
     .orb{position:absolute;border-radius:50%;pointer-events:none;z-index:-1;
       will-change:transform;backface-visibility:hidden}
     .orb1{width:440px;height:440px;background:rgba(0,200,255,0.06);
@@ -281,6 +280,37 @@
     .pstep h4{font-size:.93rem;font-weight:700;margin-bottom:.35rem}
     .pstep p{font-size:.83rem;color:var(--muted);line-height:1.6}
 
+    /* ── GALLERY ── */
+    .gallery-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.4rem}
+    .gal-item{position:relative;border-radius:var(--r);overflow:hidden;
+      border:1px solid var(--border);cursor:pointer;
+      transition:border-color .25s,transform .25s cubic-bezier(.23,1,.32,1),box-shadow .25s}
+    .gal-item:hover{border-color:rgba(0,200,255,0.4);transform:translateY(-5px);
+      box-shadow:0 18px 45px rgba(0,0,0,0.4),0 0 25px rgba(0,200,255,0.12)}
+    .gal-item img{width:100%;height:320px;object-fit:cover;display:block;
+      transition:transform .4s cubic-bezier(.23,1,.32,1)}
+    .gal-item:hover img{transform:scale(1.04)}
+    .gal-caption{position:absolute;bottom:0;left:0;right:0;
+      padding:1.1rem 1.3rem;
+      background:linear-gradient(to top,rgba(8,9,15,0.92),transparent);
+      font-size:.83rem;font-weight:700;letter-spacing:.02em}
+    .gal-tag{display:inline-block;background:rgba(0,200,255,0.12);
+      border:1px solid rgba(0,200,255,0.3);color:var(--primary);
+      font-size:.64rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+      padding:.18rem .65rem;border-radius:999px;margin-bottom:.4rem}
+
+    /* lightbox */
+    .lb-overlay{display:none;position:fixed;inset:0;z-index:999;
+      background:rgba(0,0,0,0.92);backdrop-filter:blur(8px);
+      align-items:center;justify-content:center;padding:2rem}
+    .lb-overlay.open{display:flex}
+    .lb-img{max-width:90vw;max-height:88vh;border-radius:12px;
+      border:1px solid rgba(0,200,255,0.2);
+      box-shadow:0 0 60px rgba(0,200,255,0.15);object-fit:contain}
+    .lb-close{position:absolute;top:1.2rem;right:1.5rem;background:none;border:none;
+      color:var(--fg);font-size:2rem;cursor:pointer;opacity:.7;transition:opacity .2s}
+    .lb-close:hover{opacity:1}
+
     /* ── TEAM ── */
     .team-card{max-width:390px;margin:0 auto;background:var(--card);
       border:1px solid var(--border);border-radius:var(--r);
@@ -332,7 +362,7 @@
     @keyframes fl{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-6px,0)}}
     @keyframes sh{0%{background-position:0% center}100%{background-position:200% center}}
 
-    /* ── REVEAL (IntersectionObserver) ── */
+    /* ── REVEAL ── */
     .rv{opacity:0;transform:translateY(18px);
       transition:opacity .55s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1)}
     .rv.on{opacity:1;transform:translateY(0)}
@@ -353,7 +383,6 @@
       transform-origin:left;transition:transform .55s cubic-bezier(.16,1,.3,1) .2s}
     .rv.on .ta::after{transform:scaleX(1)}
 
-    /* ── specs row reveal ── */
     .specs-t tbody tr.rv{opacity:0;transform:translateX(-8px);
       transition:opacity .4s,transform .4s}
     .specs-t tbody tr.rv.on{opacity:1;transform:translateX(0)}
@@ -364,15 +393,23 @@
       .stats-grid{grid-template-columns:1fr}
       .sol-grid{grid-template-columns:1fr}
       .proto-grid{grid-template-columns:1fr}
+      .gallery-grid{grid-template-columns:1fr}
     }
     @media(max-width:600px){
       .si{padding:3.2rem 1.2rem}
       .hero-title{font-size:1.95rem}
+      .gal-item img{height:240px}
     }
   </style>
 </head>
 <body>
 <canvas id="pc"></canvas>
+
+<!-- LIGHTBOX -->
+<div class="lb-overlay" id="lbo">
+  <button class="lb-close" id="lbc">×</button>
+  <img class="lb-img" id="lbi" src="" alt=""/>
+</div>
 
 <nav id="nav">
   <span class="nav-logo">StepUp ↑</span>
@@ -384,6 +421,7 @@
     <li><a href="#how"       data-ar="كيف تعمل"  data-en="How it Works">كيف تعمل</a></li>
     <li><a href="#specs"     data-ar="المواصفات"  data-en="Specs">المواصفات</a></li>
     <li><a href="#prototype" data-ar="النموذج"    data-en="Prototype">النموذج</a></li>
+    <li><a href="#gallery"   data-ar="الصور"      data-en="Gallery">الصور</a></li>
     <li><a href="#team"      data-ar="الفريق"     data-en="Team">الفريق</a></li>
     <li><a href="#contact"   data-ar="تواصل"      data-en="Contact">تواصل</a></li>
   </ul>
@@ -563,6 +601,33 @@
 
 <div class="sdiv"></div>
 
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="si">
+    <div class="sk rv" data-ar="معرض الصور" data-en="Project Gallery">معرض الصور</div>
+    <h2 class="st rv" data-ar="المشروع بالصور" data-en="The Project in Photos">المشروع بالصور</h2>
+    <p class="sl rv" data-ar="اضغط على أي صورة لعرضها بالحجم الكامل." data-en="Click any image to view full size.">اضغط على أي صورة لعرضها بالحجم الكامل.</p>
+    <div class="gallery-grid">
+      <div class="gal-item rv d1" onclick="openLb(this)">
+        <img src="photo_2_2026-07-10_02-33-46.jpg" alt="بوستر المشروع" loading="lazy"/>
+        <div class="gal-caption">
+          <span class="gal-tag" data-ar="بوستر" data-en="Poster">بوستر</span>
+          <div data-ar="بوستر مشروع التخرج" data-en="Graduation Project Poster">بوستر مشروع التخرج</div>
+        </div>
+      </div>
+      <div class="gal-item rv d2" onclick="openLb(this)">
+        <img src="photo_1_2026-07-10_02-33-46.jpg" alt="تصميم SolidWorks" loading="lazy"/>
+        <div class="gal-caption">
+          <span class="gal-tag" data-ar="تصميم CAD" data-en="CAD Design">تصميم CAD</span>
+          <div data-ar="نموذج SolidWorks ثلاثي الأبعاد" data-en="SolidWorks 3D Model">نموذج SolidWorks ثلاثي الأبعاد</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sdiv"></div>
+
 <!-- TEAM -->
 <section id="team">
   <div class="si" style="text-align:center">
@@ -630,6 +695,7 @@
     <a href="#hero"    data-ar="البداية"  data-en="Home">البداية</a>
     <a href="#problem" data-ar="المشكلة" data-en="Problem">المشكلة</a>
     <a href="#how"     data-ar="كيف تعمل" data-en="How it Works">كيف تعمل</a>
+    <a href="#gallery" data-ar="الصور"   data-en="Gallery">الصور</a>
     <a href="#contact" data-ar="تواصل"   data-en="Contact">تواصل</a>
   </div>
   <p data-ar="© 2026 — مشروع تخرج. كل الحقوق محفوظة." data-en="© 2026 — Graduation Project. All rights reserved.">© 2026 — مشروع تخرج. كل الحقوق محفوظة.</p>
@@ -639,7 +705,24 @@
 'use strict';
 const MOBILE = matchMedia('(pointer:coarse)').matches;
 
-/* ── PARTICLES (canvas, fixed bg) ─────────────────────── */
+/* ── LIGHTBOX ── */
+function openLb(item){
+  const src = item.querySelector('img').src;
+  document.getElementById('lbi').src = src;
+  document.getElementById('lbo').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+document.getElementById('lbc').addEventListener('click',closeLb);
+document.getElementById('lbo').addEventListener('click',function(e){
+  if(e.target===this) closeLb();
+});
+function closeLb(){
+  document.getElementById('lbo').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape') closeLb();});
+
+/* ── PARTICLES ── */
 (function(){
   const cv = document.getElementById('pc');
   const cx = cv.getContext('2d',{alpha:true});
@@ -671,7 +754,6 @@ const MOBILE = matchMedia('(pointer:coarse)').matches;
       if(p.x<-10)p.x=W+10; else if(p.x>W+10)p.x=-10;
       if(p.y<-10)p.y=H+10; else if(p.y>H+10)p.y=-10;
     }
-    // lines
     cx.lineWidth=.45;
     for(let i=0;i<N;i++){
       const a=pts[i];
@@ -685,19 +767,16 @@ const MOBILE = matchMedia('(pointer:coarse)').matches;
         cx.strokeStyle=`rgba(0,200,255,${al})`; cx.stroke();
       }
     }
-    // dots
     for(let i=0;i<N;i++){
       const p=pts[i];
       const pulse=.5+.5*Math.sin(p.ph);
       const al=p.a*(.7+.3*pulse);
       const s=p.r*(.9+.2*pulse);
-      // mid glow
       const mg=cx.createRadialGradient(p.x,p.y,0,p.x,p.y,s*2.5);
       mg.addColorStop(0,`rgba(0,200,255,${(al*.4).toFixed(3)})`);
       mg.addColorStop(1,'rgba(0,200,255,0)');
       cx.beginPath(); cx.arc(p.x,p.y,s*2.5,0,Math.PI*2);
       cx.fillStyle=mg; cx.fill();
-      // core
       cx.beginPath(); cx.arc(p.x,p.y,s,0,Math.PI*2);
       cx.fillStyle=`rgba(0,200,255,${al.toFixed(3)})`;
       cx.shadowColor='rgba(0,200,255,.7)'; cx.shadowBlur=s*6*(0.7+0.6*pulse);
@@ -712,7 +791,7 @@ const MOBILE = matchMedia('(pointer:coarse)').matches;
   });
 })();
 
-/* ── HERO CARD TILT (desktop only) ──────────────────────── */
+/* ── HERO CARD TILT ── */
 if(!MOBILE){
   const hc=document.getElementById('hc');
   hc.addEventListener('mousemove',e=>{
@@ -723,13 +802,13 @@ if(!MOBILE){
   hc.addEventListener('mouseleave',()=>hc.style.transform='');
 }
 
-/* ── SCROLL REVEAL ───────────────────────────────────────── */
+/* ── SCROLL REVEAL ── */
 const io=new IntersectionObserver(es=>{
   es.forEach(e=>{if(e.isIntersecting) e.target.classList.add('on')});
 },{threshold:.07});
 document.querySelectorAll('.rv,.rl,.rr,.rs').forEach(el=>io.observe(el));
 
-/* ── COUNTER ─────────────────────────────────────────────── */
+/* ── COUNTER ── */
 const co=new IntersectionObserver(es=>{
   es.forEach(e=>{
     if(!e.isIntersecting) return;
@@ -746,7 +825,7 @@ const co=new IntersectionObserver(es=>{
 },{threshold:.5});
 document.querySelectorAll('.sn[data-target]').forEach(el=>co.observe(el));
 
-/* ── ACTIVE NAV ──────────────────────────────────────────── */
+/* ── ACTIVE NAV ── */
 const no=new IntersectionObserver(es=>{
   es.forEach(e=>{
     if(e.isIntersecting){
@@ -758,25 +837,24 @@ const no=new IntersectionObserver(es=>{
 },{rootMargin:'-38% 0px -55% 0px'});
 document.querySelectorAll('section[id]').forEach(s=>no.observe(s));
 
-/* ── NAV SCROLL ──────────────────────────────────────────── */
+/* ── NAV SCROLL ── */
 const nav=document.getElementById('nav');
 let nTick=false;
 addEventListener('scroll',()=>{
   if(!nTick){requestAnimationFrame(()=>{nav.classList.toggle('scrolled',scrollY>40);nTick=false});nTick=true;}
 },{passive:true});
 
-/* ── HAMBURGER ───────────────────────────────────────────── */
+/* ── HAMBURGER ── */
 document.getElementById('hbg').addEventListener('click',function(){
   this.classList.toggle('open');
   document.getElementById('nl').classList.toggle('open');
 });
-// close menu on link click
 document.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',()=>{
   document.getElementById('hbg').classList.remove('open');
   document.getElementById('nl').classList.remove('open');
 }));
 
-/* ── LANGUAGE ────────────────────────────────────────────── */
+/* ── LANGUAGE ── */
 let isAr=true;
 document.getElementById('lb').addEventListener('click',()=>{
   isAr=!isAr;
