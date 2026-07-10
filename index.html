@@ -245,6 +245,39 @@
       to{opacity:1;transform:scale(1) translateY(0)}
     }
 
+    /* ── MOTION SVG BANNER (below hero) ── */
+    .motion-banner{
+      position:relative;z-index:1;
+      display:flex;justify-content:center;align-items:center;
+      padding:2.5rem 2rem;
+      background:rgba(0,200,255,0.02);
+      border-top:1px solid rgba(0,200,255,0.07);
+    }
+    .motion-banner-inner{
+      display:flex;flex-direction:column;align-items:center;gap:1rem;
+      max-width:480px;text-align:center;
+    }
+    .motion-banner-inner .mb-label{
+      font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;
+      color:var(--primary);font-family:var(--fe);
+    }
+    .motion-banner-inner .mb-title{
+      font-size:1rem;font-weight:700;color:var(--fg);
+    }
+    .motion-banner-inner .mb-desc{
+      font-size:.83rem;color:var(--muted);line-height:1.6;
+    }
+
+    /* icon animations (same as solution section) */
+    @keyframes rFloat{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-8px) rotate(-5deg)}}
+    @keyframes tFlick{0%,100%{opacity:1;transform:scaleY(1)}50%{opacity:.7;transform:scaleY(1.2)}}
+    @keyframes spk{0%,100%{opacity:0;transform:scale(0)}50%{opacity:1;transform:scale(1)}}
+    .icon-rocket{animation:rFloat 2.5s ease-in-out infinite;transform-origin:center}
+    .rf{animation:tFlick .35s ease-in-out infinite;transform-origin:top center}
+    .rs1{animation:spk 1.2s ease-in-out .1s infinite}
+    .rs2{animation:spk 1.2s ease-in-out .4s infinite}
+    .rs3{animation:spk 1.2s ease-in-out .7s infinite}
+
     /* ── SECTIONS ── */
     section{position:relative;z-index:1;contain:layout style}
     .si{max-width:1100px;margin:0 auto;padding:5rem 2rem}
@@ -296,14 +329,6 @@
     @keyframes bShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
     @keyframes bGlow{0%,100%{filter:drop-shadow(0 0 3px rgba(255,80,80,0.35))}50%{filter:drop-shadow(0 0 10px rgba(255,80,80,0.75))}}
     .icon-barrier{animation:bShake 3.5s ease-in-out infinite,bGlow 2s ease-in-out infinite}
-    @keyframes rFloat{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-8px) rotate(-5deg)}}
-    @keyframes tFlick{0%,100%{opacity:1;transform:scaleY(1)}50%{opacity:.7;transform:scaleY(1.2)}}
-    @keyframes spk{0%,100%{opacity:0;transform:scale(0)}50%{opacity:1;transform:scale(1)}}
-    .icon-rocket{animation:rFloat 2.5s ease-in-out infinite;transform-origin:center}
-    .rf{animation:tFlick .35s ease-in-out infinite;transform-origin:top center}
-    .rs1{animation:spk 1.2s ease-in-out .1s infinite}
-    .rs2{animation:spk 1.2s ease-in-out .4s infinite}
-    .rs3{animation:spk 1.2s ease-in-out .7s infinite}
     @keyframes gSpin{to{transform:rotate(360deg)}}
     @keyframes gSpinR{to{transform:rotate(-360deg)}}
     @keyframes wWave{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(14deg)}}
@@ -578,6 +603,29 @@
     </div>
   </div>
 </section>
+
+<!-- MOTION SVG BANNER — below hero -->
+<div class="motion-banner rv">
+  <div class="motion-banner-inner">
+    <span class="mb-label" data-ar="حركة مستقلة" data-en="Independent Motion">حركة مستقلة</span>
+    <svg width="96" height="96" viewBox="0 0 80 80" fill="none">
+      <g class="icon-rocket">
+        <path d="M40 10 C30 10 22 22 22 38 L22 52 L40 58 L58 52 L58 38 C58 22 50 10 40 10Z" fill="rgba(0,200,255,0.1)" stroke="rgba(0,200,255,0.8)" stroke-width="1.5"/>
+        <path d="M40 10 C36 10 32 16 32 22 L48 22 C48 16 44 10 40 10Z" fill="rgba(0,200,255,0.22)" stroke="rgba(0,200,255,0.9)" stroke-width="1"/>
+        <circle cx="40" cy="34" r="6" fill="rgba(0,200,255,0.1)" stroke="rgba(0,200,255,0.9)" stroke-width="1.5"/>
+        <circle cx="40" cy="34" r="3" fill="rgba(0,200,255,0.4)"/>
+        <path d="M22 44 L12 56 L22 52Z" fill="rgba(91,107,255,0.28)" stroke="rgba(91,107,255,0.8)" stroke-width="1"/>
+        <path d="M58 44 L68 56 L58 52Z" fill="rgba(91,107,255,0.28)" stroke="rgba(91,107,255,0.8)" stroke-width="1"/>
+        <g class="rf"><path d="M33 58 Q36 68 40 72 Q44 68 47 58Z" fill="rgba(255,180,0,0.8)"/><path d="M35 58 Q38 64 40 67 Q42 64 45 58Z" fill="rgba(255,220,0,0.9)"/><path d="M37 58 Q39 61 40 63 Q41 61 43 58Z" fill="white" opacity=".8"/></g>
+        <circle class="rs1" cx="36" cy="72" r="2" fill="rgba(255,200,0,0.9)"/>
+        <circle class="rs2" cx="44" cy="70" r="1.5" fill="rgba(255,150,0,0.9)"/>
+        <circle class="rs3" cx="40" cy="75" r="1.5" fill="rgba(255,220,50,0.9)"/>
+      </g>
+    </svg>
+    <div class="mb-title" data-ar="مع الوحدة الجنزيرية — حركة كاملة على السلالم" data-en="With the Track Unit — Full Stair Freedom">مع الوحدة الجنزيرية — حركة كاملة على السلالم</div>
+    <p class="mb-desc" data-ar="تمنح الوحدة المستخدم استقلالية تامة في الصعود والهبوط بأمان وسهولة." data-en="The unit gives the user complete independence navigating stairs safely and easily.">تمنح الوحدة المستخدم استقلالية تامة في الصعود والهبوط بأمان وسهولة.</p>
+  </div>
+</div>
 
 <div class="sdiv"></div>
 
