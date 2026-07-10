@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>StepUp — وحدة جنزيرية معيارية لتسلّق السلالم</title>
-  <meta name="description" content="مشروع تخرج هندسة ميكانيكية — وحدة جنزيرية مدمجة لتمكين الكراسي المتحركة من تسلق السلالم"/>
+  <title id="page-title">StepUp — وحدة جنزيرية معيارية لتسلّق السلالم</title>
+  <meta name="description" id="page-desc" content="مشروع تخرج هندسة ميكانيكية — وحدة جنزيرية مدمجة لتمكين الكراسي المتحركة من تسلق السلالم"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet"/>
@@ -94,78 +94,16 @@
     .machine-caption{position:absolute;bottom:0;left:0;right:0;padding:.65rem 1rem;background:linear-gradient(to top,rgba(8,9,15,0.92) 60%,transparent);display:flex;align-items:center;gap:.5rem;font-size:.72rem;font-weight:700;letter-spacing:.12em;font-family:var(--fe);}
     .cap-dot{width:6px;height:6px;border-radius:50%;background:var(--primary);animation:pg 2s ease-in-out infinite;flex-shrink:0}
     .cap-text{color:rgba(255,255,255,0.75)}
-    /* TICKER — Professional infinite marquee via JS */
-    .welcome-ticker{
-      margin-top:.85rem;
-      border:1px solid rgba(0,200,255,0.13);
-      border-radius:10px;
-      background:rgba(0,200,255,0.03);
-      overflow:hidden;
-      position:relative;
-      height:44px;
-      display:flex;
-      align-items:center;
-    }
-    .welcome-ticker::before{
-      content:'';
-      position:absolute;
-      left:0;top:0;bottom:0;
-      width:3px;
-      background:var(--primary);
-      animation:tickerBarPulse 2s ease-in-out infinite;
-      border-radius:0 2px 2px 0;
-      z-index:2;
-    }
-    @keyframes tickerBarPulse{
-      0%,100%{opacity:.4;box-shadow:0 0 6px rgba(0,200,255,0.3)}
-      50%{opacity:1;box-shadow:0 0 18px rgba(0,200,255,0.9)}
-    }
-    /* fade edges */
-    .welcome-ticker::after{
-      content:'';
-      position:absolute;
-      inset:0;
-      background:linear-gradient(to right,rgba(8,9,15,0.55) 0%,transparent 60px,transparent calc(100% - 60px),rgba(8,9,15,0.55) 100%);
-      pointer-events:none;
-      z-index:2;
-    }
-    .ticker-viewport{
-      width:100%;
-      height:100%;
-      overflow:hidden;
-      position:relative;
-    }
-    .ticker-track{
-      display:flex;
-      align-items:center;
-      height:100%;
-      white-space:nowrap;
-      will-change:transform;
-      /* JS drives the transform — no CSS animation */
-    }
-    .ticker-item{
-      display:inline-flex;
-      align-items:center;
-      gap:.55rem;
-      padding:0 1.5rem;
-      font-size:.72rem;
-      font-weight:700;
-      letter-spacing:.12em;
-      font-family:var(--fe);
-      color:rgba(255,255,255,0.7);
-      text-transform:uppercase;
-      flex-shrink:0;
-    }
-    .ticker-item .ti-dot{
-      width:5px;height:5px;border-radius:50%;
-      background:var(--primary);flex-shrink:0;
-      animation:pg 2.2s ease-in-out infinite;
-    }
-    .ticker-item .ti-star{
-      color:var(--primary);font-size:.9rem;
-      animation:starSpin 3s linear infinite;
-      display:inline-block;
-    }
+    /* TICKER */
+    .welcome-ticker{margin-top:.85rem;border:1px solid rgba(0,200,255,0.13);border-radius:10px;background:rgba(0,200,255,0.03);overflow:hidden;position:relative;height:44px;display:flex;align-items:center;}
+    .welcome-ticker::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--primary);animation:tickerBarPulse 2s ease-in-out infinite;border-radius:0 2px 2px 0;z-index:2;}
+    @keyframes tickerBarPulse{0%,100%{opacity:.4;box-shadow:0 0 6px rgba(0,200,255,0.3)}50%{opacity:1;box-shadow:0 0 18px rgba(0,200,255,0.9)}}
+    .welcome-ticker::after{content:'';position:absolute;inset:0;background:linear-gradient(to right,rgba(8,9,15,0.55) 0%,transparent 60px,transparent calc(100% - 60px),rgba(8,9,15,0.55) 100%);pointer-events:none;z-index:2;}
+    .ticker-viewport{width:100%;height:100%;overflow:hidden;position:relative;}
+    .ticker-track{display:flex;align-items:center;height:100%;white-space:nowrap;will-change:transform;}
+    .ticker-item{display:inline-flex;align-items:center;gap:.55rem;padding:0 1.5rem;font-size:.72rem;font-weight:700;letter-spacing:.12em;font-family:var(--fe);color:rgba(255,255,255,0.7);text-transform:uppercase;flex-shrink:0;}
+    .ticker-item .ti-dot{width:5px;height:5px;border-radius:50%;background:var(--primary);flex-shrink:0;animation:pg 2.2s ease-in-out infinite;}
+    .ticker-item .ti-star{color:var(--primary);font-size:.9rem;animation:starSpin 3s linear infinite;display:inline-block;}
     @keyframes starSpin{0%,100%{transform:rotate(0deg) scale(1)}50%{transform:rotate(180deg) scale(1.3)}}
     .ticker-item.hi{color:var(--primary);font-size:.78rem;letter-spacing:.18em;text-shadow:0 0 18px rgba(0,200,255,0.6);}
     .ticker-item.hi .ti-dot{background:var(--gold);box-shadow:0 0 8px rgba(255,215,0,0.7);}
@@ -176,7 +114,7 @@
     .motion-banner-inner .mb-label{font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:var(--primary);font-family:var(--fe);}
     .motion-banner-inner .mb-title{font-size:1rem;font-weight:700;color:var(--fg);}
     .motion-banner-inner .mb-desc{font-size:.83rem;color:var(--muted);line-height:1.6;}
-    /* TRACK SVG ANIMATIONS */
+    /* TRACK SVG */
     @keyframes trackMove{0%{stroke-dashoffset:120}100%{stroke-dashoffset:0}}
     @keyframes chassisFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
     @keyframes stairGlow{0%,100%{opacity:.35}50%{opacity:.9}}
@@ -359,7 +297,7 @@
       </h1>
       <p class="hero-tag" data-ar="تقنية تكسر الحواجز — خطوة على السلالم في كل مرة" data-en="Breaking Barriers — One Stair at a Time">تقنية تكسر الحواجز — خطوة على السلالم في كل مرة</p>
       <div class="hero-btns">
-        <a href="#problem" class="btn-p"><span data-ar="اكتشف المشروع" data-en="Discover">اكتشف المشروع</span><span>&#8592;</span></a>
+        <a href="#problem" class="btn-p"><span data-ar="اكتشف المشروع" data-en="Discover Project">اكتشف المشروع</span><span>&#8592;</span></a>
         <a href="#how" class="btn-s"><span class="bdot"></span><span data-ar="كيف تعمل" data-en="How it Works">كيف تعمل</span></a>
       </div>
       <div class="hero-scroll">
@@ -371,7 +309,7 @@
     <div class="hero-card" id="hc">
       <div class="hero-badge">SOLIDWORKS · 2024</div>
       <div class="machine-frame">
-        <img src="cad.jpeg" alt="StepUp — نموذج SolidWorks ثلاثي الأبعاد" loading="eager"/>
+        <img src="cad.jpeg" alt="StepUp CAD Model" loading="eager"/>
         <div class="machine-scan"></div>
         <div class="machine-glow"></div>
         <div class="machine-caption">
@@ -430,7 +368,7 @@
 <section id="problem">
   <div class="si">
     <div class="sk rv" data-ar="المشكلة" data-en="The Problem">المشكلة</div>
-    <h2 class="st rv">السلالم لا تزال <span class="ta" data-ar="جداراً" data-en="a Wall">جداراً</span></h2>
+    <h2 class="st rv"><span data-ar="السلالم لا تزال" data-en="Stairs Are Still">السلالم لا تزال</span> <span class="ta" data-ar="جداراً" data-en="a Wall">جداراً</span></h2>
     <p class="sl rv" data-ar="يعيش أكثر من 75 مليون شخص حول العالم باعتمادهم على الكراسي المتحركة، وتظل السلالم العائق اليومي الأكبر أمام استقلاليتهم." data-en="Over 75 million people worldwide depend on wheelchairs. Stairs remain the single largest daily barrier to their independence.">يعيش أكثر من 75 مليون شخص حول العالم باعتمادهم على الكراسي المتحركة، وتظل السلالم العائق اليومي الأكبر أمام استقلاليتهم.</p>
     <div class="stats-grid">
       <div class="sc rv d1"><span class="sn" data-target="75" data-suffix="M+">0</span><span class="slb" data-ar="مستخدم كرسي متحرك حول العالم" data-en="Wheelchair users globally">مستخدم كرسي متحرك حول العالم</span></div>
@@ -446,7 +384,7 @@
 <section id="solution">
   <div class="si">
     <div class="sk rv" data-ar="الحل" data-en="The Solution">الحل</div>
-    <h2 class="st rv">وحدة واحدة. كل سُلَّم.</h2>
+    <h2 class="st rv" data-ar="وحدة واحدة. كل سُلَّم." data-en="One Unit. Every Stair.">وحدة واحدة. كل سُلَّم.</h2>
     <p class="sl rv" data-ar="وحدة جنزيرية مدمجة تُركَّب على الكراسي المتحركة القياسية لتمنح المستخدم استقلالية كاملة في الصعود والهبوط بأمان." data-en="A compact track-drive module that mounts onto standard wheelchairs, giving full safe independent stair travel — up and down.">وحدة جنزيرية مدمجة تُركَّب على الكراسي المتحركة القياسية لتمنح المستخدم استقلالية كاملة في الصعود والهبوط بأمان.</p>
     <div class="sol-grid">
       <div class="sol-card bef rl">
@@ -493,7 +431,7 @@
 <section id="how">
   <div class="si">
     <div class="sk rv" data-ar="كيف تعمل" data-en="How it Works">كيف تعمل</div>
-    <h2 class="st rv">مكوّنات النظام</h2>
+    <h2 class="st rv" data-ar="مكوّنات النظام" data-en="System Components">مكوّنات النظام</h2>
     <p class="sl rv" data-ar="الوحدة مؤلفة من مجموعة مكوّنات هندسية متكاملة تعمل معاً لضمان الحركة الآمنة على السلالم." data-en="The unit consists of integrated engineering components working together for safe stair travel.">الوحدة مؤلفة من مجموعة مكوّنات هندسية متكاملة تعمل معاً لضمان الحركة الآمنة على السلالم.</p>
     <div class="parts-grid">
       <div class="pc2 rv d1"><div class="pn">01</div><div class="pm" data-ar="الهيكل الجنزيري" data-en="Track Frame">الهيكل الجنزيري</div><p class="pd" data-ar="هيكل خفيف الوزن مصنوع من الألومنيوم يحمل الحزام الجنزيري ويوزع الأحمال بالتساوي." data-en="Lightweight aluminum frame carrying the track belt and distributing loads evenly.">هيكل خفيف الوزن مصنوع من الألومنيوم يحمل الحزام الجنزيري ويوزع الأحمال بالتساوي.</p></div>
@@ -512,7 +450,7 @@
 <section id="specs">
   <div class="si">
     <div class="sk rv" data-ar="المواصفات" data-en="Specifications">المواصفات</div>
-    <h2 class="st rv">المواصفات التقنية</h2>
+    <h2 class="st rv" data-ar="المواصفات التقنية" data-en="Technical Specifications">المواصفات التقنية</h2>
     <p class="sl rv" data-ar="أبرز المواصفات الهندسية للوحدة الجنزيرية." data-en="Key engineering specifications of the track unit.">أبرز المواصفات الهندسية للوحدة الجنزيرية.</p>
     <table class="specs-t">
       <thead><tr><th data-ar="المواصفة" data-en="Specification">المواصفة</th><th data-ar="القيمة" data-en="Value">القيمة</th></tr></thead>
@@ -522,8 +460,8 @@
         <tr class="rv"><td data-ar="ارتفاع الدرجة القصوى" data-en="Max stair height">ارتفاع الدرجة القصوى</td><td><span class="sv">20 cm</span></td></tr>
         <tr class="rv"><td data-ar="وزن الوحدة" data-en="Unit weight">وزن الوحدة</td><td><span class="sv">8 kg</span></td></tr>
         <tr class="rv"><td data-ar="سرعة الصعود" data-en="Climbing speed">سرعة الصعود</td><td><span class="sv">0.3 m/s</span></td></tr>
-        <tr class="rv"><td data-ar="عمر البطارية" data-en="Battery life">عمر البطارية</td><td><span class="sv">4 ساعات / 50+ رحلة</span></td></tr>
-        <tr class="rv"><td data-ar="المادة الهيكلية" data-en="Frame material">المادة الهيكلية</td><td><span class="sv">ألومنيوم 6061</span></td></tr>
+        <tr class="rv"><td data-ar="عمر البطارية" data-en="Battery life">عمر البطارية</td><td><span class="sv" data-ar="4 ساعات / 50+ رحلة" data-en="4 hrs / 50+ trips">4 ساعات / 50+ رحلة</span></td></tr>
+        <tr class="rv"><td data-ar="المادة الهيكلية" data-en="Frame material">المادة الهيكلية</td><td><span class="sv" data-ar="ألومنيوم 6061" data-en="Aluminum 6061">ألومنيوم 6061</span></td></tr>
         <tr class="rv"><td data-ar="البرنامج" data-en="Software">البرنامج</td><td><span class="sv">SolidWorks 2024</span></td></tr>
       </tbody>
     </table>
@@ -536,7 +474,7 @@
 <section id="prototype">
   <div class="si">
     <div class="sk rv" data-ar="النموذج" data-en="Prototype">النموذج</div>
-    <h2 class="st rv">مراحل بناء النموذج</h2>
+    <h2 class="st rv" data-ar="مراحل بناء النموذج" data-en="Prototype Build Stages">مراحل بناء النموذج</h2>
     <p class="sl rv" data-ar="مررنا بمراحل تصميم وتصنيع متعددة للوصول إلى النموذج الأولي الحالي." data-en="We went through multiple design and manufacturing stages to reach the current prototype.">مررنا بمراحل تصميم وتصنيع متعددة للوصول إلى النموذج الأولي الحالي.</p>
     <div class="proto-grid">
       <div class="pstep rv d1"><div class="pnum">1</div><div><h4 data-ar="دراسة المتطلبات" data-en="Requirements Study">دراسة المتطلبات</h4><p data-ar="تحليل احتياجات المستخدمين وتحديد المواصفات الهندسية الأساسية للمشروع." data-en="Analyzing user needs and defining core engineering specs.">تحليل احتياجات المستخدمين وتحديد المواصفات الهندسية الأساسية للمشروع.</p></div></div>
@@ -553,20 +491,29 @@
 <section id="gallery">
   <div class="si">
     <div class="sk rv" data-ar="الصور" data-en="Gallery">الصور</div>
-    <h2 class="st rv">معرض المشروع</h2>
+    <h2 class="st rv" data-ar="معرض المشروع" data-en="Project Gallery">معرض المشروع</h2>
     <p class="sl rv" data-ar="صور من مراحل التصميم والتصنيع والاختبار." data-en="Images from design, manufacturing and testing stages.">صور من مراحل التصميم والتصنيع والاختبار.</p>
     <div class="gallery-grid">
       <div class="gal-item full rv" onclick="openLb(this)" data-src="photo_2_2026-07-10_02-33-46.jpg">
-        <img src="photo_2_2026-07-10_02-33-46.jpg" alt="النموذج الفعلي للوحدة الجنزيرية" loading="lazy" width="800" height="400"/>
-        <div class="gal-caption"><span class="gal-tag" data-ar="النموذج الفعلي" data-en="Physical Prototype">النموذج الفعلي</span><br/>الوحدة الجنزيرية — النموذج الأولي</div>
+        <img src="photo_2_2026-07-10_02-33-46.jpg" alt="Physical prototype" loading="lazy" width="800" height="400"/>
+        <div class="gal-caption">
+          <span class="gal-tag" data-ar="النموذج الفعلي" data-en="Physical Prototype">النموذج الفعلي</span><br/>
+          <span data-ar="الوحدة الجنزيرية — النموذج الأولي" data-en="Track Unit — First Prototype">الوحدة الجنزيرية — النموذج الأولي</span>
+        </div>
       </div>
       <div class="gal-item rv d1" onclick="openLb(this)" data-src="cad.jpeg">
-        <img src="cad.jpeg" alt="نموذج SolidWorks" loading="lazy" width="400" height="320"/>
-        <div class="gal-caption"><span class="gal-tag">CAD</span><br/>تصميم SolidWorks ثلاثي الأبعاد</div>
+        <img src="cad.jpeg" alt="SolidWorks CAD" loading="lazy" width="400" height="320"/>
+        <div class="gal-caption">
+          <span class="gal-tag">CAD</span><br/>
+          <span data-ar="تصميم SolidWorks ثلاثي الأبعاد" data-en="SolidWorks 3D Design">تصميم SolidWorks ثلاثي الأبعاد</span>
+        </div>
       </div>
       <div class="gal-item rv d2" onclick="openLb(this)" data-src="photo_2_2026-07-10_02-33-46.jpg">
-        <img src="photo_2_2026-07-10_02-33-46.jpg" alt="تفاصيل الهيكل" loading="lazy" width="400" height="320" style="object-position:center 30%"/>
-        <div class="gal-caption"><span class="gal-tag" data-ar="التفاصيل" data-en="Details">التفاصيل</span><br/>تفاصيل الهيكل والمكوّنات</div>
+        <img src="photo_2_2026-07-10_02-33-46.jpg" alt="Frame details" loading="lazy" width="400" height="320" style="object-position:center 30%"/>
+        <div class="gal-caption">
+          <span class="gal-tag" data-ar="التفاصيل" data-en="Details">التفاصيل</span><br/>
+          <span data-ar="تفاصيل الهيكل والمكوّنات" data-en="Frame &amp; Component Details">تفاصيل الهيكل والمكوّنات</span>
+        </div>
       </div>
     </div>
   </div>
@@ -578,7 +525,7 @@
 <section id="team">
   <div class="si">
     <div class="sk rv" data-ar="الفريق" data-en="The Team">الفريق</div>
-    <h2 class="st rv">فريق المشروع</h2>
+    <h2 class="st rv" data-ar="فريق المشروع" data-en="Project Team">فريق المشروع</h2>
     <div class="team-card rs">
       <div class="avatar">
         <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
@@ -586,7 +533,7 @@
           <path d="M6 42c0-9.941 8.059-18 18-18s18 8.059 18 18" fill="rgba(0,200,255,0.08)" stroke="rgba(0,200,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
         </svg>
       </div>
-      <div class="tn">عمرو عمّوري</div>
+      <div class="tn">Amr Ammory</div>
       <div class="tr" data-ar="طالب هندسة ميكانيكية — مشروع التخرج" data-en="Mechanical Engineering Student — Graduation Project">طالب هندسة ميكانيكية — مشروع التخرج</div>
     </div>
   </div>
@@ -599,7 +546,7 @@
   <div class="si">
     <div class="cbox">
       <div class="sk rv" style="justify-content:center" data-ar="تواصل" data-en="Contact">تواصل</div>
-      <h2 class="st rv">تواصل مع الفريق</h2>
+      <h2 class="st rv" data-ar="تواصل مع الفريق" data-en="Get in Touch">تواصل مع الفريق</h2>
       <p class="sl rv" style="margin:0 auto 1rem" data-ar="لأي استفسار أو تعاون، لا تتردد في التواصل معنا." data-en="For any inquiries or collaboration, don't hesitate to reach out.">لأي استفسار أو تعاون، لا تتردد في التواصل معنا.</p>
       <a href="mailto:amrammory13@gmail.com" class="cemail rv">
         <span class="esw">
@@ -665,18 +612,49 @@ document.getElementById('nl').querySelectorAll('a').forEach(function(a){
   });
 });
 
-// LANG TOGGLE
-var isEn=false;
-document.getElementById('lb').addEventListener('click',function(){
-  isEn=!isEn;
-  this.textContent=isEn?'AR':'EN';
-  document.body.classList.toggle('en',isEn);
-  document.documentElement.setAttribute('lang',isEn?'en':'ar');
-  document.documentElement.setAttribute('dir',isEn?'ltr':'rtl');
+// ── LANG TOGGLE ──────────────────────────────────────────────────────────────
+var isEn = false;
+
+// Metadata translations
+var META = {
+  ar: {
+    title: 'StepUp — وحدة جنزيرية معيارية لتسلّق السلالم',
+    desc:  'مشروع تخرج هندسة ميكانيكية — وحدة جنزيرية مدمجة لتمكين الكراسي المتحركة من تسلق السلالم'
+  },
+  en: {
+    title: 'StepUp — Modular Stair-Climbing Track Unit for Wheelchairs',
+    desc:  'Mechanical Engineering Graduation Project — A compact track-drive module enabling wheelchairs to climb stairs independently'
+  }
+};
+
+document.getElementById('lb').addEventListener('click', function(){
+  isEn = !isEn;
+  var lang = isEn ? 'en' : 'ar';
+  var dir  = isEn ? 'ltr' : 'rtl';
+
+  // Button label
+  this.textContent = isEn ? 'AR' : 'EN';
+
+  // html attributes
+  document.body.classList.toggle('en', isEn);
+  document.documentElement.setAttribute('lang', lang);
+  document.documentElement.setAttribute('dir',  dir);
+
+  // Page title & meta description
+  document.title = META[lang].title;
+  var metaDesc = document.getElementById('page-desc');
+  if(metaDesc) metaDesc.setAttribute('content', META[lang].desc);
+
+  // Translate every element that has data-ar / data-en
   document.querySelectorAll('[data-ar]').forEach(function(el){
-    el.textContent=isEn?el.getAttribute('data-en'):el.getAttribute('data-ar');
+    var val = el.getAttribute('data-' + lang);
+    if(val !== null) el.textContent = val;
   });
+
+  // Ticker re-setup so widths recalculate after text changes
+  setTimeout(setupTicker, 50);
 });
+// ─────────────────────────────────────────────────────────────────────────────
 
 // ACTIVE NAV LINKS
 var sections=document.querySelectorAll('section[id]');
@@ -737,74 +715,62 @@ document.addEventListener('keydown',function(e){
 });
 
 // ─── PROFESSIONAL INFINITE TICKER ───────────────────────────────────────────
-// Driven entirely by requestAnimationFrame — never stops, never glitches,
-// works on all screen sizes. Clones items to fill viewport then loops seamlessly.
-(function(){
+var tickerOffset = 0;
+var tickerSetWidth = 0;
+var TICKER_SPEED = 0.55;
+var tickerRAF;
+
+function setupTicker(){
   var track = document.getElementById('tickerTrack');
   if(!track) return;
 
-  var SPEED = 0.55; // px per frame (~33px/sec at 60fps) — tweak as needed
-  var offset = 0;
-  var setWidth = 0; // width of ONE original set of items
+  track.querySelectorAll('.ticker-clone').forEach(function(el){ el.remove(); });
 
-  function setup(){
-    // Remove any previously cloned sets
-    track.querySelectorAll('.ticker-clone').forEach(function(el){ el.remove(); });
+  var origItems = track.querySelectorAll('.ticker-item:not(.ticker-clone)');
+  tickerSetWidth = 0;
+  origItems.forEach(function(el){ tickerSetWidth += el.offsetWidth; });
 
-    // Measure original items width
-    var origItems = track.querySelectorAll('.ticker-item:not(.ticker-clone)');
-    setWidth = 0;
-    origItems.forEach(function(el){ setWidth += el.offsetWidth; });
+  if(tickerSetWidth === 0){ setTimeout(setupTicker, 100); return; }
 
-    if(setWidth === 0){ setTimeout(setup, 100); return; } // wait for layout
+  var viewW = track.parentElement.offsetWidth || window.innerWidth;
+  var copies = Math.ceil((viewW * 3) / tickerSetWidth) + 2;
 
-    // Clone enough sets to fill the viewport + buffer
-    var viewW = track.parentElement.offsetWidth || window.innerWidth;
-    var copies = Math.ceil((viewW * 3) / setWidth) + 2;
-
-    var frag = document.createDocumentFragment();
-    for(var c = 0; c < copies; c++){
-      origItems.forEach(function(item){
-        var clone = item.cloneNode(true);
-        clone.classList.add('ticker-clone');
-        frag.appendChild(clone);
-      });
-    }
-    track.appendChild(frag);
-
-    offset = 0;
-    track.style.transform = 'translateX(0)';
+  var frag = document.createDocumentFragment();
+  for(var c = 0; c < copies; c++){
+    origItems.forEach(function(item){
+      var clone = item.cloneNode(true);
+      clone.classList.add('ticker-clone');
+      frag.appendChild(clone);
+    });
   }
+  track.appendChild(frag);
 
-  function tick(){
-    offset -= SPEED;
-    // When we've scrolled one full set-width, reset without visual jump
-    if(Math.abs(offset) >= setWidth){
-      offset += setWidth;
-    }
-    track.style.transform = 'translateX(' + offset + 'px)';
-    requestAnimationFrame(tick);
+  tickerOffset = 0;
+  track.style.transform = 'translateX(0)';
+}
+
+function tickTicker(){
+  var track = document.getElementById('tickerTrack');
+  if(!track){ requestAnimationFrame(tickTicker); return; }
+  tickerOffset -= TICKER_SPEED;
+  if(tickerSetWidth > 0 && Math.abs(tickerOffset) >= tickerSetWidth){
+    tickerOffset += tickerSetWidth;
   }
+  track.style.transform = 'translateX(' + tickerOffset + 'px)';
+  requestAnimationFrame(tickTicker);
+}
 
-  // Re-setup on resize (debounced)
-  var resizeTimer;
-  window.addEventListener('resize', function(){
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(setup, 200);
-  });
+var resizeTimer;
+window.addEventListener('resize', function(){
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(setupTicker, 200);
+});
 
-  // Also re-setup when lang changes so widths recalculate
-  document.getElementById('lb').addEventListener('click', function(){
-    setTimeout(setup, 50);
-  });
-
-  // Init after fonts/layout settle
-  if(document.readyState === 'complete'){
-    setup(); tick();
-  } else {
-    window.addEventListener('load', function(){ setup(); tick(); });
-  }
-})();
+if(document.readyState === 'complete'){
+  setupTicker(); tickTicker();
+} else {
+  window.addEventListener('load', function(){ setupTicker(); tickTicker(); });
+}
 // ─────────────────────────────────────────────────────────────────────────────
 </script>
 </body>
