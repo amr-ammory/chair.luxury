@@ -94,15 +94,78 @@
     .machine-caption{position:absolute;bottom:0;left:0;right:0;padding:.65rem 1rem;background:linear-gradient(to top,rgba(8,9,15,0.92) 60%,transparent);display:flex;align-items:center;gap:.5rem;font-size:.72rem;font-weight:700;letter-spacing:.12em;font-family:var(--fe);}
     .cap-dot{width:6px;height:6px;border-radius:50%;background:var(--primary);animation:pg 2s ease-in-out infinite;flex-shrink:0}
     .cap-text{color:rgba(255,255,255,0.75)}
-    /* TICKER */
-    .welcome-ticker{margin-top:.85rem;border:1px solid rgba(0,200,255,0.13);border-radius:10px;background:rgba(0,200,255,0.03);overflow:hidden;position:relative;height:44px;display:flex;align-items:center;}
-    .welcome-ticker::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--primary);animation:tickerBarPulse 2s ease-in-out infinite;border-radius:0 2px 2px 0;}
-    @keyframes tickerBarPulse{0%,100%{opacity:.4;box-shadow:0 0 6px rgba(0,200,255,0.3)}50%{opacity:1;box-shadow:0 0 18px rgba(0,200,255,0.9)}}
-    .ticker-track{display:flex;align-items:center;padding-right:1.1rem;animation:tickerScroll 14s linear infinite;white-space:nowrap;will-change:transform;}
-    @keyframes tickerScroll{0%{transform:translateX(0%)}100%{transform:translateX(-50%)}}
-    .ticker-item{display:inline-flex;align-items:center;gap:.55rem;padding:0 1.5rem;font-size:.72rem;font-weight:700;letter-spacing:.12em;font-family:var(--fe);color:rgba(255,255,255,0.7);text-transform:uppercase;}
-    .ticker-item .ti-dot{width:5px;height:5px;border-radius:50%;background:var(--primary);flex-shrink:0;animation:pg 2.2s ease-in-out infinite;}
-    .ticker-item .ti-star{color:var(--primary);font-size:.9rem;animation:starSpin 3s linear infinite;display:inline-block;}
+    /* TICKER — Professional infinite marquee via JS */
+    .welcome-ticker{
+      margin-top:.85rem;
+      border:1px solid rgba(0,200,255,0.13);
+      border-radius:10px;
+      background:rgba(0,200,255,0.03);
+      overflow:hidden;
+      position:relative;
+      height:44px;
+      display:flex;
+      align-items:center;
+    }
+    .welcome-ticker::before{
+      content:'';
+      position:absolute;
+      left:0;top:0;bottom:0;
+      width:3px;
+      background:var(--primary);
+      animation:tickerBarPulse 2s ease-in-out infinite;
+      border-radius:0 2px 2px 0;
+      z-index:2;
+    }
+    @keyframes tickerBarPulse{
+      0%,100%{opacity:.4;box-shadow:0 0 6px rgba(0,200,255,0.3)}
+      50%{opacity:1;box-shadow:0 0 18px rgba(0,200,255,0.9)}
+    }
+    /* fade edges */
+    .welcome-ticker::after{
+      content:'';
+      position:absolute;
+      inset:0;
+      background:linear-gradient(to right,rgba(8,9,15,0.55) 0%,transparent 60px,transparent calc(100% - 60px),rgba(8,9,15,0.55) 100%);
+      pointer-events:none;
+      z-index:2;
+    }
+    .ticker-viewport{
+      width:100%;
+      height:100%;
+      overflow:hidden;
+      position:relative;
+    }
+    .ticker-track{
+      display:flex;
+      align-items:center;
+      height:100%;
+      white-space:nowrap;
+      will-change:transform;
+      /* JS drives the transform — no CSS animation */
+    }
+    .ticker-item{
+      display:inline-flex;
+      align-items:center;
+      gap:.55rem;
+      padding:0 1.5rem;
+      font-size:.72rem;
+      font-weight:700;
+      letter-spacing:.12em;
+      font-family:var(--fe);
+      color:rgba(255,255,255,0.7);
+      text-transform:uppercase;
+      flex-shrink:0;
+    }
+    .ticker-item .ti-dot{
+      width:5px;height:5px;border-radius:50%;
+      background:var(--primary);flex-shrink:0;
+      animation:pg 2.2s ease-in-out infinite;
+    }
+    .ticker-item .ti-star{
+      color:var(--primary);font-size:.9rem;
+      animation:starSpin 3s linear infinite;
+      display:inline-block;
+    }
     @keyframes starSpin{0%,100%{transform:rotate(0deg) scale(1)}50%{transform:rotate(180deg) scale(1.3)}}
     .ticker-item.hi{color:var(--primary);font-size:.78rem;letter-spacing:.18em;text-shadow:0 0 18px rgba(0,200,255,0.6);}
     .ticker-item.hi .ti-dot{background:var(--gold);box-shadow:0 0 8px rgba(255,215,0,0.7);}
@@ -316,16 +379,15 @@
           <span class="cap-text" data-ar="نموذج CAD · SolidWorks 2024" data-en="CAD Model · SolidWorks 2024">نموذج CAD · SolidWorks 2024</span>
         </div>
       </div>
-      <div class="welcome-ticker">
-        <div class="ticker-track" id="tickerTrack">
-          <span class="ticker-item hi"><span class="ti-dot"></span><span data-ar="أهلاً بك في Chair Luxury" data-en="Welcome to Chair Luxury">أهلاً بك في Chair Luxury</span><span class="ti-star">✦</span></span>
-          <span class="ticker-item"><span class="ti-dot"></span><span data-ar="حرية الحركة — بلا حدود" data-en="Freedom of Motion — No Limits">حرية الحركة — بلا حدود</span></span>
-          <span class="ticker-item"><span class="ti-dot"></span><span data-ar="StepUp · مشروع تخرج 2024" data-en="StepUp · Graduation Project 2024">StepUp · مشروع تخرج 2024</span><span class="ti-star">✦</span></span>
-          <span class="ticker-item"><span class="ti-dot"></span><span data-ar="كل سُلَّم قابل للتسلّق" data-en="Every Stair is Climbable">كل سُلَّم قابل للتسلّق</span></span>
-          <span class="ticker-item hi"><span class="ti-dot"></span><span data-ar="أهلاً بك في Chair Luxury" data-en="Welcome to Chair Luxury">أهلاً بك في Chair Luxury</span><span class="ti-star">✦</span></span>
-          <span class="ticker-item"><span class="ti-dot"></span><span data-ar="حرية الحركة — بلا حدود" data-en="Freedom of Motion — No Limits">حرية الحركة — بلا حدود</span></span>
-          <span class="ticker-item"><span class="ti-dot"></span><span data-ar="StepUp · مشروع تخرج 2024" data-en="StepUp · Graduation Project 2024">StepUp · مشروع تخرج 2024</span><span class="ti-star">✦</span></span>
-          <span class="ticker-item"><span class="ti-dot"></span><span data-ar="كل سُلَّم قابل للتسلّق" data-en="Every Stair is Climbable">كل سُلَّم قابل للتسلّق</span></span>
+      <!-- TICKER -->
+      <div class="welcome-ticker" id="tickerWrap">
+        <div class="ticker-viewport">
+          <div class="ticker-track" id="tickerTrack">
+            <span class="ticker-item hi"><span class="ti-dot"></span><span class="ticker-text" data-ar="أهلاً بك في Chair Luxury" data-en="Welcome to Chair Luxury">أهلاً بك في Chair Luxury</span><span class="ti-star">✦</span></span>
+            <span class="ticker-item"><span class="ti-dot"></span><span class="ticker-text" data-ar="حرية الحركة — بلا حدود" data-en="Freedom of Motion — No Limits">حرية الحركة — بلا حدود</span></span>
+            <span class="ticker-item"><span class="ti-dot"></span><span class="ticker-text" data-ar="StepUp · مشروع تخرج 2024" data-en="StepUp · Graduation Project 2024">StepUp · مشروع تخرج 2024</span><span class="ti-star">✦</span></span>
+            <span class="ticker-item"><span class="ti-dot"></span><span class="ticker-text" data-ar="كل سُلَّم قابل للتسلّق" data-en="Every Stair is Climbable">كل سُلَّم قابل للتسلّق</span></span>
+          </div>
         </div>
       </div>
     </div>
@@ -673,6 +735,77 @@ document.getElementById('lbo').addEventListener('click',function(e){
 document.addEventListener('keydown',function(e){
   if(e.key==='Escape')document.getElementById('lbo').classList.remove('open');
 });
+
+// ─── PROFESSIONAL INFINITE TICKER ───────────────────────────────────────────
+// Driven entirely by requestAnimationFrame — never stops, never glitches,
+// works on all screen sizes. Clones items to fill viewport then loops seamlessly.
+(function(){
+  var track = document.getElementById('tickerTrack');
+  if(!track) return;
+
+  var SPEED = 0.55; // px per frame (~33px/sec at 60fps) — tweak as needed
+  var offset = 0;
+  var setWidth = 0; // width of ONE original set of items
+
+  function setup(){
+    // Remove any previously cloned sets
+    track.querySelectorAll('.ticker-clone').forEach(function(el){ el.remove(); });
+
+    // Measure original items width
+    var origItems = track.querySelectorAll('.ticker-item:not(.ticker-clone)');
+    setWidth = 0;
+    origItems.forEach(function(el){ setWidth += el.offsetWidth; });
+
+    if(setWidth === 0){ setTimeout(setup, 100); return; } // wait for layout
+
+    // Clone enough sets to fill the viewport + buffer
+    var viewW = track.parentElement.offsetWidth || window.innerWidth;
+    var copies = Math.ceil((viewW * 3) / setWidth) + 2;
+
+    var frag = document.createDocumentFragment();
+    for(var c = 0; c < copies; c++){
+      origItems.forEach(function(item){
+        var clone = item.cloneNode(true);
+        clone.classList.add('ticker-clone');
+        frag.appendChild(clone);
+      });
+    }
+    track.appendChild(frag);
+
+    offset = 0;
+    track.style.transform = 'translateX(0)';
+  }
+
+  function tick(){
+    offset -= SPEED;
+    // When we've scrolled one full set-width, reset without visual jump
+    if(Math.abs(offset) >= setWidth){
+      offset += setWidth;
+    }
+    track.style.transform = 'translateX(' + offset + 'px)';
+    requestAnimationFrame(tick);
+  }
+
+  // Re-setup on resize (debounced)
+  var resizeTimer;
+  window.addEventListener('resize', function(){
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(setup, 200);
+  });
+
+  // Also re-setup when lang changes so widths recalculate
+  document.getElementById('lb').addEventListener('click', function(){
+    setTimeout(setup, 50);
+  });
+
+  // Init after fonts/layout settle
+  if(document.readyState === 'complete'){
+    setup(); tick();
+  } else {
+    window.addEventListener('load', function(){ setup(); tick(); });
+  }
+})();
+// ─────────────────────────────────────────────────────────────────────────────
 </script>
 </body>
 </html>
