@@ -244,6 +244,7 @@
     .gal-tag{display:inline-block;background:rgba(0,200,255,0.12);border:1px solid rgba(0,200,255,0.3);color:var(--primary);font-size:.64rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;padding:.18rem .65rem;border-radius:999px;margin-bottom:.4rem}
     .gal-item.full{grid-column:1/-1}
     .gal-item.full img{height:420px}
+    .gal-item.tall img{height:380px}
 
     /* ── LIGHTBOX ── */
     .lb-overlay{display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.92);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:1.5rem}
@@ -316,6 +317,7 @@
       .gallery-grid{grid-template-columns:1fr}
       .gal-item img{height:270px}
       .gal-item.full img{height:320px}
+      .gal-item.tall img{height:300px}
     }
     /* ── RESPONSIVE: MOBILE (≤600px) ── */
     @media(max-width:600px){
@@ -338,6 +340,7 @@
       .gallery-grid{grid-template-columns:1fr}
       .gal-item img{height:230px}
       .gal-item.full img{height:260px}
+      .gal-item.tall img{height:250px}
       .specs-t th,.specs-t td{padding:.75rem 1rem;font-size:.82rem}
       .team-card{padding:2rem 1.2rem}
       .cemail{font-size:.85rem;padding:.85rem 1.2rem}
@@ -614,6 +617,8 @@
     <h2 class="st rv" data-ar="معرض المشروع" data-en="Project Gallery">معرض المشروع</h2>
     <p class="sl rv" data-ar="صور من مراحل التصميم والتصنيع والاختبار." data-en="Images from design, manufacturing and testing stages.">صور من مراحل التصميم والتصنيع والاختبار.</p>
     <div class="gallery-grid">
+
+      <!-- صورة كاملة العرض: النموذج الفعلي -->
       <div class="gal-item full rv" onclick="openLb(this)" data-src="photo_2_2026-07-10_02-33-46.jpg">
         <img src="photo_2_2026-07-10_02-33-46.jpg" alt="Physical prototype" loading="lazy" width="800" height="420"/>
         <div class="gal-caption">
@@ -621,6 +626,8 @@
           <span data-ar="الوحدة الجنزيرية — النموذج الأولي" data-en="Track Unit — First Prototype">الوحدة الجنزيرية — النموذج الأولي</span>
         </div>
       </div>
+
+      <!-- CAD -->
       <div class="gal-item rv d1" onclick="openLb(this)" data-src="cad.jpeg">
         <img src="cad.jpeg" alt="SolidWorks CAD" loading="lazy" width="400" height="300"/>
         <div class="gal-caption">
@@ -628,13 +635,25 @@
           <span data-ar="تصميم SolidWorks ثلاثي الأبعاد" data-en="SolidWorks 3D Design">تصميم SolidWorks ثلاثي الأبعاد</span>
         </div>
       </div>
-      <div class="gal-item rv d2" onclick="openLb(this)" data-src="photo_2_2026-07-10_02-33-46.jpg">
-        <img src="photo_2_2026-07-10_02-33-46.jpg" alt="Frame details" loading="lazy" width="400" height="300" style="object-position:center 30%"/>
+
+      <!-- photo00 -->
+      <div class="gal-item rv d2" onclick="openLb(this)" data-src="photo00.PNG">
+        <img src="photo00.PNG" alt="Project photo 1" loading="lazy" width="400" height="300"/>
         <div class="gal-caption">
-          <span class="gal-tag" data-ar="التفاصيل" data-en="Details">التفاصيل</span><br/>
-          <span data-ar="تفاصيل الهيكل والمكوّنات" data-en="Frame &amp; Component Details">تفاصيل الهيكل والمكوّنات</span>
+          <span class="gal-tag" data-ar="التصنيع" data-en="Manufacturing">التصنيع</span><br/>
+          <span data-ar="مرحلة التصنيع والتجميع" data-en="Manufacturing & Assembly Stage">مرحلة التصنيع والتجميع</span>
         </div>
       </div>
+
+      <!-- photo1 — كاملة العرض -->
+      <div class="gal-item full rv d3" onclick="openLb(this)" data-src="photo1.PNG">
+        <img src="photo1.PNG" alt="Project photo 2" loading="lazy" width="800" height="420"/>
+        <div class="gal-caption">
+          <span class="gal-tag" data-ar="الاختبار" data-en="Testing">الاختبار</span><br/>
+          <span data-ar="اختبار الوحدة على السلالم" data-en="Unit Testing on Stairs">اختبار الوحدة على السلالم</span>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
