@@ -120,7 +120,7 @@
     .hero-card{background:rgba(255,255,255,0.03);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.07);border-radius:22px;padding:1.4rem;box-shadow:0 0 35px rgba(0,200,255,0.2);animation:hIn 1s cubic-bezier(.16,1,.3,1) .18s both,fl 9s ease-in-out 1.5s infinite;position:relative;will-change:transform;backface-visibility:hidden}
     .hero-badge{position:absolute;top:-11px;left:-11px;background:var(--gold);color:#050508;font-size:.62rem;font-weight:800;letter-spacing:.15em;padding:.28rem .75rem;border-radius:999px;box-shadow:0 0 20px rgba(255,215,0,0.3);font-family:var(--fe);animation:bp .6s cubic-bezier(.34,1.56,.64,1) 1s both;z-index:2}
     @keyframes bp{from{opacity:0;transform:scale(.5) rotate(-10deg)}to{opacity:1;transform:scale(1) rotate(0)}}
-    .machine-frame{position:relative;border-radius:14px;overflow:hidden;border:1px solid rgba(0,200,255,0.18);background:#0a0c14;aspect-ratio:4/3;max-height:320px}
+    .machine-frame{position:relative;border-radius:14px;overflow:hidden;border:1px solid rgba(0,200,255,0.18);background:#0a0c14;aspect-ratio:1/1;max-height:340px}
     .machine-frame img{width:100%;height:100%;display:block;border-radius:14px;object-fit:contain;object-position:center;transition:transform .6s cubic-bezier(.23,1,.32,1);animation:machineReveal 1.2s cubic-bezier(.16,1,.3,1) .4s both}
     .hero-card:hover .machine-frame img{transform:scale(1.04)}
     .machine-scan{position:absolute;inset:0;pointer-events:none;border-radius:14px;overflow:hidden}
@@ -304,8 +304,8 @@
     /* ── RESPONSIVE: TABLET (≤1024px) ── */
     @media(max-width:1024px){
       .hero-inner{grid-template-columns:1fr;gap:2.5rem}
-      .hero-card{max-width:480px;margin:0 auto}
-      .machine-frame{max-height:280px}
+      .hero-card{max-width:420px;margin:0 auto}
+      .machine-frame{max-height:320px}
       .parts-grid{grid-template-columns:repeat(2,1fr)}
       .proto-grid{grid-template-columns:1fr}
     }
@@ -344,7 +344,7 @@
       .motion-banner{padding:2rem 1rem}
       .motion-banner-inner .mb-title{font-size:.95rem}
       .hero-card{max-width:100%}
-      .machine-frame{max-height:220px;aspect-ratio:4/3}
+      .machine-frame{max-height:260px;aspect-ratio:1/1}
       .flinks{gap:1rem}
     }
     /* ── RESPONSIVE: TINY (≤380px) ── */
@@ -352,7 +352,7 @@
       .hero-title{font-size:1.6rem}
       .hero-btns{flex-direction:column;align-items:flex-start}
       .btn-p,.btn-s{width:100%;justify-content:center}
-      .machine-frame{max-height:180px}
+      .machine-frame{max-height:220px}
     }
   </style>
 </head>
