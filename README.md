@@ -6,7 +6,7 @@ Modular Stair-Climbing Track Unit for Wheelchairs — Mechanical Engineering Gra
 
 ## 🌐 Live Site
 
-> [amr-ammory.github.io/stepup-stairclimber](https://amr-ammory.github.io/stepup-stairclimber)
+> [[amr-ammory.github.io/stepup-stairclimber] https://amr-ammory.github.io/chair.luxury/
 
 ## Features
 - ⚡ Pure HTML/CSS/JS — no build step needed
