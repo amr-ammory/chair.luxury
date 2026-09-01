@@ -32,37 +32,11 @@
     ::-webkit-scrollbar-thumb{background:rgba(0,200,255,0.25);border-radius:10px}
 
     /* ── NAV ── */
-    nav{
-      position:fixed;top:0;width:100%;z-index:100;
-      backdrop-filter:blur(16px) saturate(140%);
-      -webkit-backdrop-filter:blur(16px) saturate(140%);
-      background:rgba(8,9,15,0.7);
-      border-bottom:1px solid var(--border);
-      padding:0 1.5rem;
-      height:62px;
-      display:flex;align-items:center;justify-content:space-between;
-      gap:.75rem;
-      transition:background .3s,box-shadow .3s
-    }
+    nav{position:fixed;top:0;width:100%;z-index:100;backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%);background:rgba(8,9,15,0.7);border-bottom:1px solid var(--border);padding:0 1.5rem;height:62px;display:flex;align-items:center;justify-content:space-between;gap:.75rem;transition:background .3s,box-shadow .3s}
     nav.scrolled{background:rgba(8,9,15,0.97);box-shadow:0 2px 24px rgba(0,0,0,0.5)}
-    .nav-logo{
-      font-weight:900;font-size:1.15rem;letter-spacing:-.02em;
-      background:var(--eg);-webkit-background-clip:text;background-clip:text;
-      color:transparent;font-family:var(--fe);flex-shrink:0;white-space:nowrap
-    }
-    .nav-links{
-      display:flex;
-      gap:clamp(.4rem,.9vw,1.1rem);
-      list-style:none;flex-wrap:nowrap;
-      flex:1;justify-content:center;
-      overflow:hidden
-    }
-    .nav-links a{
-      color:var(--muted);text-decoration:none;
-      font-size:clamp(.66rem,.72vw,.78rem);
-      font-weight:500;transition:color .2s;
-      position:relative;padding-bottom:2px;white-space:nowrap
-    }
+    .nav-logo{font-weight:900;font-size:1.15rem;letter-spacing:-.02em;background:var(--eg);-webkit-background-clip:text;background-clip:text;color:transparent;font-family:var(--fe);flex-shrink:0;white-space:nowrap}
+    .nav-links{display:flex;gap:clamp(.4rem,.9vw,1.1rem);list-style:none;flex-wrap:nowrap;flex:1;justify-content:center;overflow:hidden}
+    .nav-links a{color:var(--muted);text-decoration:none;font-size:clamp(.66rem,.72vw,.78rem);font-weight:500;transition:color .2s;position:relative;padding-bottom:2px;white-space:nowrap}
     .nav-links a::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:var(--primary);transform:scaleX(0);transform-origin:center;transition:transform .22s}
     .nav-links a:hover,.nav-links a.active{color:var(--primary)}
     .nav-links a:hover::after,.nav-links a.active::after{transform:scaleX(1)}
@@ -75,12 +49,7 @@
     .hamburger.open span:nth-child(2){opacity:0}
     .hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
     @media(max-width:1024px){
-      .nav-links{
-        display:none;position:absolute;top:62px;right:0;left:0;
-        flex-direction:column;background:rgba(8,9,15,0.99);
-        padding:1.5rem 2rem;gap:1rem;
-        border-bottom:1px solid var(--border);z-index:99
-      }
+      .nav-links{display:none;position:absolute;top:62px;right:0;left:0;flex-direction:column;background:rgba(8,9,15,0.99);padding:1.5rem 2rem;gap:1rem;border-bottom:1px solid var(--border);z-index:99}
       .nav-links.open{display:flex;animation:slideDown .22s ease}
       .nav-links a{font-size:.9rem}
       .hamburger{display:flex}
@@ -162,8 +131,6 @@
     @keyframes stairGlow{0%,100%{opacity:.3}50%{opacity:.85}}
     @keyframes trackGlow{0%,100%{filter:drop-shadow(0 0 4px rgba(0,200,255,0.35))}50%{filter:drop-shadow(0 0 14px rgba(0,200,255,0.85))}}
     @keyframes arrowPulse{0%,100%{transform:translateX(0);opacity:.55}50%{transform:translateX(5px);opacity:1}}
-    @keyframes wheelSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-    @keyframes wheelSpinR{from{transform:rotate(0deg)}to{transform:rotate(-360deg)}}
     .track-chassis{animation:chassisFloat 3.4s ease-in-out infinite}
     .track-belt-path{stroke-dasharray:200;animation:beltLoop 1.8s linear infinite}
     .stair-glow{animation:stairGlow 2.2s ease-in-out infinite}
@@ -298,11 +265,108 @@
     .specs-t tbody tr.rv{opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s}
     .specs-t tbody tr.rv.on{opacity:1;transform:translateX(0)}
 
-    /* ── RESPONSIVE: MEDIUM (1025–1280px) ── */
-    @media(max-width:1280px) and (min-width:1025px){
-      .parts-grid{grid-template-columns:repeat(3,1fr)}
+    /* ══════════════════════════════════════
+       ── WHATSAPP FLOATING BUTTON ──
+    ══════════════════════════════════════ */
+    .wa-fab{
+      position:fixed;
+      bottom:2rem;
+      left:2rem;
+      z-index:200;
+      display:flex;
+      align-items:center;
+      gap:.75rem;
+      cursor:pointer;
+      text-decoration:none;
+      animation:waEntry .8s cubic-bezier(.34,1.56,.64,1) 1.2s both;
     }
-    /* ── RESPONSIVE: TABLET (≤1024px) ── */
+    @keyframes waEntry{
+      from{opacity:0;transform:translateY(30px) scale(.7)}
+      to{opacity:1;transform:translateY(0) scale(1)}
+    }
+    /* الدائرة الخضراء */
+    .wa-icon{
+      width:58px;height:58px;
+      background:linear-gradient(135deg,#25d366,#128c4a);
+      border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      flex-shrink:0;
+      box-shadow:0 4px 22px rgba(37,211,102,0.45),0 0 0 0 rgba(37,211,102,0.4);
+      transition:transform .25s cubic-bezier(.23,1,.32,1),box-shadow .25s;
+      animation:waPulse 2.8s ease-in-out infinite;
+      position:relative;
+    }
+    @keyframes waPulse{
+      0%  {box-shadow:0 4px 22px rgba(37,211,102,0.45),0 0 0 0   rgba(37,211,102,0.45)}
+      60% {box-shadow:0 4px 22px rgba(37,211,102,0.25),0 0 0 18px rgba(37,211,102,0)}
+      100%{box-shadow:0 4px 22px rgba(37,211,102,0.45),0 0 0 0   rgba(37,211,102,0)}
+    }
+    .wa-fab:hover .wa-icon{
+      transform:scale(1.12) rotate(-8deg);
+      box-shadow:0 8px 35px rgba(37,211,102,0.65),0 0 0 0 rgba(37,211,102,0);
+    }
+    /* لوغو واتساب SVG */
+    .wa-icon svg{width:32px;height:32px;fill:#fff;filter:drop-shadow(0 1px 3px rgba(0,0,0,0.2))}
+    /* بالون النص */
+    .wa-bubble{
+      background:rgba(18,20,30,0.92);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      border:1px solid rgba(37,211,102,0.25);
+      border-radius:12px 12px 12px 4px;
+      padding:.55rem 1rem;
+      max-width:0;
+      overflow:hidden;
+      white-space:nowrap;
+      opacity:0;
+      transform:translateX(-8px);
+      transition:max-width .4s cubic-bezier(.23,1,.32,1),opacity .35s ease,transform .35s cubic-bezier(.23,1,.32,1),border-color .25s;
+      pointer-events:none;
+    }
+    .wa-fab:hover .wa-bubble{
+      max-width:240px;
+      opacity:1;
+      transform:translateX(0);
+      border-color:rgba(37,211,102,0.5);
+      pointer-events:auto;
+    }
+    .wa-bubble-text{
+      font-size:.78rem;
+      font-weight:700;
+      color:#f0f2ff;
+      display:block;
+      line-height:1.3;
+    }
+    .wa-bubble-sub{
+      font-size:.65rem;
+      color:rgba(37,211,102,0.85);
+      display:block;
+      margin-top:.15rem;
+      font-family:'Space Grotesk',sans-serif;
+    }
+    /* نقطة خضراء نبضة على الايقونة */
+    .wa-dot{
+      position:absolute;
+      top:3px;right:3px;
+      width:12px;height:12px;
+      background:#25d366;
+      border-radius:50%;
+      border:2px solid #08090f;
+      animation:waDot 1.8s ease-in-out infinite;
+    }
+    @keyframes waDot{
+      0%,100%{transform:scale(1);opacity:1}
+      50%{transform:scale(1.35);opacity:.7}
+    }
+    /* ── Responsive ── */
+    @media(max-width:600px){
+      .wa-fab{bottom:1.2rem;left:1.2rem}
+      .wa-icon{width:52px;height:52px}
+      .wa-icon svg{width:28px;height:28px}
+    }
+
+    /* ── RESPONSIVE (rest) ── */
+    @media(max-width:1280px) and (min-width:1025px){.parts-grid{grid-template-columns:repeat(3,1fr)}}
     @media(max-width:1024px){
       .hero-inner{grid-template-columns:1fr;gap:2.5rem}
       .hero-card{max-width:420px;margin:0 auto}
@@ -310,7 +374,6 @@
       .parts-grid{grid-template-columns:repeat(2,1fr)}
       .proto-grid{grid-template-columns:1fr}
     }
-    /* ── RESPONSIVE: SMALL TABLET (≤900px) ── */
     @media(max-width:900px){
       .stats-grid{grid-template-columns:repeat(3,1fr)}
       .sol-grid{grid-template-columns:1fr}
@@ -319,7 +382,6 @@
       .gal-item.full img{height:320px}
       .gal-item.tall img{height:300px}
     }
-    /* ── RESPONSIVE: MOBILE (≤600px) ── */
     @media(max-width:600px){
       nav{padding:0 1rem}
       .si{padding:3rem 1rem}
@@ -350,7 +412,6 @@
       .machine-frame{max-height:260px;aspect-ratio:1/1}
       .flinks{gap:1rem}
     }
-    /* ── RESPONSIVE: TINY (≤380px) ── */
     @media(max-width:380px){
       .hero-title{font-size:1.6rem}
       .hero-btns{flex-direction:column;align-items:flex-start}
@@ -367,6 +428,27 @@
   <button class="lb-close" id="lbc">&#215;</button>
   <img class="lb-img" id="lbi" src="" alt=""/>
 </div>
+
+<!-- ══ WHATSAPP FLOATING BUTTON ══
+     ⚠️  غيّر الرقم: بدّل 966501234567 برقمك الكامل مع كود الدولة (بدون + أو 00)
+     مثال أردني: 962791234567
+-->
+<a class="wa-fab"
+   href="https://wa.me/966501234567?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D9%84%D8%AF%D9%8A%20%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%AD%D9%88%D9%84%20%D9%85%D8%B4%D8%B1%D9%88%D8%B9%20StepUp"
+   target="_blank"
+   rel="noopener noreferrer"
+   aria-label="تواصل عبر واتساب">
+  <div class="wa-icon">
+    <span class="wa-dot"></span>
+    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+      <path d="M16.002 2.667C8.638 2.667 2.667 8.637 2.667 16c0 2.37.637 4.588 1.748 6.503L2.667 29.333l6.997-1.83A13.265 13.265 0 0016.002 29.333C23.365 29.333 29.333 23.363 29.333 16S23.365 2.667 16.002 2.667zm0 2.4c5.985 0 10.932 4.947 10.932 10.933 0 5.987-4.947 10.933-10.932 10.933a10.893 10.893 0 01-5.56-1.52l-.398-.239-4.153 1.087 1.107-4.047-.261-.414A10.892 10.892 0 015.07 16c0-5.986 4.947-10.933 10.932-10.933zm-3.29 5.6c-.2 0-.523.075-.797.375-.274.3-1.046 1.022-1.046 2.493s1.07 2.893 1.22 3.093c.148.2 2.093 3.194 5.072 4.35 2.98 1.155 2.98.77 3.518.722.537-.048 1.733-.71 1.977-1.393.244-.683.244-1.268.17-1.39-.072-.122-.271-.195-.568-.342-.297-.147-1.755-.867-2.027-.965-.272-.097-.47-.147-.668.148-.198.296-.767.965-.94 1.163-.172.197-.344.222-.64.074-.297-.148-1.253-.462-2.386-1.473-.882-.787-1.477-1.758-1.65-2.055-.172-.298-.018-.459.13-.607.132-.132.297-.344.445-.516.149-.173.198-.296.298-.494.099-.198.05-.372-.025-.52-.074-.147-.662-1.6-.91-2.19-.237-.566-.48-.49-.664-.499-.172-.008-.37-.01-.568-.01z"/>
+    </svg>
+  </div>
+  <div class="wa-bubble">
+    <span class="wa-bubble-text" data-ar="تواصل معي على واتساب" data-en="Chat on WhatsApp">تواصل معي على واتساب</span>
+    <span class="wa-bubble-sub">StepUp · استفسار / تعاون</span>
+  </div>
+</a>
 
 <nav id="nav">
   <span class="nav-logo">StepUp &#8593;</span>
@@ -442,263 +524,159 @@
   <div class="motion-banner-inner">
     <span class="mb-label" data-ar="حركة مستقلة" data-en="Independent Motion">حركة مستقلة</span>
     <svg width="220" height="110" viewBox="0 0 220 110" fill="none" xmlns="http://www.w3.org/2000/svg" class="track-glow" style="overflow:visible">
-      <g class="stair-glow">
-        <rect x="0" y="82" width="44" height="28" rx="2" fill="rgba(0,200,255,0.05)" stroke="rgba(0,200,255,0.3)" stroke-width="1.2"/>
-        <rect x="0" y="60" width="30" height="22" rx="2" fill="rgba(0,200,255,0.05)" stroke="rgba(0,200,255,0.3)" stroke-width="1.2"/>
-        <rect x="0" y="42" width="18" height="18" rx="2" fill="rgba(0,200,255,0.05)" stroke="rgba(0,200,255,0.3)" stroke-width="1.2"/>
-      </g>
-      <g class="arrow-motion">
-        <path d="M178 46 L196 46 M190 40 L196 46 L190 52" stroke="rgba(0,200,255,0.65)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-      </g>
+      <g class="stair-glow"><rect x="0" y="82" width="44" height="28" rx="2" fill="rgba(0,200,255,0.05)" stroke="rgba(0,200,255,0.3)" stroke-width="1.2"/><rect x="0" y="60" width="30" height="22" rx="2" fill="rgba(0,200,255,0.05)" stroke="rgba(0,200,255,0.3)" stroke-width="1.2"/><rect x="0" y="42" width="18" height="18" rx="2" fill="rgba(0,200,255,0.05)" stroke="rgba(0,200,255,0.3)" stroke-width="1.2"/></g>
+      <g class="arrow-motion"><path d="M178 46 L196 46 M190 40 L196 46 L190 52" stroke="rgba(0,200,255,0.65)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g>
       <g class="track-chassis">
         <rect x="44" y="30" width="118" height="52" rx="26" fill="rgba(0,200,255,0.06)" stroke="rgba(0,200,255,0.75)" stroke-width="1.8"/>
         <rect x="44" y="30" width="118" height="52" rx="26" fill="none" stroke="rgba(0,200,255,0.35)" stroke-width="1" stroke-dasharray="6 5" class="track-belt-path"/>
-        <line x1="68" y1="30" x2="58" y2="16" stroke="rgba(0,200,255,0.6)" stroke-width="2" stroke-linecap="round"/>
-        <circle cx="56" cy="13" r="7" fill="rgba(8,9,15,0.85)" stroke="rgba(0,200,255,0.8)" stroke-width="1.5"/>
-        <circle cx="56" cy="13" r="3" fill="rgba(0,200,255,0.25)" stroke="rgba(0,200,255,0.9)" stroke-width="1"/>
-        <line x1="62" y1="18" x2="70" y2="30" stroke="rgba(0,200,255,0.4)" stroke-width="1.2" stroke-dasharray="3 2"/>
         <circle cx="70" cy="32" r="8" fill="rgba(0,180,230,0.18)" stroke="rgba(0,200,255,0.9)" stroke-width="1.5"><animateTransform attributeName="transform" type="rotate" from="0 70 32" to="360 70 32" dur="1.4s" repeatCount="indefinite"/></circle>
         <circle cx="70" cy="32" r="3.5" fill="rgba(0,200,255,0.35)" stroke="rgba(0,200,255,0.7)" stroke-width="1"/>
-        <circle cx="103" cy="28" r="7" fill="rgba(0,180,230,0.15)" stroke="rgba(0,200,255,0.85)" stroke-width="1.4"><animateTransform attributeName="transform" type="rotate" from="360 103 28" to="0 103 28" dur="1.6s" repeatCount="indefinite"/></circle>
-        <circle cx="103" cy="28" r="3" fill="rgba(0,200,255,0.3)" stroke="rgba(0,200,255,0.65)" stroke-width="1"/>
-        <circle cx="136" cy="32" r="8" fill="rgba(0,180,230,0.18)" stroke="rgba(0,200,255,0.9)" stroke-width="1.5"><animateTransform attributeName="transform" type="rotate" from="0 136 32" to="360 136 32" dur="1.4s" repeatCount="indefinite"/></circle>
-        <circle cx="136" cy="32" r="3.5" fill="rgba(0,200,255,0.35)" stroke="rgba(0,200,255,0.7)" stroke-width="1"/>
         <circle cx="152" cy="56" r="20" fill="rgba(8,9,15,0.8)" stroke="rgba(0,200,255,0.9)" stroke-width="2"><animateTransform attributeName="transform" type="rotate" from="360 152 56" to="0 152 56" dur="1.1s" repeatCount="indefinite"/></circle>
-        <circle cx="152" cy="56" r="11" fill="none" stroke="rgba(0,200,255,0.4)" stroke-width="1.2" stroke-dasharray="5 4"/>
         <circle cx="152" cy="56" r="4" fill="rgba(0,200,255,0.35)" stroke="rgba(0,200,255,0.9)" stroke-width="1.2"/>
-        <circle cx="60" cy="74" r="6" fill="rgba(8,9,15,0.8)" stroke="rgba(0,200,255,0.65)" stroke-width="1.3"><animateTransform attributeName="transform" type="rotate" from="0 60 74" to="360 60 74" dur="1.3s" repeatCount="indefinite"/></circle>
-        <circle cx="76" cy="78" r="6" fill="rgba(8,9,15,0.8)" stroke="rgba(0,200,255,0.65)" stroke-width="1.3"><animateTransform attributeName="transform" type="rotate" from="360 76 78" to="0 76 78" dur="1.3s" repeatCount="indefinite"/></circle>
-        <circle cx="92" cy="80" r="6" fill="rgba(8,9,15,0.8)" stroke="rgba(0,200,255,0.65)" stroke-width="1.3"><animateTransform attributeName="transform" type="rotate" from="0 92 80" to="360 92 80" dur="1.3s" repeatCount="indefinite"/></circle>
-        <circle cx="108" cy="80" r="6" fill="rgba(8,9,15,0.8)" stroke="rgba(0,200,255,0.65)" stroke-width="1.3"><animateTransform attributeName="transform" type="rotate" from="360 108 80" to="0 108 80" dur="1.3s" repeatCount="indefinite"/></circle>
-        <circle cx="124" cy="78" r="6" fill="rgba(8,9,15,0.8)" stroke="rgba(0,200,255,0.65)" stroke-width="1.3"><animateTransform attributeName="transform" type="rotate" from="0 124 78" to="360 124 78" dur="1.3s" repeatCount="indefinite"/></circle>
-        <circle cx="138" cy="74" r="6" fill="rgba(8,9,15,0.8)" stroke="rgba(0,200,255,0.65)" stroke-width="1.3"><animateTransform attributeName="transform" type="rotate" from="360 138 74" to="0 138 74" dur="1.3s" repeatCount="indefinite"/></circle>
-        <circle cx="95" cy="52" r="3.5" fill="rgba(0,200,255,0.2)" stroke="rgba(0,200,255,0.8)" stroke-width="1"><animate attributeName="r" values="2.5;4.5;2.5" dur="2.2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.5;1;0.5" dur="2.2s" repeatCount="indefinite"/></circle>
       </g>
     </svg>
     <div class="mb-title" data-ar="مع الوحدة الجنزيرية — حركة كاملة على السلالم" data-en="With the Track Unit — Full Stair Freedom">مع الوحدة الجنزيرية — حركة كاملة على السلالم</div>
     <p class="mb-desc" data-ar="تمنح الوحدة المستخدم استقلالية تامة في الصعود والهبوط بأمان وسهولة." data-en="The unit gives the user complete independence navigating stairs safely and easily.">تمنح الوحدة المستخدم استقلالية تامة في الصعود والهبوط بأمان وسهولة.</p>
   </div>
 </div>
-
 <div class="sdiv"></div>
 
 <!-- PROBLEM -->
-<section id="problem">
-  <div class="si">
-    <div class="sk rv" data-ar="المشكلة" data-en="The Problem">المشكلة</div>
-    <h2 class="st rv"><span data-ar="السلالم لا تزال" data-en="Stairs Are Still">السلالم لا تزال</span> <span class="ta" data-ar="جداراً" data-en="a Wall">جداراً</span></h2>
-    <p class="sl rv" data-ar="يعيش أكثر من 75 مليون شخص حول العالم باعتمادهم على الكراسي المتحركة، وتظل السلالم العائق اليومي الأكبر أمام استقلاليتهم." data-en="Over 75 million people worldwide depend on wheelchairs. Stairs remain the single largest daily barrier to their independence.">يعيش أكثر من 75 مليون شخص حول العالم باعتمادهم على الكراسي المتحركة، وتظل السلالم العائق اليومي الأكبر أمام استقلاليتهم.</p>
-    <div class="stats-grid">
-      <div class="sc rv d1"><span class="sn" data-target="75" data-suffix="M+">0</span><span class="slb" data-ar="مستخدم كرسي متحرك حول العالم" data-en="Wheelchair users globally">مستخدم كرسي متحرك حول العالم</span></div>
-      <div class="sc rv d2"><span class="sn" data-target="70" data-suffix="%">0</span><span class="slb" data-ar="يواجهون عوائق يومية في السلالم" data-en="Face daily stair-access barriers">يواجهون عوائق يومية في السلالم</span></div>
-      <div class="sc rv d3"><span class="sn" data-target="2" data-suffix="%">0</span><span class="slb" data-ar="فقط من المباني العامة مهيّأة بالكامل" data-en="Of public buildings fully accessible">فقط من المباني العامة مهيّأة بالكامل</span></div>
-    </div>
+<section id="problem"><div class="si">
+  <div class="sk rv" data-ar="المشكلة" data-en="The Problem">المشكلة</div>
+  <h2 class="st rv"><span data-ar="السلالم لا تزال" data-en="Stairs Are Still">السلالم لا تزال</span> <span class="ta" data-ar="جداراً" data-en="a Wall">جداراً</span></h2>
+  <p class="sl rv" data-ar="يعيش أكثر من 75 مليون شخص حول العالم باعتمادهم على الكراسي المتحركة، وتظل السلالم العائق اليومي الأكبر أمام استقلاليتهم." data-en="Over 75 million people worldwide depend on wheelchairs. Stairs remain the single largest daily barrier to their independence.">يعيش أكثر من 75 مليون شخص حول العالم باعتمادهم على الكراسي المتحركة، وتظل السلالم العائق اليومي الأكبر أمام استقلاليتهم.</p>
+  <div class="stats-grid">
+    <div class="sc rv d1"><span class="sn" data-target="75" data-suffix="M+">0</span><span class="slb" data-ar="مستخدم كرسي متحرك حول العالم" data-en="Wheelchair users globally">مستخدم كرسي متحرك حول العالم</span></div>
+    <div class="sc rv d2"><span class="sn" data-target="70" data-suffix="%">0</span><span class="slb" data-ar="يواجهون عوائق يومية في السلالم" data-en="Face daily stair-access barriers">يواجهون عوائق يومية في السلالم</span></div>
+    <div class="sc rv d3"><span class="sn" data-target="2" data-suffix="%">0</span><span class="slb" data-ar="فقط من المباني العامة مهيّأة بالكامل" data-en="Of public buildings fully accessible">فقط من المباني العامة مهيّأة بالكامل</span></div>
   </div>
-</section>
-
+</div></section>
 <div class="sdiv"></div>
 
 <!-- SOLUTION -->
-<section id="solution">
-  <div class="si">
-    <div class="sk rv" data-ar="الحل" data-en="The Solution">الحل</div>
-    <h2 class="st rv" data-ar="وحدة واحدة. كل سُلَّم." data-en="One Unit. Every Stair.">وحدة واحدة. كل سُلَّم.</h2>
-    <p class="sl rv" data-ar="وحدة جنزيرية مدمجة تُركَّب على الكراسي المتحركة القياسية لتمنح المستخدم استقلالية كاملة في الصعود والهبوط بأمان." data-en="A compact track-drive module that mounts onto standard wheelchairs, giving full safe independent stair travel — up and down.">وحدة جنزيرية مدمجة تُركَّب على الكراسي المتحركة القياسية لتمنح المستخدم استقلالية كاملة في الصعود والهبوط بأمان.</p>
-    <div class="sol-grid">
-      <div class="sol-card bef rl">
-        <span class="sol-lbl bad" data-ar="قبل: عائق دائم" data-en="Before: A Permanent Barrier">قبل: عائق دائم</span>
-        <div class="siw">
-          <svg class="icon-barrier" viewBox="0 0 80 80" fill="none">
-            <rect x="4" y="52" width="20" height="8" rx="2" fill="rgba(255,80,80,0.12)" stroke="rgba(255,80,80,0.5)" stroke-width="1.5"/>
-            <rect x="4" y="44" width="14" height="8" rx="2" fill="rgba(255,80,80,0.12)" stroke="rgba(255,80,80,0.5)" stroke-width="1.5"/>
-            <rect x="4" y="36" width="8" height="8" rx="2" fill="rgba(255,80,80,0.12)" stroke="rgba(255,80,80,0.5)" stroke-width="1.5"/>
-            <rect x="28" y="28" width="6" height="36" rx="3" fill="rgba(255,80,80,0.28)" stroke="#ff5050" stroke-width="1.5"/>
-            <line x1="25" y1="35" x2="37" y2="55" stroke="#ff5050" stroke-width="2" stroke-linecap="round"/>
-            <line x1="37" y1="35" x2="25" y2="55" stroke="#ff5050" stroke-width="2" stroke-linecap="round"/>
-            <circle cx="58" cy="44" r="7" stroke="rgba(255,80,80,0.55)" stroke-width="1.5" fill="none"/>
-            <circle cx="58" cy="44" r="2" fill="rgba(255,80,80,0.55)"/>
-            <circle cx="66" cy="58" r="5" stroke="rgba(255,80,80,0.55)" stroke-width="1.5" fill="none"/>
-            <circle cx="50" cy="58" r="5" stroke="rgba(255,80,80,0.55)" stroke-width="1.5" fill="none"/>
-          </svg>
-        </div>
-        <p class="sol-txt" data-ar="الكرسي التقليدي عاجز أمام أي درجة سُلَّم — يقيّد الاستقلالية ويتطلب مساعدة دائمة." data-en="A traditional wheelchair is helpless against stairs — limiting independence and requiring constant assistance.">الكرسي التقليدي عاجز أمام أي درجة سُلَّم — يقيّد الاستقلالية ويتطلب مساعدة دائمة.</p>
-      </div>
-      <div class="sol-card aft rr">
-        <span class="sol-lbl good" data-ar="بعد: حركة مستقلة" data-en="After: Independent Motion">بعد: حركة مستقلة</span>
-        <div class="siw">
-          <svg viewBox="0 0 80 80" fill="none">
-            <g class="track-chassis" style="animation-duration:3.5s">
-              <rect x="10" y="22" width="60" height="26" rx="13" fill="rgba(0,200,255,0.08)" stroke="rgba(0,200,255,0.8)" stroke-width="1.5"/>
-              <rect x="10" y="22" width="60" height="26" rx="13" fill="none" stroke="rgba(0,200,255,0.3)" stroke-width="1" stroke-dasharray="5 4" class="track-belt-path"/>
-              <circle cx="23" cy="35" r="9" fill="rgba(8,9,15,0.8)" stroke="rgba(0,200,255,0.85)" stroke-width="1.6"><animateTransform attributeName="transform" type="rotate" from="360 23 35" to="0 23 35" dur="1.1s" repeatCount="indefinite"/></circle>
-              <circle cx="23" cy="35" r="4" fill="none" stroke="rgba(0,200,255,0.4)" stroke-width="1" stroke-dasharray="4 3"/>
-              <circle cx="23" cy="35" r="1.8" fill="rgba(0,200,255,0.5)"/>
-              <circle cx="57" cy="35" r="7" fill="rgba(8,9,15,0.8)" stroke="rgba(0,200,255,0.8)" stroke-width="1.4"><animateTransform attributeName="transform" type="rotate" from="0 57 35" to="360 57 35" dur="1.3s" repeatCount="indefinite"/></circle>
-              <circle cx="57" cy="35" r="2.5" fill="rgba(0,200,255,0.4)"/>
-              <circle cx="38" cy="26" r="5" fill="rgba(0,180,230,0.15)" stroke="rgba(0,200,255,0.8)" stroke-width="1.2"><animateTransform attributeName="transform" type="rotate" from="0 38 26" to="360 38 26" dur="1.5s" repeatCount="indefinite"/></circle>
-              <circle cx="40" cy="35" r="2.8" fill="rgba(0,200,255,0.2)" stroke="rgba(0,200,255,0.8)" stroke-width="1"><animate attributeName="r" values="2;3.5;2" dur="2s" repeatCount="indefinite"/></circle>
-            </g>
-          </svg>
-        </div>
-        <p class="sol-txt" data-ar="الوحدة الجنزيرية تحوّل أي كرسي متحرك إلى آلة قادرة على تسلّق السلالم باستقلالية تامة." data-en="The track unit transforms any wheelchair into a fully autonomous stair-climbing machine.">الوحدة الجنزيرية تحوّل أي كرسي متحرك إلى آلة قادرة على تسلّق السلالم باستقلالية تامة.</p>
-      </div>
+<section id="solution"><div class="si">
+  <div class="sk rv" data-ar="الحل" data-en="The Solution">الحل</div>
+  <h2 class="st rv" data-ar="وحدة واحدة. كل سُلَّم." data-en="One Unit. Every Stair.">وحدة واحدة. كل سُلَّم.</h2>
+  <p class="sl rv" data-ar="وحدة جنزيرية مدمجة تُركَّب على الكراسي المتحركة القياسية لتمنح المستخدم استقلالية كاملة في الصعود والهبوط بأمان." data-en="A compact track-drive module that mounts onto standard wheelchairs, giving full safe independent stair travel — up and down.">وحدة جنزيرية مدمجة تُركَّب على الكراسي المتحركة القياسية لتمنح المستخدم استقلالية كاملة في الصعود والهبوط بأمان.</p>
+  <div class="sol-grid">
+    <div class="sol-card bef rl">
+      <span class="sol-lbl bad" data-ar="قبل: عائق دائم" data-en="Before: A Permanent Barrier">قبل: عائق دائم</span>
+      <div class="siw"><svg class="icon-barrier" viewBox="0 0 80 80" fill="none"><rect x="4" y="52" width="20" height="8" rx="2" fill="rgba(255,80,80,0.12)" stroke="rgba(255,80,80,0.5)" stroke-width="1.5"/><rect x="4" y="44" width="14" height="8" rx="2" fill="rgba(255,80,80,0.12)" stroke="rgba(255,80,80,0.5)" stroke-width="1.5"/><rect x="4" y="36" width="8" height="8" rx="2" fill="rgba(255,80,80,0.12)" stroke="rgba(255,80,80,0.5)" stroke-width="1.5"/><rect x="28" y="28" width="6" height="36" rx="3" fill="rgba(255,80,80,0.28)" stroke="#ff5050" stroke-width="1.5"/><line x1="25" y1="35" x2="37" y2="55" stroke="#ff5050" stroke-width="2" stroke-linecap="round"/><line x1="37" y1="35" x2="25" y2="55" stroke="#ff5050" stroke-width="2" stroke-linecap="round"/><circle cx="58" cy="44" r="7" stroke="rgba(255,80,80,0.55)" stroke-width="1.5" fill="none"/><circle cx="58" cy="44" r="2" fill="rgba(255,80,80,0.55)"/><circle cx="66" cy="58" r="5" stroke="rgba(255,80,80,0.55)" stroke-width="1.5" fill="none"/><circle cx="50" cy="58" r="5" stroke="rgba(255,80,80,0.55)" stroke-width="1.5" fill="none"/></svg></div>
+      <p class="sol-txt" data-ar="الكرسي التقليدي عاجز أمام أي درجة سُلَّم — يقيّد الاستقلالية ويتطلب مساعدة دائمة." data-en="A traditional wheelchair is helpless against stairs — limiting independence and requiring constant assistance.">الكرسي التقليدي عاجز أمام أي درجة سُلَّم — يقيّد الاستقلالية ويتطلب مساعدة دائمة.</p>
+    </div>
+    <div class="sol-card aft rr">
+      <span class="sol-lbl good" data-ar="بعد: حركة مستقلة" data-en="After: Independent Motion">بعد: حركة مستقلة</span>
+      <div class="siw"><svg viewBox="0 0 80 80" fill="none"><g class="track-chassis" style="animation-duration:3.5s"><rect x="10" y="22" width="60" height="26" rx="13" fill="rgba(0,200,255,0.08)" stroke="rgba(0,200,255,0.8)" stroke-width="1.5"/><circle cx="23" cy="35" r="9" fill="rgba(8,9,15,0.8)" stroke="rgba(0,200,255,0.85)" stroke-width="1.6"><animateTransform attributeName="transform" type="rotate" from="360 23 35" to="0 23 35" dur="1.1s" repeatCount="indefinite"/></circle><circle cx="57" cy="35" r="7" fill="rgba(8,9,15,0.8)" stroke="rgba(0,200,255,0.8)" stroke-width="1.4"><animateTransform attributeName="transform" type="rotate" from="0 57 35" to="360 57 35" dur="1.3s" repeatCount="indefinite"/></circle></g></svg></div>
+      <p class="sol-txt" data-ar="الوحدة الجنزيرية تحوّل أي كرسي متحرك إلى آلة قادرة على تسلّق السلالم باستقلالية تامة." data-en="The track unit transforms any wheelchair into a fully autonomous stair-climbing machine.">الوحدة الجنزيرية تحوّل أي كرسي متحرك إلى آلة قادرة على تسلّق السلالم باستقلالية تامة.</p>
     </div>
   </div>
-</section>
-
+</div></section>
 <div class="sdiv"></div>
 
 <!-- HOW IT WORKS -->
-<section id="how">
-  <div class="si">
-    <div class="sk rv" data-ar="كيف تعمل" data-en="How it Works">كيف تعمل</div>
-    <h2 class="st rv" data-ar="مكوّنات النظام" data-en="System Components">مكوّنات النظام</h2>
-    <p class="sl rv" data-ar="الوحدة مؤلفة من مجموعة مكوّنات هندسية متكاملة تعمل معاً لضمان الحركة الآمنة على السلالم." data-en="The unit consists of integrated engineering components working together for safe stair travel.">الوحدة مؤلفة من مجموعة مكوّنات هندسية متكاملة تعمل معاً لضمان الحركة الآمنة على السلالم.</p>
-    <div class="parts-grid">
-      <div class="pc2 rv d1"><div class="pn">01</div><div class="pm" data-ar="الهيكل الجنزيري" data-en="Track Frame">الهيكل الجنزيري</div><p class="pd" data-ar="هيكل خفيف الوزن مصنوع من الألومنيوم يحمل الحزام الجنزيري ويوزع الأحمال بالتساوي." data-en="Lightweight aluminum frame carrying the track belt and distributing loads evenly.">هيكل خفيف الوزن مصنوع من الألومنيوم يحمل الحزام الجنزيري ويوزع الأحمال بالتساوي.</p></div>
-      <div class="pc2 rv d2"><div class="pn">02</div><div class="pm" data-ar="المحرك الكهربائي" data-en="Electric Motor">المحرك الكهربائي</div><p class="pd" data-ar="محرك DC عالي الكفاءة يوفر عزم دوران كافٍ للصعود والهبوط بسرعة آمنة." data-en="High-efficiency DC motor providing sufficient torque for safe ascent and descent.">محرك DC عالي الكفاءة يوفر عزم دوران كافٍ للصعود والهبوط بسرعة آمنة.</p></div>
-      <div class="pc2 rv d3"><div class="pn">03</div><div class="pm" data-ar="نظام التحكم" data-en="Control System">نظام التحكم</div><p class="pd" data-ar="وحدة تحكم مدمجة تدير المحركات وتراقب الاستقرار بشكل مستمر." data-en="Integrated control unit managing motors and continuously monitoring stability.">وحدة تحكم مدمجة تدير المحركات وتراقب الاستقرار بشكل مستمر.</p></div>
-      <div class="pc2 rv d4"><div class="pn">04</div><div class="pm" data-ar="حزام التشبّث" data-en="Grip Belt">حزام التشبّث</div><p class="pd" data-ar="حزام مطاطي مسنّن يضمن التشبّث الكامل بكل درجة سُلَّم بدون انزلاق." data-en="Toothed rubber belt ensuring full grip on every stair step without slipping.">حزام مطاطي مسنّن يضمن التشبّث الكامل بكل درجة سُلَّم بدون انزلاق.</p></div>
-      <div class="pc2 rv d5"><div class="pn">05</div><div class="pm" data-ar="البطارية" data-en="Battery Pack">البطارية</div><p class="pd" data-ar="بطارية ليثيوم قابلة للشحن توفر طاقة كافية لعشرات الرحلات على السلالم." data-en="Rechargeable lithium battery providing sufficient energy for dozens of stair trips.">بطارية ليثيوم قابلة للشحن توفر طاقة كافية لعشرات الرحلات على السلالم.</p></div>
-      <div class="pc2 rv d5"><div class="pn">06</div><div class="pm" data-ar="نظام التثبيت" data-en="Mounting System">نظام التثبيت</div><p class="pd" data-ar="نظام تثبيت سريع يتوافق مع معظم أحجام الكراسي المتحركة القياسية." data-en="Quick-mount system compatible with most standard wheelchair sizes.">نظام تثبيت سريع يتوافق مع معظم أحجام الكراسي المتحركة القياسية.</p></div>
-    </div>
+<section id="how"><div class="si">
+  <div class="sk rv" data-ar="كيف تعمل" data-en="How it Works">كيف تعمل</div>
+  <h2 class="st rv" data-ar="مكوّنات النظام" data-en="System Components">مكوّنات النظام</h2>
+  <p class="sl rv" data-ar="الوحدة مؤلفة من مجموعة مكوّنات هندسية متكاملة تعمل معاً لضمان الحركة الآمنة على السلالم." data-en="The unit consists of integrated engineering components working together for safe stair travel.">الوحدة مؤلفة من مجموعة مكوّنات هندسية متكاملة تعمل معاً لضمان الحركة الآمنة على السلالم.</p>
+  <div class="parts-grid">
+    <div class="pc2 rv d1"><div class="pn">01</div><div class="pm" data-ar="الهيكل الجنزيري" data-en="Track Frame">الهيكل الجنزيري</div><p class="pd" data-ar="هيكل خفيف الوزن مصنوع من الألومنيوم يحمل الحزام الجنزيري ويوزع الأحمال بالتساوي." data-en="Lightweight aluminum frame.">هيكل خفيف الوزن مصنوع من الألومنيوم يحمل الحزام الجنزيري ويوزع الأحمال بالتساوي.</p></div>
+    <div class="pc2 rv d2"><div class="pn">02</div><div class="pm" data-ar="المحرك الكهربائي" data-en="Electric Motor">المحرك الكهربائي</div><p class="pd" data-ar="محرك DC عالي الكفاءة يوفر عزم دوران كافٍ للصعود والهبوط بسرعة آمنة." data-en="High-efficiency DC motor.">محرك DC عالي الكفاءة يوفر عزم دوران كافٍ للصعود والهبوط بسرعة آمنة.</p></div>
+    <div class="pc2 rv d3"><div class="pn">03</div><div class="pm" data-ar="نظام التحكم" data-en="Control System">نظام التحكم</div><p class="pd" data-ar="وحدة تحكم مدمجة تدير المحركات وتراقب الاستقرار بشكل مستمر." data-en="Integrated control unit.">وحدة تحكم مدمجة تدير المحركات وتراقب الاستقرار بشكل مستمر.</p></div>
+    <div class="pc2 rv d4"><div class="pn">04</div><div class="pm" data-ar="حزام التشبّث" data-en="Grip Belt">حزام التشبّث</div><p class="pd" data-ar="حزام مطاطي مسنّن يضمن التشبّث الكامل بكل درجة سُلَّم بدون انزلاق." data-en="Toothed rubber belt.">حزام مطاطي مسنّن يضمن التشبّث الكامل بكل درجة سُلَّم بدون انزلاق.</p></div>
+    <div class="pc2 rv d5"><div class="pn">05</div><div class="pm" data-ar="البطارية" data-en="Battery Pack">البطارية</div><p class="pd" data-ar="بطارية ليثيوم قابلة للشحن توفر طاقة كافية لعشرات الرحلات على السلالم." data-en="Rechargeable lithium battery.">بطارية ليثيوم قابلة للشحن توفر طاقة كافية لعشرات الرحلات على السلالم.</p></div>
+    <div class="pc2 rv d5"><div class="pn">06</div><div class="pm" data-ar="نظام التثبيت" data-en="Mounting System">نظام التثبيت</div><p class="pd" data-ar="نظام تثبيت سريع يتوافق مع معظم أحجام الكراسي المتحركة القياسية." data-en="Quick-mount system.">نظام تثبيت سريع يتوافق مع معظم أحجام الكراسي المتحركة القياسية.</p></div>
   </div>
-</section>
-
+</div></section>
 <div class="sdiv"></div>
 
 <!-- SPECS -->
-<section id="specs">
-  <div class="si">
-    <div class="sk rv" data-ar="المواصفات" data-en="Specifications">المواصفات</div>
-    <h2 class="st rv" data-ar="المواصفات التقنية" data-en="Technical Specifications">المواصفات التقنية</h2>
-    <p class="sl rv" data-ar="أبرز المواصفات الهندسية للوحدة الجنزيرية." data-en="Key engineering specifications of the track unit.">أبرز المواصفات الهندسية للوحدة الجنزيرية.</p>
-    <div class="specs-wrap">
-      <table class="specs-t">
-        <thead><tr><th data-ar="المواصفة" data-en="Specification">المواصفة</th><th data-ar="القيمة" data-en="Value">القيمة</th></tr></thead>
-        <tbody>
-          <tr class="rv"><td data-ar="الوزن الأقصى المحمول" data-en="Max load capacity">الوزن الأقصى المحمول</td><td><span class="sv">120 kg</span></td></tr>
-          <tr class="rv"><td data-ar="زاوية الصعود القصوى" data-en="Max climb angle">زاوية الصعود القصوى</td><td><span class="sv">35°</span></td></tr>
-          <tr class="rv"><td data-ar="ارتفاع الدرجة القصوى" data-en="Max stair height">ارتفاع الدرجة القصوى</td><td><span class="sv">20 cm</span></td></tr>
-          <tr class="rv"><td data-ar="وزن الوحدة" data-en="Unit weight">وزن الوحدة</td><td><span class="sv">8 kg</span></td></tr>
-          <tr class="rv"><td data-ar="سرعة الصعود" data-en="Climbing speed">سرعة الصعود</td><td><span class="sv">0.3 m/s</span></td></tr>
-          <tr class="rv"><td data-ar="عمر البطارية" data-en="Battery life">عمر البطارية</td><td><span class="sv" data-ar="4 ساعات / 50+ رحلة" data-en="4 hrs / 50+ trips">4 ساعات / 50+ رحلة</span></td></tr>
-          <tr class="rv"><td data-ar="المادة الهيكلية" data-en="Frame material">المادة الهيكلية</td><td><span class="sv" data-ar="ألومنيوم 6061" data-en="Aluminum 6061">ألومنيوم 6061</span></td></tr>
-          <tr class="rv"><td data-ar="البرنامج" data-en="Software">البرنامج</td><td><span class="sv">SolidWorks 2024</span></td></tr>
-        </tbody>
-      </table>
-    </div>
+<section id="specs"><div class="si">
+  <div class="sk rv" data-ar="المواصفات" data-en="Specifications">المواصفات</div>
+  <h2 class="st rv" data-ar="المواصفات التقنية" data-en="Technical Specifications">المواصفات التقنية</h2>
+  <p class="sl rv" data-ar="أبرز المواصفات الهندسية للوحدة الجنزيرية." data-en="Key engineering specifications of the track unit.">أبرز المواصفات الهندسية للوحدة الجنزيرية.</p>
+  <div class="specs-wrap">
+    <table class="specs-t">
+      <thead><tr><th data-ar="المواصفة" data-en="Specification">المواصفة</th><th data-ar="القيمة" data-en="Value">القيمة</th></tr></thead>
+      <tbody>
+        <tr class="rv"><td data-ar="الوزن الأقصى المحمول" data-en="Max load capacity">الوزن الأقصى المحمول</td><td><span class="sv">120 kg</span></td></tr>
+        <tr class="rv"><td data-ar="زاوية الصعود القصوى" data-en="Max climb angle">زاوية الصعود القصوى</td><td><span class="sv">35°</span></td></tr>
+        <tr class="rv"><td data-ar="ارتفاع الدرجة القصوى" data-en="Max stair height">ارتفاع الدرجة القصوى</td><td><span class="sv">20 cm</span></td></tr>
+        <tr class="rv"><td data-ar="وزن الوحدة" data-en="Unit weight">وزن الوحدة</td><td><span class="sv">8 kg</span></td></tr>
+        <tr class="rv"><td data-ar="سرعة الصعود" data-en="Climbing speed">سرعة الصعود</td><td><span class="sv">0.3 m/s</span></td></tr>
+        <tr class="rv"><td data-ar="عمر البطارية" data-en="Battery life">عمر البطارية</td><td><span class="sv" data-ar="4 ساعات / 50+ رحلة" data-en="4 hrs / 50+ trips">4 ساعات / 50+ رحلة</span></td></tr>
+        <tr class="rv"><td data-ar="المادة الهيكلية" data-en="Frame material">المادة الهيكلية</td><td><span class="sv" data-ar="ألومنيوم 6061" data-en="Aluminum 6061">ألومنيوم 6061</span></td></tr>
+        <tr class="rv"><td data-ar="البرنامج" data-en="Software">البرنامج</td><td><span class="sv">SolidWorks 2024</span></td></tr>
+      </tbody>
+    </table>
   </div>
-</section>
-
+</div></section>
 <div class="sdiv"></div>
 
 <!-- PROTOTYPE -->
-<section id="prototype">
-  <div class="si">
-    <div class="sk rv" data-ar="النموذج" data-en="Prototype">النموذج</div>
-    <h2 class="st rv" data-ar="مراحل بناء النموذج" data-en="Prototype Build Stages">مراحل بناء النموذج</h2>
-    <p class="sl rv" data-ar="مررنا بمراحل تصميم وتصنيع متعددة للوصول إلى النموذج الأولي الحالي." data-en="We went through multiple design and manufacturing stages to reach the current prototype.">مررنا بمراحل تصميم وتصنيع متعددة للوصول إلى النموذج الأولي الحالي.</p>
-    <div class="proto-grid">
-      <div class="pstep rv d1"><div class="pnum">1</div><div><h4 data-ar="دراسة المتطلبات" data-en="Requirements Study">دراسة المتطلبات</h4><p data-ar="تحليل احتياجات المستخدمين وتحديد المواصفات الهندسية الأساسية للمشروع." data-en="Analyzing user needs and defining core engineering specs.">تحليل احتياجات المستخدمين وتحديد المواصفات الهندسية الأساسية للمشروع.</p></div></div>
-      <div class="pstep rv d2"><div class="pnum">2</div><div><h4 data-ar="التصميم ثلاثي الأبعاد" data-en="3D Design">التصميم ثلاثي الأبعاد</h4><p data-ar="تصميم كامل للوحدة باستخدام SolidWorks مع محاكاة الحركة والإجهادات." data-en="Full unit design using SolidWorks with motion and stress simulation.">تصميم كامل للوحدة باستخدام SolidWorks مع محاكاة الحركة والإجهادات.</p></div></div>
-      <div class="pstep rv d3"><div class="pnum">3</div><div><h4 data-ar="تصنيع الهيكل" data-en="Frame Manufacturing">تصنيع الهيكل</h4><p data-ar="قطع وتشكيل مكوّنات الألومنيوم وتجميع الهيكل الأساسي للوحدة." data-en="Cutting and shaping aluminum components and assembling the unit's main frame.">قطع وتشكيل مكوّنات الألومنيوم وتجميع الهيكل الأساسي للوحدة.</p></div></div>
-      <div class="pstep rv d4"><div class="pnum">4</div><div><h4 data-ar="الاختبار والتحسين" data-en="Testing &amp; Refinement">الاختبار والتحسين</h4><p data-ar="اختبارات فعلية على سلالم متعددة لقياس الأداء وتحسين التصميم." data-en="Real tests on multiple stairs to measure performance and refine the design.">اختبارات فعلية على سلالم متعددة لقياس الأداء وتحسين التصميم.</p></div></div>
-    </div>
+<section id="prototype"><div class="si">
+  <div class="sk rv" data-ar="النموذج" data-en="Prototype">النموذج</div>
+  <h2 class="st rv" data-ar="مراحل بناء النموذج" data-en="Prototype Build Stages">مراحل بناء النموذج</h2>
+  <p class="sl rv" data-ar="مررنا بمراحل تصميم وتصنيع متعددة للوصول إلى النموذج الأولي الحالي." data-en="We went through multiple design and manufacturing stages to reach the current prototype.">مررنا بمراحل تصميم وتصنيع متعددة للوصول إلى النموذج الأولي الحالي.</p>
+  <div class="proto-grid">
+    <div class="pstep rv d1"><div class="pnum">1</div><div><h4 data-ar="دراسة المتطلبات" data-en="Requirements Study">دراسة المتطلبات</h4><p data-ar="تحليل احتياجات المستخدمين وتحديد المواصفات الهندسية الأساسية للمشروع." data-en="Analyzing user needs and defining core engineering specs.">تحليل احتياجات المستخدمين وتحديد المواصفات الهندسية الأساسية للمشروع.</p></div></div>
+    <div class="pstep rv d2"><div class="pnum">2</div><div><h4 data-ar="التصميم ثلاثي الأبعاد" data-en="3D Design">التصميم ثلاثي الأبعاد</h4><p data-ar="تصميم كامل للوحدة باستخدام SolidWorks مع محاكاة الحركة والإجهادات." data-en="Full unit design using SolidWorks with motion and stress simulation.">تصميم كامل للوحدة باستخدام SolidWorks مع محاكاة الحركة والإجهادات.</p></div></div>
+    <div class="pstep rv d3"><div class="pnum">3</div><div><h4 data-ar="تصنيع الهيكل" data-en="Frame Manufacturing">تصنيع الهيكل</h4><p data-ar="قطع وتشكيل مكوّنات الألومنيوم وتجميع الهيكل الأساسي للوحدة." data-en="Cutting and shaping aluminum components and assembling the unit's main frame.">قطع وتشكيل مكوّنات الألومنيوم وتجميع الهيكل الأساسي للوحدة.</p></div></div>
+    <div class="pstep rv d4"><div class="pnum">4</div><div><h4 data-ar="الاختبار والتحسين" data-en="Testing &amp; Refinement">الاختبار والتحسين</h4><p data-ar="اختبارات فعلية على سلالم متعددة لقياس الأداء وتحسين التصميم." data-en="Real tests on multiple stairs to measure performance and refine the design.">اختبارات فعلية على سلالم متعددة لقياس الأداء وتحسين التصميم.</p></div></div>
   </div>
-</section>
-
+</div></section>
 <div class="sdiv"></div>
 
 <!-- GALLERY -->
-<section id="gallery">
-  <div class="si">
-    <div class="sk rv" data-ar="الصور" data-en="Gallery">الصور</div>
-    <h2 class="st rv" data-ar="معرض المشروع" data-en="Project Gallery">معرض المشروع</h2>
-    <p class="sl rv" data-ar="صور من مراحل التصميم والتصنيع والاختبار." data-en="Images from design, manufacturing and testing stages.">صور من مراحل التصميم والتصنيع والاختبار.</p>
-    <div class="gallery-grid">
-
-      <!-- صورة كاملة العرض: النموذج الفعلي -->
-      <div class="gal-item full rv" onclick="openLb(this)" data-src="photo_2_2026-07-10_02-33-46.jpg">
-        <img src="photo_2_2026-07-10_02-33-46.jpg" alt="Physical prototype" loading="lazy" width="800" height="420"/>
-        <div class="gal-caption">
-          <span class="gal-tag" data-ar="النموذج الفعلي" data-en="Physical Prototype">النموذج الفعلي</span><br/>
-          <span data-ar="الوحدة الجنزيرية — النموذج الأولي" data-en="Track Unit — First Prototype">الوحدة الجنزيرية — النموذج الأولي</span>
-        </div>
-      </div>
-
-      <!-- CAD -->
-      <div class="gal-item rv d1" onclick="openLb(this)" data-src="cad.jpeg">
-        <img src="cad.jpeg" alt="SolidWorks CAD" loading="lazy" width="400" height="300"/>
-        <div class="gal-caption">
-          <span class="gal-tag">CAD</span><br/>
-          <span data-ar="تصميم SolidWorks ثلاثي الأبعاد" data-en="SolidWorks 3D Design">تصميم SolidWorks ثلاثي الأبعاد</span>
-        </div>
-      </div>
-
-      <!-- photo00 -->
-      <div class="gal-item rv d2" onclick="openLb(this)" data-src="photo00.PNG">
-        <img src="photo00.PNG" alt="Project photo 1" loading="lazy" width="400" height="300"/>
-        <div class="gal-caption">
-          <span class="gal-tag" data-ar="التصنيع" data-en="Manufacturing">التصنيع</span><br/>
-          <span data-ar="مرحلة التصنيع والتجميع" data-en="Manufacturing & Assembly Stage">مرحلة التصنيع والتجميع</span>
-        </div>
-      </div>
-
-      <!-- photo1 — كاملة العرض -->
-      <div class="gal-item full rv d3" onclick="openLb(this)" data-src="photo1.PNG">
-        <img src="photo1.PNG" alt="Project photo 2" loading="lazy" width="800" height="420"/>
-        <div class="gal-caption">
-          <span class="gal-tag" data-ar="الاختبار" data-en="Testing">الاختبار</span><br/>
-          <span data-ar="اختبار الوحدة على السلالم" data-en="Unit Testing on Stairs">اختبار الوحدة على السلالم</span>
-        </div>
-      </div>
-
+<section id="gallery"><div class="si">
+  <div class="sk rv" data-ar="الصور" data-en="Gallery">الصور</div>
+  <h2 class="st rv" data-ar="معرض المشروع" data-en="Project Gallery">معرض المشروع</h2>
+  <p class="sl rv" data-ar="صور من مراحل التصميم والتصنيع والاختبار." data-en="Images from design, manufacturing and testing stages.">صور من مراحل التصميم والتصنيع والاختبار.</p>
+  <div class="gallery-grid">
+    <div class="gal-item full rv" onclick="openLb(this)" data-src="photo_2_2026-07-10_02-33-46.jpg">
+      <img src="photo_2_2026-07-10_02-33-46.jpg" alt="Physical prototype" loading="lazy" width="800" height="420"/>
+      <div class="gal-caption"><span class="gal-tag" data-ar="النموذج الفعلي" data-en="Physical Prototype">النموذج الفعلي</span><br/><span data-ar="الوحدة الجنزيرية — النموذج الأولي" data-en="Track Unit — First Prototype">الوحدة الجنزيرية — النموذج الأولي</span></div>
+    </div>
+    <div class="gal-item rv d1" onclick="openLb(this)" data-src="cad.jpeg">
+      <img src="cad.jpeg" alt="SolidWorks CAD" loading="lazy" width="400" height="300"/>
+      <div class="gal-caption"><span class="gal-tag">CAD</span><br/><span data-ar="تصميم SolidWorks ثلاثي الأبعاد" data-en="SolidWorks 3D Design">تصميم SolidWorks ثلاثي الأبعاد</span></div>
+    </div>
+    <div class="gal-item rv d2" onclick="openLb(this)" data-src="photo00.PNG">
+      <img src="photo00.PNG" alt="Project photo 1" loading="lazy" width="400" height="300"/>
+      <div class="gal-caption"><span class="gal-tag" data-ar="التصنيع" data-en="Manufacturing">التصنيع</span><br/><span data-ar="مرحلة التصنيع والتجميع" data-en="Manufacturing &amp; Assembly Stage">مرحلة التصنيع والتجميع</span></div>
+    </div>
+    <div class="gal-item full rv d3" onclick="openLb(this)" data-src="photo1.PNG">
+      <img src="photo1.PNG" alt="Project photo 2" loading="lazy" width="800" height="420"/>
+      <div class="gal-caption"><span class="gal-tag" data-ar="الاختبار" data-en="Testing">الاختبار</span><br/><span data-ar="اختبار الوحدة على السلالم" data-en="Unit Testing on Stairs">اختبار الوحدة على السلالم</span></div>
     </div>
   </div>
-</section>
-
+</div></section>
 <div class="sdiv"></div>
 
 <!-- TEAM -->
-<section id="team">
-  <div class="si">
-    <div class="sk rv" data-ar="الفريق" data-en="The Team">الفريق</div>
-    <h2 class="st rv" data-ar="فريق المشروع" data-en="Project Team">فريق المشروع</h2>
-    <div class="team-card rs">
-      <div class="avatar">
-        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-          <circle cx="24" cy="18" r="10" fill="rgba(0,200,255,0.18)" stroke="rgba(0,200,255,0.7)" stroke-width="1.5"/>
-          <path d="M6 42c0-9.941 8.059-18 18-18s18 8.059 18 18" fill="rgba(0,200,255,0.08)" stroke="rgba(0,200,255,0.5)" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <div class="tn">Amr Ammory</div>
-      <div class="tr" data-ar="طالب هندسة ميكانيكية — مشروع التخرج" data-en="Mechanical Engineering Student — Graduation Project">طالب هندسة ميكانيكية — مشروع التخرج</div>
-    </div>
+<section id="team"><div class="si">
+  <div class="sk rv" data-ar="الفريق" data-en="The Team">الفريق</div>
+  <h2 class="st rv" data-ar="فريق المشروع" data-en="Project Team">فريق المشروع</h2>
+  <div class="team-card rs">
+    <div class="avatar"><svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="18" r="10" fill="rgba(0,200,255,0.18)" stroke="rgba(0,200,255,0.7)" stroke-width="1.5"/><path d="M6 42c0-9.941 8.059-18 18-18s18 8.059 18 18" fill="rgba(0,200,255,0.08)" stroke="rgba(0,200,255,0.5)" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+    <div class="tn">Amr Ammory</div>
+    <div class="tr" data-ar="طالب هندسة ميكانيكية — مشروع التخرج" data-en="Mechanical Engineering Student — Graduation Project">طالب هندسة ميكانيكية — مشروع التخرج</div>
   </div>
-</section>
-
+</div></section>
 <div class="sdiv"></div>
 
 <!-- CONTACT -->
-<section id="contact">
-  <div class="si">
-    <div class="cbox">
-      <div class="sk rv" style="justify-content:center" data-ar="تواصل" data-en="Contact">تواصل</div>
-      <h2 class="st rv" data-ar="تواصل مع الفريق" data-en="Get in Touch">تواصل مع الفريق</h2>
-      <p class="sl rv" style="margin:0 auto 1rem" data-ar="لأي استفسار أو تعاون، لا تتردد في التواصل معنا." data-en="For any inquiries or collaboration, don't hesitate to reach out.">لأي استفسار أو تعاون، لا تتردد في التواصل معنا.</p>
-      <a href="mailto:amrammory13@gmail.com" class="cemail rv">
-        <span class="esw">
-          <svg viewBox="0 0 34 34" fill="none">
-            <rect x="3" y="8" width="28" height="20" rx="4" fill="rgba(0,200,255,0.08)" stroke="rgba(0,200,255,0.7)" stroke-width="1.5"/>
-            <path d="M3 12l14 10 14-10" stroke="rgba(0,200,255,0.7)" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
-        </span>
-        amrammory13@gmail.com
-      </a>
-    </div>
+<section id="contact"><div class="si">
+  <div class="cbox">
+    <div class="sk rv" style="justify-content:center" data-ar="تواصل" data-en="Contact">تواصل</div>
+    <h2 class="st rv" data-ar="تواصل مع الفريق" data-en="Get in Touch">تواصل مع الفريق</h2>
+    <p class="sl rv" style="margin:0 auto 1rem" data-ar="لأي استفسار أو تعاون، لا تتردد في التواصل معنا." data-en="For any inquiries or collaboration, don't hesitate to reach out.">لأي استفسار أو تعاون، لا تتردد في التواصل معنا.</p>
+    <a href="mailto:amrammory13@gmail.com" class="cemail rv">
+      <span class="esw"><svg viewBox="0 0 34 34" fill="none"><rect x="3" y="8" width="28" height="20" rx="4" fill="rgba(0,200,255,0.08)" stroke="rgba(0,200,255,0.7)" stroke-width="1.5"/><path d="M3 12l14 10 14-10" stroke="rgba(0,200,255,0.7)" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+      amrammory13@gmail.com
+    </a>
   </div>
-</section>
+</div></section>
 
 <footer>
   <span class="flogo">StepUp ↑</span>
@@ -722,13 +700,7 @@
   for(var i=0;i<55;i++)pts.push({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*1.2+0.3,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,a:Math.random()*.5+.15});
   function draw(){
     ctx.clearRect(0,0,c.width,c.height);
-    pts.forEach(function(p){
-      p.x+=p.vx;p.y+=p.vy;
-      if(p.x<0)p.x=c.width;if(p.x>c.width)p.x=0;
-      if(p.y<0)p.y=c.height;if(p.y>c.height)p.y=0;
-      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fillStyle='rgba(0,200,255,'+p.a+')';ctx.fill();
-    });
+    pts.forEach(function(p){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=c.width;if(p.x>c.width)p.x=0;if(p.y<0)p.y=c.height;if(p.y>c.height)p.y=0;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle='rgba(0,200,255,'+p.a+')';ctx.fill();});
     requestAnimationFrame(draw);
   }
   draw();
@@ -737,34 +709,16 @@
 var nav=document.getElementById('nav');
 window.addEventListener('scroll',function(){nav.classList.toggle('scrolled',scrollY>40);});
 
-var hbg=document.getElementById('hbg');
-var nl=document.getElementById('nl');
-hbg.addEventListener('click',function(){
-  this.classList.toggle('open');
-  nl.classList.toggle('open');
-});
-nl.querySelectorAll('a').forEach(function(a){
-  a.addEventListener('click',function(){
-    hbg.classList.remove('open');
-    nl.classList.remove('open');
-  });
-});
-document.addEventListener('click',function(e){
-  if(nl.classList.contains('open')&&!nl.contains(e.target)&&e.target!==hbg&&!hbg.contains(e.target)){
-    hbg.classList.remove('open');
-    nl.classList.remove('open');
-  }
-});
+var hbg=document.getElementById('hbg'),nl=document.getElementById('nl');
+hbg.addEventListener('click',function(){this.classList.toggle('open');nl.classList.toggle('open');});
+nl.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){hbg.classList.remove('open');nl.classList.remove('open');});});
+document.addEventListener('click',function(e){if(nl.classList.contains('open')&&!nl.contains(e.target)&&e.target!==hbg&&!hbg.contains(e.target)){hbg.classList.remove('open');nl.classList.remove('open');}});
 
 var isEn=false;
-var META={
-  ar:{title:'StepUp — وحدة جنزيرية معيارية لتسلّق السلالم',desc:'مشروع تخرج هندسة ميكانيكية — وحدة جنزيرية مدمجة لتمكين الكراسي المتحركة من تسلق السلالم'},
-  en:{title:'StepUp — Modular Stair-Climbing Track Unit for Wheelchairs',desc:'Mechanical Engineering Graduation Project — A compact track-drive module enabling wheelchairs to climb stairs independently'}
-};
+var META={ar:{title:'StepUp — وحدة جنزيرية معيارية لتسلّق السلالم',desc:'مشروع تخرج هندسة ميكانيكية — وحدة جنزيرية مدمجة لتمكين الكراسي المتحركة من تسلق السلالم'},en:{title:'StepUp — Modular Stair-Climbing Track Unit for Wheelchairs',desc:'Mechanical Engineering Graduation Project — A compact track-drive module enabling wheelchairs to climb stairs independently'}};
 document.getElementById('lb').addEventListener('click',function(){
   isEn=!isEn;
-  var lang=isEn?'en':'ar';
-  var dir=isEn?'ltr':'rtl';
+  var lang=isEn?'en':'ar',dir=isEn?'ltr':'rtl';
   this.textContent=isEn?'AR':'EN';
   document.body.classList.toggle('en',isEn);
   document.documentElement.setAttribute('lang',lang);
@@ -772,78 +726,30 @@ document.getElementById('lb').addEventListener('click',function(){
   document.title=META[lang].title;
   var md=document.getElementById('page-desc');
   if(md)md.setAttribute('content',META[lang].desc);
-  document.querySelectorAll('[data-ar]').forEach(function(el){
-    var v=el.getAttribute('data-'+lang);
-    if(v!==null)el.textContent=v;
-  });
+  document.querySelectorAll('[data-ar]').forEach(function(el){var v=el.getAttribute('data-'+lang);if(v!==null)el.textContent=v;});
   setTimeout(setupTicker,50);
 });
 
-var sections=document.querySelectorAll('section[id]');
-var links=document.querySelectorAll('.nav-links a');
-var io=new IntersectionObserver(function(entries){
-  entries.forEach(function(e){
-    if(e.isIntersecting)links.forEach(function(l){l.classList.toggle('active',l.getAttribute('href')==='#'+e.target.id);});
-  });
-},{threshold:0.4});
+var sections=document.querySelectorAll('section[id]'),links=document.querySelectorAll('.nav-links a');
+var io=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)links.forEach(function(l){l.classList.toggle('active',l.getAttribute('href')==='#'+e.target.id);});});},{threshold:0.4});
 sections.forEach(function(s){io.observe(s);});
 
 var rvEls=document.querySelectorAll('.rv,.rl,.rr,.rs');
-var rio=new IntersectionObserver(function(entries){
-  entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('on');rio.unobserve(e.target);}});
-},{threshold:0.1});
+var rio=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('on');rio.unobserve(e.target);}});},{threshold:0.1});
 rvEls.forEach(function(el){rio.observe(el);});
 
-function animCount(el){
-  var target=parseInt(el.getAttribute('data-target'));
-  var suffix=el.getAttribute('data-suffix')||'';
-  var start=0,dur=1400,step=16;
-  var timer=setInterval(function(){
-    start+=Math.ceil(target/(dur/step));
-    if(start>=target){start=target;clearInterval(timer);}
-    el.textContent=start+suffix;
-  },step);
-}
-var cio=new IntersectionObserver(function(entries){
-  entries.forEach(function(e){
-    if(e.isIntersecting){e.target.querySelectorAll('[data-target]').forEach(animCount);cio.unobserve(e.target);}
-  });
-},{threshold:0.3});
+function animCount(el){var target=parseInt(el.getAttribute('data-target')),suffix=el.getAttribute('data-suffix')||'',start=0,dur=1400,step=16;var timer=setInterval(function(){start+=Math.ceil(target/(dur/step));if(start>=target){start=target;clearInterval(timer);}el.textContent=start+suffix;},step);}
+var cio=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.querySelectorAll('[data-target]').forEach(animCount);cio.unobserve(e.target);}});},{threshold:0.3});
 document.querySelectorAll('.stats-grid').forEach(function(g){cio.observe(g);});
 
-function openLb(el){
-  document.getElementById('lbi').src=el.getAttribute('data-src');
-  document.getElementById('lbo').classList.add('open');
-}
+function openLb(el){document.getElementById('lbi').src=el.getAttribute('data-src');document.getElementById('lbo').classList.add('open');}
 document.getElementById('lbc').addEventListener('click',function(){document.getElementById('lbo').classList.remove('open');});
 document.getElementById('lbo').addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
 document.addEventListener('keydown',function(e){if(e.key==='Escape')document.getElementById('lbo').classList.remove('open');});
 
 var tickerOffset=0,tickerSetWidth=0,TICKER_SPEED=0.55;
-function setupTicker(){
-  var track=document.getElementById('tickerTrack');
-  if(!track)return;
-  track.querySelectorAll('.ticker-clone').forEach(function(el){el.remove();});
-  var origItems=track.querySelectorAll('.ticker-item:not(.ticker-clone)');
-  tickerSetWidth=0;
-  origItems.forEach(function(el){tickerSetWidth+=el.offsetWidth;});
-  if(tickerSetWidth===0){setTimeout(setupTicker,100);return;}
-  var viewW=track.parentElement.offsetWidth||window.innerWidth;
-  var copies=Math.ceil((viewW*3)/tickerSetWidth)+2;
-  var frag=document.createDocumentFragment();
-  for(var c=0;c<copies;c++)origItems.forEach(function(item){var cl=item.cloneNode(true);cl.classList.add('ticker-clone');frag.appendChild(cl);});
-  track.appendChild(frag);
-  tickerOffset=0;
-  track.style.transform='translateX(0)';
-}
-function tickTicker(){
-  var track=document.getElementById('tickerTrack');
-  if(!track){requestAnimationFrame(tickTicker);return;}
-  tickerOffset-=TICKER_SPEED;
-  if(tickerSetWidth>0&&Math.abs(tickerOffset)>=tickerSetWidth)tickerOffset+=tickerSetWidth;
-  track.style.transform='translateX('+tickerOffset+'px)';
-  requestAnimationFrame(tickTicker);
-}
+function setupTicker(){var track=document.getElementById('tickerTrack');if(!track)return;track.querySelectorAll('.ticker-clone').forEach(function(el){el.remove();});var origItems=track.querySelectorAll('.ticker-item:not(.ticker-clone)');tickerSetWidth=0;origItems.forEach(function(el){tickerSetWidth+=el.offsetWidth;});if(tickerSetWidth===0){setTimeout(setupTicker,100);return;}var viewW=track.parentElement.offsetWidth||window.innerWidth;var copies=Math.ceil((viewW*3)/tickerSetWidth)+2;var frag=document.createDocumentFragment();for(var c=0;c<copies;c++)origItems.forEach(function(item){var cl=item.cloneNode(true);cl.classList.add('ticker-clone');frag.appendChild(cl);});track.appendChild(frag);tickerOffset=0;track.style.transform='translateX(0)';}
+function tickTicker(){var track=document.getElementById('tickerTrack');if(!track){requestAnimationFrame(tickTicker);return;}tickerOffset-=TICKER_SPEED;if(tickerSetWidth>0&&Math.abs(tickerOffset)>=tickerSetWidth)tickerOffset+=tickerSetWidth;track.style.transform='translateX('+tickerOffset+'px)';requestAnimationFrame(tickTicker);}
 var resizeTimer;
 window.addEventListener('resize',function(){clearTimeout(resizeTimer);resizeTimer=setTimeout(setupTicker,200);});
 if(document.readyState==='complete'){setupTicker();tickTicker();}else{window.addEventListener('load',function(){setupTicker();tickTicker();});}
