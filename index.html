@@ -17,6 +17,7 @@
       --fg:#f0f2ff;--muted:#8892a4;
       --eg:linear-gradient(135deg,#00c8ff,#5b6bff);
       --gg:linear-gradient(135deg,#ffd700,#d4960a);
+      --wa:#25d366;--wa2:#128c4a;
       --r:14px;
       --fa:'Cairo',system-ui,sans-serif;
       --fe:'Space Grotesk',system-ui,sans-serif;
@@ -117,6 +118,169 @@
     @keyframes starSpin{0%,100%{transform:rotate(0deg) scale(1)}50%{transform:rotate(180deg) scale(1.3)}}
     .ticker-item.hi{color:var(--primary);font-size:.78rem;letter-spacing:.18em;text-shadow:0 0 18px rgba(0,200,255,0.6)}
     .ticker-item.hi .ti-dot{background:var(--gold);box-shadow:0 0 8px rgba(255,215,0,0.7)}
+
+    /* ══════════════════════════════════════
+       ── WA INLINE BANNER (below hero) ──
+    ══════════════════════════════════════ */
+    .wa-banner-wrap{
+      position:relative;z-index:1;
+      padding:2.2rem 1.5rem;
+      background:linear-gradient(135deg,rgba(37,211,102,0.04) 0%,rgba(18,140,74,0.03) 100%);
+      border-top:1px solid rgba(37,211,102,0.10);
+      border-bottom:1px solid rgba(37,211,102,0.10);
+    }
+    /* animated green side-bar accent */
+    .wa-banner-wrap::before{
+      content:'';
+      position:absolute;
+      top:0;bottom:0;
+      right:0;
+      width:3px;
+      background:linear-gradient(to bottom,transparent,#25d366,transparent);
+      animation:waBannerBar 3s ease-in-out infinite;
+    }
+    body.en .wa-banner-wrap::before{right:auto;left:0;}
+    @keyframes waBannerBar{0%,100%{opacity:.3;transform:scaleY(.6)}50%{opacity:1;transform:scaleY(1)}}
+
+    .wa-banner{
+      max-width:900px;
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      gap:2rem;
+    }
+    @media(max-width:680px){.wa-banner{flex-direction:column;align-items:flex-start;gap:1.4rem;}}
+
+    /* left: icon + ring */
+    .wa-banner-icon-wrap{
+      position:relative;
+      flex-shrink:0;
+      width:72px;height:72px;
+    }
+    .wa-banner-ring{
+      position:absolute;
+      inset:-6px;
+      border-radius:50%;
+      border:1.5px solid rgba(37,211,102,0.35);
+      animation:waBannerRing 2.6s ease-in-out infinite;
+    }
+    .wa-banner-ring2{
+      position:absolute;
+      inset:-14px;
+      border-radius:50%;
+      border:1px solid rgba(37,211,102,0.14);
+      animation:waBannerRing 2.6s ease-in-out .5s infinite;
+    }
+    @keyframes waBannerRing{0%,100%{opacity:.4;transform:scale(.92)}50%{opacity:1;transform:scale(1)}}
+    .wa-banner-ico{
+      width:72px;height:72px;
+      border-radius:22px;
+      background:linear-gradient(135deg,rgba(37,211,102,0.14),rgba(18,140,74,0.22));
+      border:1px solid rgba(37,211,102,0.28);
+      display:flex;align-items:center;justify-content:center;
+      box-shadow:0 0 28px rgba(37,211,102,0.18);
+      transition:transform .3s cubic-bezier(.23,1,.32,1),box-shadow .3s;
+    }
+    .wa-banner-wrap:hover .wa-banner-ico{
+      transform:scale(1.07) rotate(-4deg);
+      box-shadow:0 0 42px rgba(37,211,102,0.32);
+    }
+    .wa-banner-ico svg{width:36px;height:36px;fill:#25d366;filter:drop-shadow(0 0 8px rgba(37,211,102,0.5));}
+
+    /* middle: text block */
+    .wa-banner-body{flex:1;min-width:0;}
+    .wa-banner-label{
+      font-size:.65rem;
+      letter-spacing:.28em;
+      text-transform:uppercase;
+      color:rgba(37,211,102,0.8);
+      font-family:var(--fe);
+      margin-bottom:.35rem;
+      display:flex;
+      align-items:center;
+      gap:.5rem;
+    }
+    .wa-banner-label::before{
+      content:'';
+      width:14px;height:1px;
+      background:rgba(37,211,102,0.6);
+      flex-shrink:0;
+    }
+    body.en .wa-banner-label{flex-direction:row-reverse;}
+    body.en .wa-banner-label::before{order:2;}
+    .wa-banner-title{
+      font-size:clamp(1rem,2.2vw,1.3rem);
+      font-weight:800;
+      color:var(--fg);
+      margin-bottom:.3rem;
+      line-height:1.25;
+    }
+    .wa-banner-desc{
+      font-size:.82rem;
+      color:var(--muted);
+      line-height:1.65;
+      max-width:460px;
+    }
+    .wa-banner-num{
+      display:inline-flex;
+      align-items:center;
+      gap:.55rem;
+      margin-top:.7rem;
+      background:rgba(37,211,102,0.06);
+      border:1px solid rgba(37,211,102,0.2);
+      border-radius:999px;
+      padding:.28rem 1rem .28rem .7rem;
+      font-family:var(--fe);
+      font-size:.82rem;
+      font-weight:700;
+      color:rgba(37,211,102,0.95);
+      letter-spacing:.04em;
+    }
+    .wa-num-dot{
+      width:7px;height:7px;
+      border-radius:50%;
+      background:#25d366;
+      animation:pg 2s ease-in-out infinite;
+      flex-shrink:0;
+      box-shadow:0 0 6px rgba(37,211,102,0.6);
+    }
+
+    /* right: CTA button */
+    .wa-banner-cta{
+      flex-shrink:0;
+    }
+    .wa-banner-btn{
+      display:inline-flex;
+      align-items:center;
+      gap:.65rem;
+      background:linear-gradient(135deg,#25d366,#128c4a);
+      color:#fff;
+      font-weight:700;
+      font-size:.86rem;
+      padding:.78rem 1.6rem;
+      border-radius:999px;
+      text-decoration:none;
+      box-shadow:0 0 28px rgba(37,211,102,0.3);
+      transition:transform .22s cubic-bezier(.23,1,.32,1),box-shadow .22s;
+      position:relative;
+      overflow:hidden;
+      white-space:nowrap;
+    }
+    .wa-banner-btn::after{
+      content:'';
+      position:absolute;
+      inset:0;
+      background:rgba(255,255,255,0.12);
+      transform:translateX(-100%) skewX(-15deg);
+      transition:transform .3s;
+    }
+    .wa-banner-btn:hover{transform:scale(1.05) translateY(-2px);box-shadow:0 0 44px rgba(37,211,102,0.5);}
+    .wa-banner-btn:hover::after{transform:translateX(200%) skewX(-15deg);}
+    .wa-banner-btn svg{width:20px;height:20px;fill:#fff;flex-shrink:0;}
+    @media(max-width:680px){
+      .wa-banner-cta{width:100%;}
+      .wa-banner-btn{width:100%;justify-content:center;}
+    }
 
     /* ── MOTION BANNER ── */
     .motion-banner{position:relative;z-index:1;display:flex;justify-content:center;align-items:center;padding:3rem 1.5rem;background:rgba(0,200,255,0.02);border-top:1px solid rgba(0,200,255,0.07)}
@@ -375,6 +539,52 @@
     </div>
   </div>
 </section>
+
+<!-- ══════════════════════════════════════
+     WHATSAPP INLINE CONTACT BANNER
+     Placed immediately after hero section
+════════════════════════════════════════ -->
+<div class="wa-banner-wrap rv">
+  <div class="wa-banner">
+
+    <!-- Icon -->
+    <div class="wa-banner-icon-wrap">
+      <div class="wa-banner-ring"></div>
+      <div class="wa-banner-ring2"></div>
+      <div class="wa-banner-ico">
+        <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16.002 2.667C8.638 2.667 2.667 8.637 2.667 16c0 2.37.637 4.588 1.748 6.503L2.667 29.333l6.997-1.83A13.265 13.265 0 0016.002 29.333C23.365 29.333 29.333 23.363 29.333 16S23.365 2.667 16.002 2.667zm0 2.4c5.985 0 10.932 4.947 10.932 10.933 0 5.987-4.947 10.933-10.932 10.933a10.893 10.893 0 01-5.56-1.52l-.398-.239-4.153 1.087 1.107-4.047-.261-.414A10.892 10.892 0 015.07 16c0-5.986 4.947-10.933 10.932-10.933zm-3.29 5.6c-.2 0-.523.075-.797.375-.274.3-1.046 1.022-1.046 2.493s1.07 2.893 1.22 3.093c.148.2 2.093 3.194 5.072 4.35 2.98 1.155 2.98.77 3.518.722.537-.048 1.733-.71 1.977-1.393.244-.683.244-1.268.17-1.39-.072-.122-.271-.195-.568-.342-.297-.147-1.755-.867-2.027-.965-.272-.097-.47-.147-.668.148-.198.296-.767.965-.94 1.163-.172.197-.344.222-.64.074-.297-.148-1.253-.462-2.386-1.473-.882-.787-1.477-1.758-1.65-2.055-.172-.298-.018-.459.13-.607.132-.132.297-.344.445-.516.149-.173.198-.296.298-.494.099-.198.05-.372-.025-.52-.074-.147-.662-1.6-.91-2.19-.237-.566-.48-.49-.664-.499-.172-.008-.37-.01-.568-.01z"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Text -->
+    <div class="wa-banner-body">
+      <div class="wa-banner-label" data-ar="تواصل مباشر" data-en="Direct Contact">تواصل مباشر</div>
+      <div class="wa-banner-title" data-ar="هل لديك سؤال أو فكرة؟ تواصل معي على واتساب" data-en="Have a question or idea? Reach me on WhatsApp">هل لديك سؤال أو فكرة؟ تواصل معي على واتساب</div>
+      <p class="wa-banner-desc" data-ar="سواء كنت مهتماً بالمشروع، تريد الاستفسار عن التفاصيل التقنية، أو تفكر في تعاون — أنا هنا." data-en="Whether you're curious about the project, want technical details, or thinking about collaboration — I'm here.">سواء كنت مهتماً بالمشروع، تريد الاستفسار عن التفاصيل التقنية، أو تفكر في تعاون — أنا هنا.</p>
+      <div class="wa-banner-num">
+        <span class="wa-num-dot"></span>
+        <span dir="ltr">+963 983 952 896</span>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="wa-banner-cta">
+      <a class="wa-banner-btn"
+         href="https://wa.me/963983952896?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D9%84%D8%AF%D9%8A%20%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%AD%D9%88%D9%84%20%D9%85%D8%B4%D8%B1%D9%88%D8%B9%20StepUp"
+         target="_blank"
+         rel="noopener noreferrer">
+        <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16.002 2.667C8.638 2.667 2.667 8.637 2.667 16c0 2.37.637 4.588 1.748 6.503L2.667 29.333l6.997-1.83A13.265 13.265 0 0016.002 29.333C23.365 29.333 29.333 23.363 29.333 16S23.365 2.667 16.002 2.667zm0 2.4c5.985 0 10.932 4.947 10.932 10.933 0 5.987-4.947 10.933-10.932 10.933a10.893 10.893 0 01-5.56-1.52l-.398-.239-4.153 1.087 1.107-4.047-.261-.414A10.892 10.892 0 015.07 16c0-5.986 4.947-10.933 10.932-10.933zm-3.29 5.6c-.2 0-.523.075-.797.375-.274.3-1.046 1.022-1.046 2.493s1.07 2.893 1.22 3.093c.148.2 2.093 3.194 5.072 4.35 2.98 1.155 2.98.77 3.518.722.537-.048 1.733-.71 1.977-1.393.244-.683.244-1.268.17-1.39-.072-.122-.271-.195-.568-.342-.297-.147-1.755-.867-2.027-.965-.272-.097-.47-.147-.668.148-.198.296-.767.965-.94 1.163-.172.197-.344.222-.64.074-.297-.148-1.253-.462-2.386-1.473-.882-.787-1.477-1.758-1.65-2.055-.172-.298-.018-.459.13-.607.132-.132.297-.344.445-.516.149-.173.198-.296.298-.494.099-.198.05-.372-.025-.52-.074-.147-.662-1.6-.91-2.19-.237-.566-.48-.49-.664-.499-.172-.008-.37-.01-.568-.01z"/>
+        </svg>
+        <span data-ar="ابدأ المحادثة" data-en="Start Chat">ابدأ المحادثة</span>
+      </a>
+    </div>
+
+  </div>
+</div>
+<!-- ══ END WA BANNER ══ -->
 
 <div class="motion-banner rv">
   <div class="motion-banner-inner">
